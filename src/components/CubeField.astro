@@ -1,0 +1,15 @@
+---
+// Subtle ambient 3D cube field, used as a section background layer.
+// Three.js is lazy-loaded by cubeFieldLoader only when this enters view.
+---
+
+<div class="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+  <canvas data-cube-field class="h-full w-full opacity-55"></canvas>
+  <!-- fade edges into the page so it reads as ambient texture -->
+  <div class="absolute inset-0 bg-gradient-to-b from-base via-transparent to-base"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-base/70 via-transparent to-base/70"></div>
+</div>
+
+<script>
+  import "../scripts/cubeFieldLoader";
+</script>

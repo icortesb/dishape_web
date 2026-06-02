@@ -1,0 +1,10 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = "text-xl" } = Astro.props;
+---
+
+<span class={`font-bold tracking-tight text-ink ${className}`}>
+  dishape<span class="text-accent">.</span>
+</span>

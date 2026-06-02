@@ -1,0 +1,50 @@
+---
+/**
+ * dishape isometric cube mark — vector-exact port of the Pencil source.
+ * Negative-space "d" carved into the front-left face. Scales to any size.
+ */
+interface Props {
+  class?: string;
+  /** Colour of the carved "d" — should match the surface behind the logo. */
+  cut?: string;
+}
+const { class: className = "h-10 w-10", cut = "#0a0a0f" } = Astro.props;
+const uid = Math.random().toString(36).slice(2, 8);
+---
+
+<svg
+  viewBox="0 0 88 88"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  class={className}
+  role="img"
+  aria-label="dishape"
+>
+  <defs>
+    <linearGradient id={`top-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6BDD78"></stop>
+      <stop offset="1" stop-color="#4CC661"></stop>
+    </linearGradient>
+    <linearGradient id={`left-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#46C95B"></stop>
+      <stop offset="1" stop-color="#2F9E46"></stop>
+    </linearGradient>
+    <linearGradient id={`right-${uid}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E9440"></stop>
+      <stop offset="1" stop-color="#1C6B2E"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- cube faces -->
+  <path d="M44 4 L80 22 L44 40 L8 22 Z" fill={`url(#top-${uid})`}></path>
+  <path d="M8 22 L44 40 L44 84 L8 66 Z" fill={`url(#left-${uid})`}></path>
+  <path d="M44 40 L80 22 L80 66 L44 84 Z" fill={`url(#right-${uid})`}></path>
+
+  <!-- negative-space "d" on the front-left face -->
+  <g fill={cut}>
+    <path d="M34 37 L40 40 L40 78 L34 75 Z"></path>
+    <path d="M16 42 L34 51 L34 57 L16 48 Z"></path>
+    <path d="M16 48 L22 51 L22 63 L16 60 Z"></path>
+    <path d="M16 60 L34 69 L34 75 L16 66 Z"></path>
+  </g>
+</svg>

@@ -1,0 +1,74 @@
+---
+import LogoMark from "./LogoMark.astro";
+import Wordmark from "./Wordmark.astro";
+import { Icon } from "astro-icon/components";
+
+const links = [
+  { label: "Servicios", href: "#servicios" },
+  { label: "IA", href: "#ia" },
+  { label: "Proceso", href: "#proceso" },
+  { label: "Stack", href: "#stack" },
+  { label: "Beneficios", href: "#resultados" },
+  { label: "Contacto", href: "#contacto" },
+];
+
+const social = [
+  { icon: "github", href: "#", label: "GitHub" },
+  { icon: "linkedin", href: "#", label: "LinkedIn" },
+  { icon: "mail", href: "mailto:hola@dishape.dev", label: "Email" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-base">
+  <div class="shell flex flex-col gap-8 py-12">
+    <div class="flex flex-col justify-between gap-8 md:flex-row md:items-start">
+      <div class="flex max-w-xs flex-col gap-3">
+        <div class="flex items-center gap-2.5">
+          <LogoMark class="h-7 w-7" />
+          <Wordmark class="text-lg" />
+        </div>
+        <p class="text-sm leading-relaxed text-faint">
+          Desarrollo full-stack profesional, de la idea al deploy.
+        </p>
+      </div>
+
+      <ul class="flex flex-wrap gap-x-8 gap-y-3">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-sm font-medium text-muted transition-colors hover:text-ink"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex items-center gap-3">
+        {
+          social.map((s) => (
+            <a
+              href={s.href}
+              aria-label={s.label}
+              class="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-accent/30 hover:text-ink"
+            >
+              <Icon name={`lucide:${s.icon}`} class="h-4 w-4" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="h-px w-full bg-line"></div>
+
+    <div class="flex flex-col justify-between gap-2 text-sm text-faint sm:flex-row sm:items-center">
+      <span>© {year} dishape — Todos los derechos reservados.</span>
+      <a href="mailto:hola@dishape.dev" class="transition-colors hover:text-ink">hola@dishape.dev</a>
+    </div>
+  </div>
+</footer>

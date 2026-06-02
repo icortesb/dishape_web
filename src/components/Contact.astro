@@ -1,0 +1,106 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import { Icon } from "astro-icon/components";
+
+const field =
+  "w-full rounded-lg border border-line bg-card px-4 py-3 text-sm text-ink placeholder:text-faint transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent";
+const label = "mb-2 block text-sm font-medium text-muted";
+---
+
+<section
+  id="contacto"
+  class="relative scroll-mt-20 overflow-hidden border-b border-line bg-base"
+>
+  <div
+    class="blueprint-grid pointer-events-none absolute inset-x-0 -top-[40%] h-[180%]"
+    style="--grid-color: rgb(255 255 255 / 0.035)"
+    data-parallax="0.25"
+  >
+  </div>
+
+  <div class="shell relative flex flex-col gap-14 py-24">
+    <SectionHeader
+      eyebrow="07 / CONTACTO"
+      title="¿Listo para arrancar tu proyecto?"
+    >
+      <p class="text-lg leading-relaxed text-muted">
+        Contame qué necesitás y te respondo en menos de 24 horas con una
+        propuesta clara.
+      </p>
+    </SectionHeader>
+
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+      <!-- TODO: conectar a un backend / servicio de mailing (Resend, Formspree, etc.) -->
+      <form
+        class="reveal grid gap-5"
+        data-contact-form
+        method="POST"
+        action="#"
+      >
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class={label} for="name">Nombre *</label>
+            <input class={field} id="name" name="name" type="text" placeholder="Tu nombre" required />
+          </div>
+          <div>
+            <label class={label} for="email">Email *</label>
+            <input class={field} id="email" name="email" type="email" placeholder="tu@email.com" required />
+          </div>
+        </div>
+        <div>
+          <label class={label} for="company">Empresa (opcional)</label>
+          <input class={field} id="company" name="company" type="text" placeholder="Nombre de tu empresa" />
+        </div>
+        <div>
+          <label class={label} for="message">Mensaje *</label>
+          <textarea class={`${field} min-h-36 resize-y`} id="message" name="message" placeholder="Contame sobre tu proyecto: qué necesitás y en qué plazos." required></textarea>
+        </div>
+        <button
+          type="submit"
+          class="rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+        >
+          Enviar mensaje
+        </button>
+      </form>
+
+      <aside class="reveal flex flex-col gap-5">
+        <h3 class="text-xl font-semibold text-ink">¿Preferís contacto directo?</h3>
+        <p class="text-sm leading-relaxed text-muted">
+          Si ya tenés claro lo que necesitás o preferís una conversación más
+          directa, escribime por cualquiera de estos canales.
+        </p>
+
+        <a
+          href="mailto:hola@dishape.dev"
+          class="flex items-center gap-3 rounded-xl border border-line bg-card p-4 transition-colors hover:border-accent/30"
+        >
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/12">
+            <Icon name="lucide:mail" class="h-5 w-5 text-accent-light" />
+          </span>
+          <span>
+            <span class="block text-xs text-faint">Email</span>
+            <span class="text-sm text-ink">hola@dishape.dev</span>
+          </span>
+        </a>
+
+        <a
+          href="https://wa.me/000000000000"
+          class="flex items-center gap-3 rounded-xl border border-line bg-card p-4 transition-colors hover:border-accent/30"
+        >
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/12">
+            <Icon name="lucide:message-circle" class="h-5 w-5 text-accent-light" />
+          </span>
+          <span>
+            <span class="block text-xs text-faint">WhatsApp</span>
+            <span class="text-sm text-ink">+54 9 11 XXXX-XXXX</span>
+          </span>
+        </a>
+
+        <div class="flex items-center gap-2 rounded-xl border border-line bg-card/50 p-4">
+          <Icon name="lucide:clock" class="h-4 w-4 text-accent-light" />
+          <span class="text-sm text-muted">Respuesta en menos de 24 hs</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

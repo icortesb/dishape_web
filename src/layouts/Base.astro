@@ -1,0 +1,40 @@
+---
+import "@fontsource-variable/inter";
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/space-grotesk";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "dishape — Desarrollo full-stack, de la idea al deploy",
+  description = "Diseño, desarrollo, infraestructura, integraciones, IA y analítica. Un solo responsable técnico senior que entiende tu negocio y responde por los números.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#0a0a0f" />
+  </head>
+  <body class="min-h-screen bg-base text-ink antialiased">
+    <slot />
+    <script>
+      import "../scripts/motion";
+    </script>
+  </body>
+</html>

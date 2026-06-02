@@ -1,0 +1,44 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+
+const groups: [string, string[]][] = [
+  ["Frontend", ["React", "Next.js", "TypeScript", "Tailwind CSS", "Astro"]],
+  ["Backend", ["Node.js", "Express", "PHP", "Laravel", "APIs REST"]],
+  ["Bases de datos", ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Firebase", "Supabase"]],
+  ["Infraestructura / DevOps", ["Vercel", "AWS", "VPS", "Docker", "CI/CD", "Nginx", "Cloudflare"]],
+  ["Analytics & Pagos", ["Google Analytics", "GTM", "Search Console", "Stripe", "MercadoPago", "Mailing"]],
+];
+---
+
+<section id="stack" class="scroll-mt-20 border-b border-line bg-base">
+  <div class="shell flex flex-col gap-14 py-24">
+    <SectionHeader eyebrow="05 / STACK" title="Con qué trabajo">
+      <p class="text-lg leading-relaxed text-muted">
+        Cada capa elegida por una razón, no por moda. Esto es lo que corro en
+        producción.
+      </p>
+    </SectionHeader>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        groups.map(([name, items], i) => (
+          <div
+            class:list={[
+              "reveal rounded-2xl border border-line bg-card p-8",
+              i === groups.length - 1 && "md:col-span-2",
+            ]}
+          >
+            <h3 class="eyebrow mb-5">{name}</h3>
+            <ul class="flex flex-wrap gap-2.5">
+              {items.map((t) => (
+                <li class="rounded-full border border-line bg-elevated px-4 py-2 text-[13px] font-medium text-ink">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
