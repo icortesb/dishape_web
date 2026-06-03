@@ -12,6 +12,7 @@ export const en = {
     benefits: "Benefits",
     contact: "Contact",
     cta: "Let's talk",
+    book: "Book 10 min",
   },
   hero: {
     badge: "AVAILABLE FOR NEW PROJECTS",
@@ -141,6 +142,8 @@ export const en = {
     asideTitle: "Prefer to reach out directly?",
     asideBody:
       "If you already know what you need or prefer a more direct conversation, reach me through any of these channels.",
+    calendlyLabel: "Video call",
+    calendlyValue: "Book a 10-min call",
     emailLabel: "Email",
     whatsappLabel: "WhatsApp",
     whatsappPrefill: "Hi! I'd like to talk about a project.",

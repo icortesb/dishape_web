@@ -3,6 +3,7 @@ import LogoMark from "./LogoMark.astro";
 import Wordmark from "./Wordmark.astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLang, getDict, languages, type Lang } from "../i18n";
+import { SITE } from "../site";
 
 const lang = getLang(Astro);
 const t = getDict(lang).nav;
@@ -51,10 +52,13 @@ const otherUrl = getRelativeLocaleUrl(other, "");
         {languages[other]}
       </a>
       <a
-        href="#contacto"
+        href={SITE.calendly}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-calendly
         class="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
       >
-        {t.cta}
+        {t.book}
       </a>
     </div>
   </nav>

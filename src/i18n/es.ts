@@ -12,6 +12,7 @@ export const es = {
     benefits: "Beneficios",
     contact: "Contacto",
     cta: "Hablemos",
+    book: "Agendar 10 min",
   },
   hero: {
     badge: "DISPONIBLE PARA NUEVOS PROYECTOS",
@@ -142,6 +143,8 @@ export const es = {
     asideTitle: "¿Preferís contacto directo?",
     asideBody:
       "Si ya tenés claro lo que necesitás o preferís una conversación más directa, escribime por cualquiera de estos canales.",
+    calendlyLabel: "Videollamada",
+    calendlyValue: "Agendar llamada de 10 min",
     emailLabel: "Email",
     whatsappLabel: "WhatsApp",
     whatsappPrefill: "Hola! Me interesa hablar sobre un proyecto.",
