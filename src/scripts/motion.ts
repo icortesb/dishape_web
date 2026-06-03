@@ -50,25 +50,19 @@ mm.add(
 
     gsap.defaults({ ease: "power3.out", duration: 0.7 });
 
-    // ---- Hero intro (plays on load) ----
-    const heroReveals = gsap.utils.toArray<HTMLElement>("#top .reveal");
-    const codeLines = gsap.utils.toArray<HTMLElement>("#top .font-mono p");
-    gsap.set(heroReveals, { autoAlpha: 0, y: 28 });
-    gsap.set(codeLines, { autoAlpha: 0, x: -10 });
-
-    gsap
-      .timeline({ delay: 0.15 })
-      .to(heroReveals, { autoAlpha: 1, y: 0, stagger: 0.1 })
-      .to(
-        codeLines,
-        { autoAlpha: 1, x: 0, duration: 0.4, stagger: 0.06 },
-        "-=0.35",
-      );
+    // Hero intro is handled in CSS (global.css) so the first paint never waits
+    // for this lazily-loaded bundle.
 
     // ---- Scroll reveals for everything below the fold ----
+    // Only hide elements still below the fold when GSAP finally loads — anything
+    // already on screen stays visible, so late loading never causes a flash.
     const reveals = gsap.utils
       .toArray<HTMLElement>(".reveal")
-      .filter((el) => !el.closest("#top"));
+      .filter(
+        (el) =>
+          !el.closest("#top") &&
+          el.getBoundingClientRect().top > window.innerHeight * 0.85,
+      );
     gsap.set(reveals, { autoAlpha: 0, y: 32 });
 
     ScrollTrigger.batch(reveals, {

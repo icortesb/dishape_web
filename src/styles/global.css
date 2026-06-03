@@ -24,7 +24,6 @@
   /* Type */
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
-  --font-display: "Space Grotesk Variable", "Inter Variable", sans-serif;
 
   /* Radii */
   --radius-sm: 8px;
@@ -52,6 +51,35 @@
   ::selection {
     background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
     color: var(--color-ink);
+  }
+
+  /* Hero intro — CSS-driven so the first paint never waits for the lazily
+     loaded GSAP bundle. Scoped to #top; below-the-fold reveals stay on GSAP. */
+  @media (prefers-reduced-motion: no-preference) {
+    #top .reveal {
+      opacity: 0;
+      animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    #top .reveal:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+    #top .reveal:nth-child(3) {
+      animation-delay: 0.16s;
+    }
+    #top .reveal:nth-child(4) {
+      animation-delay: 0.24s;
+    }
+  }
+
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 

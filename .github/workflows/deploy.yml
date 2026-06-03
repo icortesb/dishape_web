@@ -1,0 +1,31 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allows manual runs from the Actions tab
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/dishape
+            git fetch --prune origin main
+            git reset --hard origin/main
+            npm ci
+            npm run build
+            systemctl restart dishape
+            echo "Deployed $(git rev-parse --short HEAD)"

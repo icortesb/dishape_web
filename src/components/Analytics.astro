@@ -20,7 +20,26 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
         gtag('set','url_passthrough',true); gtag('set','ads_data_redaction',true);
       </script>
       <script is:inline define:vars={{ gtmId }}>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);
+        (function (w, d, s, l, i) {
+          var loaded = false;
+          var evts = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
+          function load() {
+            if (loaded) return;
+            loaded = true;
+            evts.forEach(function (e) { w.removeEventListener(e, load); });
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+          }
+          evts.forEach(function (e) { w.addEventListener(e, load, { passive: true }); });
+          // Fallback: load anyway after 5s so zero-interaction sessions still count.
+          setTimeout(load, 5000);
+        })(window, document, 'script', 'dataLayer', gtmId);
       </script>
     </>
   )

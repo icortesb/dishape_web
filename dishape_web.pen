@@ -1,5 +1,5 @@
 {
-  "version": "2.10",
+  "version": "2.13",
   "children": [
     {
       "type": "frame",
@@ -244,13 +244,11 @@
           "name": "Navbar",
           "width": "fill_container",
           "fill": "$bg-primary",
-          "stroke": {
-            "align": "inside",
-            "thickness": {
-              "bottom": 1
-            },
-            "fill": "$border-subtle"
+          "stroke": "$border-subtle",
+          "strokeWidth": {
+            "bottom": 1
           },
+          "strokeAlignment": "inner",
           "padding": [
             18,
             80
@@ -646,9 +644,6 @@
                       "name": "badge",
                       "fill": "#00000000",
                       "cornerRadius": 100,
-                      "stroke": {
-                        "thickness": 0
-                      },
                       "gap": 8,
                       "alignItems": "center",
                       "children": [
@@ -737,11 +732,9 @@
                           "id": "CLTUY",
                           "name": "ctaSecondary",
                           "cornerRadius": "$radius-sm",
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "$border-subtle"
-                          },
+                          "stroke": "$border-subtle",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
                           "gap": 8,
                           "padding": [
                             16,
@@ -773,11 +766,9 @@
                   "width": 460,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "children": [
                     {
@@ -786,13 +777,11 @@
                       "name": "panelBar",
                       "width": "fill_container",
                       "fill": "$bg-tertiary",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": {
-                          "bottom": 1
-                        },
-                        "fill": "$border-subtle"
+                      "stroke": "$border-subtle",
+                      "strokeWidth": {
+                        "bottom": 1
                       },
+                      "strokeAlignment": "inner",
                       "gap": 8,
                       "padding": [
                         14,
@@ -887,11 +876,9 @@
           "name": "Section 2 - Trust Bar",
           "width": "fill_container",
           "fill": "$bg-secondary",
-          "stroke": {
-            "align": "inside",
-            "thickness": 1,
-            "fill": "$border-subtle"
-          },
+          "stroke": "$border-subtle",
+          "strokeWidth": 1,
+          "strokeAlignment": "inner",
           "padding": [
             36,
             80
@@ -1101,11 +1088,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -1122,13 +1107,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "bdFrn",
                           "name": "c1IconFont",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "user",
-                          "iconFontFamily": "lucide",
+                          "icon": "user",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -1168,11 +1153,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -1189,13 +1172,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "Ssxwa",
                           "name": "c2IconFont",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "timer",
-                          "iconFontFamily": "lucide",
+                          "icon": "timer",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -1235,11 +1218,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -1256,13 +1237,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "GLEta",
                           "name": "c3IconFont",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "wallet",
-                          "iconFontFamily": "lucide",
+                          "icon": "wallet",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -1302,11 +1283,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -1323,13 +1302,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "nLWmn",
                           "name": "c4IconFont",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "shield-check",
-                          "iconFontFamily": "lucide",
+                          "icon": "shield-check",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -1445,11 +1424,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1466,13 +1443,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "cLMGy",
                               "name": "s1if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "palette",
-                              "iconFontFamily": "lucide",
+                              "icon": "palette",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1509,11 +1486,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1530,13 +1505,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "A55v6",
                               "name": "s2if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "code",
-                              "iconFontFamily": "lucide",
+                              "icon": "code",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1573,11 +1548,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1594,13 +1567,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "uDCeY",
                               "name": "s3if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "database",
-                              "iconFontFamily": "lucide",
+                              "icon": "database",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1646,11 +1619,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1667,13 +1638,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "mxyDS",
                               "name": "s4if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "plug",
-                              "iconFontFamily": "lucide",
+                              "icon": "plug",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1710,11 +1681,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1731,13 +1700,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "xVDPV",
                               "name": "s5if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "server",
-                              "iconFontFamily": "lucide",
+                              "icon": "server",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1774,11 +1743,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -1795,13 +1762,13 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "XAU7b",
                               "name": "s6if",
                               "width": 22,
                               "height": 22,
-                              "iconFontName": "trending-up",
-                              "iconFontFamily": "lucide",
+                              "icon": "trending-up",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -1912,11 +1879,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -1933,13 +1898,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "wqX4P",
                           "name": "ai1ic",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "bot",
-                          "iconFontFamily": "lucide",
+                          "icon": "bot",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -1979,11 +1944,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -2000,13 +1963,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "NEwsJ",
                           "name": "ai2ic",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "workflow",
-                          "iconFontFamily": "lucide",
+                          "icon": "workflow",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -2046,11 +2009,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -2067,13 +2028,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "WhOg3",
                           "name": "ai3ic",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "share-2",
-                          "iconFontFamily": "lucide",
+                          "icon": "share-2",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -2113,11 +2074,9 @@
                   "height": 290,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 28,
@@ -2134,13 +2093,13 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "GEIJQ",
                           "name": "ai4ic",
                           "width": 24,
                           "height": 24,
-                          "iconFontName": "database",
-                          "iconFontFamily": "lucide",
+                          "icon": "database",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         }
                       ]
@@ -2246,11 +2205,9 @@
                   "height": 268,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 24,
@@ -2313,11 +2270,9 @@
                   "height": 268,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 24,
@@ -2380,11 +2335,9 @@
                   "height": 268,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 24,
@@ -2447,11 +2400,9 @@
                   "height": 268,
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 16,
                   "padding": 24,
@@ -2589,11 +2540,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 20,
                       "padding": 32,
@@ -2622,11 +2571,9 @@
                               "name": "fe1",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2649,11 +2596,9 @@
                               "name": "fe2",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2676,11 +2621,9 @@
                               "name": "fe3",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2703,11 +2646,9 @@
                               "name": "fe4",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2730,11 +2671,9 @@
                               "name": "fe5",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2762,11 +2701,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 20,
                       "padding": 32,
@@ -2795,11 +2732,9 @@
                               "name": "be1",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2822,11 +2757,9 @@
                               "name": "be2",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2849,11 +2782,9 @@
                               "name": "be3",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2876,11 +2807,9 @@
                               "name": "be4",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2903,11 +2832,9 @@
                               "name": "be5",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -2944,11 +2871,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 20,
                       "padding": 32,
@@ -2977,11 +2902,9 @@
                               "name": "c1",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3004,11 +2927,9 @@
                               "name": "c2",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3031,11 +2952,9 @@
                               "name": "c3",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3058,11 +2977,9 @@
                               "name": "c4",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3085,11 +3002,9 @@
                               "name": "c5",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3112,11 +3027,9 @@
                               "name": "c6",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3144,11 +3057,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 20,
                       "padding": 32,
@@ -3177,11 +3088,9 @@
                               "name": "inf1",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3204,11 +3113,9 @@
                               "name": "inf2",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3231,11 +3138,9 @@
                               "name": "inf3",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3258,11 +3163,9 @@
                               "name": "inf4",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3285,11 +3188,9 @@
                               "name": "inf5",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3312,11 +3213,9 @@
                               "name": "inf6",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3339,11 +3238,9 @@
                               "name": "inf7",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3380,11 +3277,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 20,
                       "padding": 32,
@@ -3413,11 +3308,9 @@
                               "name": "an1",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3440,11 +3333,9 @@
                               "name": "an2",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3467,11 +3358,9 @@
                               "name": "an3",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3494,11 +3383,9 @@
                               "name": "an4",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3521,11 +3408,9 @@
                               "name": "an5",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3548,11 +3433,9 @@
                               "name": "an6",
                               "fill": "$bg-tertiary",
                               "cornerRadius": 20,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 8,
                                 16
@@ -3658,11 +3541,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -3697,12 +3578,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "g0FC7",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "zap",
-                              "iconFontFamily": "lucide",
+                              "icon": "zap",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -3737,11 +3618,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -3776,12 +3655,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "rHFMb",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "search",
-                              "iconFontFamily": "lucide",
+                              "icon": "search",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -3826,11 +3705,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -3865,12 +3742,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "WoHwa",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "shield",
-                              "iconFontFamily": "lucide",
+                              "icon": "shield",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -3905,11 +3782,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -3944,12 +3819,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "fPPIw",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "credit-card",
-                              "iconFontFamily": "lucide",
+                              "icon": "credit-card",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -3994,11 +3869,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -4033,12 +3906,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "LQhFp",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "headphones",
-                              "iconFontFamily": "lucide",
+                              "icon": "headphones",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -4073,11 +3946,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-lg",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "layout": "vertical",
                       "gap": 16,
                       "padding": 28,
@@ -4112,12 +3983,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "F6PmO",
                               "width": 24,
                               "height": 24,
-                              "iconFontName": "smartphone",
-                              "iconFontFamily": "lucide",
+                              "icon": "smartphone",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -4455,11 +4326,9 @@
                   "width": "fill_container",
                   "fill": "$bg-card",
                   "cornerRadius": "$radius-lg",
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$border-subtle"
-                  },
+                  "stroke": "$border-subtle",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
                   "layout": "vertical",
                   "gap": 24,
                   "padding": 40,
@@ -4495,11 +4364,9 @@
                               "width": "fill_container",
                               "fill": "$bg-tertiary",
                               "cornerRadius": "$radius-sm",
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 14,
                                 16
@@ -4542,11 +4409,9 @@
                               "width": "fill_container",
                               "fill": "$bg-tertiary",
                               "cornerRadius": "$radius-sm",
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "$border-subtle"
-                              },
+                              "stroke": "$border-subtle",
+                              "strokeWidth": 1,
+                              "strokeAlignment": "inner",
                               "padding": [
                                 14,
                                 16
@@ -4591,11 +4456,9 @@
                           "width": "fill_container",
                           "fill": "$bg-tertiary",
                           "cornerRadius": "$radius-sm",
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "$border-subtle"
-                          },
+                          "stroke": "$border-subtle",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
                           "padding": [
                             14,
                             16
@@ -4639,11 +4502,9 @@
                           "height": 140,
                           "fill": "$bg-tertiary",
                           "cornerRadius": "$radius-sm",
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "$border-subtle"
-                          },
+                          "stroke": "$border-subtle",
+                          "strokeWidth": 1,
+                          "strokeAlignment": "inner",
                           "layout": "vertical",
                           "padding": [
                             14,
@@ -4746,11 +4607,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-md",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "gap": 16,
                       "padding": [
                         20,
@@ -4770,12 +4629,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "2PizC",
                               "width": 20,
                               "height": 20,
-                              "iconFontName": "mail",
-                              "iconFontFamily": "lucide",
+                              "icon": "mail",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -4817,11 +4676,9 @@
                       "width": "fill_container",
                       "fill": "$bg-card",
                       "cornerRadius": "$radius-md",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "$border-subtle"
-                      },
+                      "stroke": "$border-subtle",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
                       "gap": 16,
                       "padding": [
                         20,
@@ -4841,12 +4698,12 @@
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "icon_font",
+                              "type": "icon",
                               "id": "kIrmB",
                               "width": 20,
                               "height": 20,
-                              "iconFontName": "message-circle",
-                              "iconFontFamily": "lucide",
+                              "icon": "message-circle",
+                              "library": "lucide",
                               "fill": "$accent-light"
                             }
                           ]
@@ -4896,12 +4753,12 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "K5zs2",
                           "width": 18,
                           "height": 18,
-                          "iconFontName": "timer",
-                          "iconFontFamily": "lucide",
+                          "icon": "timer",
+                          "library": "lucide",
                           "fill": "$accent-light"
                         },
                         {
@@ -4927,13 +4784,11 @@
           "name": "Section 9 - Footer",
           "width": "fill_container",
           "fill": "$bg-primary",
-          "stroke": {
-            "align": "inside",
-            "thickness": {
-              "top": 1
-            },
-            "fill": "$border-subtle"
+          "stroke": "$border-subtle",
+          "strokeWidth": {
+            "top": 1
           },
+          "strokeAlignment": "inner",
           "layout": "vertical",
           "gap": 32,
           "padding": [
@@ -5081,12 +4936,12 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "SwsIR",
                           "width": 18,
                           "height": 18,
-                          "iconFontName": "github",
-                          "iconFontFamily": "lucide",
+                          "icon": "github",
+                          "library": "lucide",
                           "fill": "$text-secondary"
                         }
                       ]
@@ -5103,12 +4958,12 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "j39j2",
                           "width": 18,
                           "height": 18,
-                          "iconFontName": "linkedin",
-                          "iconFontFamily": "lucide",
+                          "icon": "linkedin",
+                          "library": "lucide",
                           "fill": "$text-secondary"
                         }
                       ]
@@ -5125,12 +4980,12 @@
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "icon_font",
+                          "type": "icon",
                           "id": "NpRZr",
                           "width": 18,
                           "height": 18,
-                          "iconFontName": "twitter",
-                          "iconFontFamily": "lucide",
+                          "icon": "twitter",
+                          "library": "lucide",
                           "fill": "$text-secondary"
                         }
                       ]

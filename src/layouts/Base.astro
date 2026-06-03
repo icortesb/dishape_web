@@ -1,7 +1,6 @@
 ---
 import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
-import "@fontsource-variable/space-grotesk";
 import "../styles/global.css";
 import Seo from "../components/Seo.astro";
 import Analytics from "../components/Analytics.astro";
@@ -49,8 +48,9 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     <slot />
     <ConsentBanner />
     <script>
-      import "../scripts/motion";
       import "../scripts/calendly";
+      import "../scripts/cta";
+      import "../scripts/motionLoader";
     </script>
   </body>
 </html>

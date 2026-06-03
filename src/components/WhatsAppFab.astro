@@ -1,0 +1,25 @@
+---
+import { Icon } from "astro-icon/components";
+import { getLang } from "../i18n";
+import { waLink } from "../site";
+
+const lang = getLang(Astro);
+const label = lang === "en" ? "Chat on WhatsApp" : "Escribinos por WhatsApp";
+const prefill =
+  lang === "en"
+    ? "Hi! I'd like to talk about a project."
+    : "¡Hola! Me gustaría hablar sobre un proyecto.";
+---
+
+<a
+  href={waLink(prefill)}
+  target="_blank"
+  rel="noopener noreferrer"
+  data-wa-link
+  data-cta="whatsapp_fab"
+  aria-label={label}
+  title={label}
+  class="group fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/30 transition-transform hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+>
+  <Icon name="lucide:message-circle" class="h-7 w-7" />
+</a>

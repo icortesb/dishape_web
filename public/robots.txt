@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /lab
 
 Sitemap: https://dishape.dev/sitemap-index.xml

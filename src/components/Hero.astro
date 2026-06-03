@@ -37,12 +37,14 @@ const t = getDict(getLang(Astro)).hero;
       <div class="reveal flex flex-wrap gap-4">
         <a
           href="#contacto"
+          data-cta="hero_primary"
           class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
         >
           {t.ctaPrimary}
         </a>
         <a
           href="#servicios"
+          data-cta="hero_secondary"
           class="rounded-lg border border-line px-8 py-4 font-medium text-muted transition-colors hover:border-accent/40 hover:text-ink"
         >
           {t.ctaSecondary}
