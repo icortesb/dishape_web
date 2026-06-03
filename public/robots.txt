@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /lab
+
+Sitemap: https://dishape.com.ar/sitemap-index.xml

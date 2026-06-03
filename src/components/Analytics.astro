@@ -1,0 +1,27 @@
+---
+// Loads Google Tag Manager with Google Consent Mode v2.
+// GA4, Meta Pixel and Microsoft Clarity are configured as tags INSIDE GTM
+// (single container, no double-firing) — see SETUP.md.
+//
+// Consent defaults: GRANTED everywhere, then DENIED for EEA/UK/CH until the
+// visitor opts in via the banner. LATAM & the rest are unaffected.
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+---
+
+{
+  gtmId && (
+    <>
+      <script is:inline>
+        window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+        var EEA = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'];
+        gtag('consent','default',{ ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted', security_storage:'granted' });
+        gtag('consent','default',{ region: EEA, ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', analytics_storage:'denied', wait_for_update: 500 });
+        try { if (localStorage.getItem('dishape-consent') === 'granted') { gtag('consent','update',{ ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted' }); } } catch(e){}
+        gtag('set','url_passthrough',true); gtag('set','ads_data_redaction',true);
+      </script>
+      <script is:inline define:vars={{ gtmId }}>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);
+      </script>
+    </>
+  )
+}

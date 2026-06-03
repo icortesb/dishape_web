@@ -3,36 +3,51 @@ import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/space-grotesk";
 import "../styles/global.css";
+import Seo from "../components/Seo.astro";
+import Analytics from "../components/Analytics.astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
+import { getLang, getDict } from "../i18n";
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const {
-  title = "dishape — Desarrollo full-stack, de la idea al deploy",
-  description = "Diseño, desarrollo, infraestructura, integraciones, IA y analítica. Un solo responsable técnico senior que entiende tu negocio y responde por los números.",
-} = Astro.props;
+const lang = getLang(Astro);
+const meta = getDict(lang).meta;
+const { title = meta.title, description = meta.description } = Astro.props;
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0a0a0f" />
 
     <title>{title}</title>
-    <meta name="description" content={description} />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta name="theme-color" content="#0a0a0f" />
+    <Seo title={title} description={description} />
+    <Analytics />
   </head>
   <body class="min-h-screen bg-base text-ink antialiased">
+    {
+      gtmId && (
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden"
+            title="gtm"
+          />
+        </noscript>
+      )
+    }
     <slot />
+    <ConsentBanner />
     <script>
       import "../scripts/motion";
     </script>

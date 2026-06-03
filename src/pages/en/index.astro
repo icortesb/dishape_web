@@ -1,0 +1,11 @@
+---
+import Base from "../../layouts/Base.astro";
+import Home from "../../components/Home.astro";
+import { getDict } from "../../i18n";
+
+const t = getDict("en").meta;
+---
+
+<Base title={t.title} description={t.description}>
+  <Home />
+</Base>

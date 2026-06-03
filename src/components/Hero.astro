@@ -1,12 +1,6 @@
 ---
-const flowLines = [
-  ["diseño", "interfaces UI/UX"],
-  ["desarrollo", "frontend + backend"],
-  ["datos", "SQL / NoSQL"],
-  ["infra", "deploy · hosting · mails"],
-  ["analítica", "GA4 / GTM"],
-  ["conversión", "SEO · CRO · performance"],
-];
+import { getLang, getDict } from "../i18n";
+const t = getDict(getLang(Astro)).hero;
 ---
 
 <section id="top" class="relative overflow-hidden border-b border-line bg-base">
@@ -30,30 +24,28 @@ const flowLines = [
     <div class="flex flex-col items-start gap-7">
       <span class="eyebrow reveal flex items-center gap-2">
         <span class="h-2 w-2 rounded-full bg-accent"></span>
-        DISPONIBLE PARA NUEVOS PROYECTOS
+        {t.badge}
       </span>
       <h1
         class="reveal text-4xl font-bold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]"
       >
-        Tu proyecto web, de la idea al deploy — con un solo responsable técnico.
+        {t.title}
       </h1>
       <p class="reveal max-w-xl text-lg leading-relaxed text-muted">
-        Diseño, desarrollo, bases de datos, infraestructura, integraciones y
-        analítica. Una sola persona senior que entiende el negocio y responde
-        por los números.
+        {t.subtitle}
       </p>
       <div class="reveal flex flex-wrap gap-4">
         <a
           href="#contacto"
           class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
         >
-          Hablemos de tu proyecto
+          {t.ctaPrimary}
         </a>
         <a
           href="#servicios"
           class="rounded-lg border border-line px-8 py-4 font-medium text-muted transition-colors hover:border-accent/40 hover:text-ink"
         >
-          Ver servicios
+          {t.ctaSecondary}
         </a>
       </div>
     </div>
@@ -66,12 +58,12 @@ const flowLines = [
         <span class="h-2.5 w-2.5 rounded-full" style="background:#ff5f56"></span>
         <span class="h-2.5 w-2.5 rounded-full" style="background:#ffbd2e"></span>
         <span class="h-2.5 w-2.5 rounded-full" style="background:#27c93f"></span>
-        <span class="ml-2 font-mono text-xs text-faint">flujo.ts</span>
+        <span class="ml-2 font-mono text-xs text-faint">{t.panelFile}</span>
       </div>
       <div class="p-6 font-mono text-[13px] leading-loose">
-        <p class="text-faint">// lo que entrego, de punta a punta</p>
+        <p class="text-faint">{t.panelComment}</p>
         {
-          flowLines.map(([k, v]) => (
+          t.flow.map(([k, v]) => (
             <p class="flex text-muted">
               <span class="inline-block w-28 shrink-0 text-accent-light">{k}</span>
               <span class="mr-2 text-faint">&rarr;</span>

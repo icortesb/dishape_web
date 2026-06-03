@@ -1,28 +1,20 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import Card from "./Card.astro";
+import { getLang, getDict } from "../i18n";
 
-const items = [
-  ["user", "Un único responsable", "Sin intermediarios ni malentendidos. Hablás directo con quien diseña, programa y despliega tu proyecto."],
-  ["timer", "Menos tiempo, menos fricción", "Sin reuniones entre equipos ni esperas entre proveedores. Un flujo directo de la idea a la implementación."],
-  ["wallet", "Costos reducidos", "Un solo profesional en lugar de tres o cuatro proveedores. Menos overhead, más inversión directa en tu producto."],
-  ["layers", "Visión integral", "Cada decisión técnica se toma con perspectiva completa: diseño, rendimiento, seguridad y escalabilidad alineados."],
-];
+const t = getDict(getLang(Astro)).value;
 ---
 
 <section class="border-b border-line bg-base">
   <div class="shell flex flex-col gap-14 py-24">
-    <SectionHeader eyebrow="01 / TODO EN UNO" title="Un solo responsable. Todo resuelto.">
-      <p class="text-lg leading-relaxed text-muted">
-        Olvidate de coordinar diseñador, programador, administrador de
-        servidores y agencia de marketing por separado. Un profesional senior
-        que domina todas las piezas.
-      </p>
+    <SectionHeader eyebrow={t.eyebrow} title={t.title}>
+      <p class="text-lg leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {
-        items.map(([icon, title, body]) => (
+        t.items.map(([icon, title, body]) => (
           <Card icon={icon} title={title}>
             {body}
           </Card>

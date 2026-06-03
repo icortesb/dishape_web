@@ -1,25 +1,19 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
+import { getLang, getDict } from "../i18n";
 
-const steps = [
-  ["1", "Conversamos y definimos objetivos", "Entiendo tu negocio, tus usuarios y lo que necesitás lograr. Definimos alcance, prioridades y métricas de éxito."],
-  ["2", "Diseño y propuesta técnica", "Diseño la interfaz, defino la arquitectura y presento una propuesta clara con tiempos y entregables."],
-  ["3", "Desarrollo e integraciones", "Construyo el producto iterativamente con entregas parciales. Ves avances reales, no solo promesas."],
-  ["4", "Lanzamiento y optimización", "Deploy a producción, monitoreo, analytics y mejora continua basada en datos reales de uso."],
-];
+const t = getDict(getLang(Astro)).process;
 ---
 
 <section id="proceso" class="scroll-mt-20 border-b border-line bg-surface">
   <div class="shell flex flex-col gap-14 py-24">
-    <SectionHeader eyebrow="04 / PROCESO" title="Cómo trabajo">
-      <p class="text-lg leading-relaxed text-muted">
-        Un proceso claro y predecible. Sin sorpresas.
-      </p>
+    <SectionHeader eyebrow={t.eyebrow} title={t.title}>
+      <p class="text-lg leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
 
     <ol class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {
-        steps.map(([n, title, body]) => (
+        t.steps.map(([n, title, body]) => (
           <li class="reveal flex h-full flex-col gap-4 rounded-2xl border border-line bg-card p-6">
             <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent font-bold text-white">
               {n}

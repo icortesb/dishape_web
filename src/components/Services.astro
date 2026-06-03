@@ -1,28 +1,20 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import Card from "./Card.astro";
+import { getLang, getDict } from "../i18n";
 
-const items = [
-  ["pen-tool", "Diseño UI/UX", "Interfaces claras, atractivas y pensadas para que tus usuarios hagan lo que necesitás que hagan."],
-  ["code", "Desarrollo a medida", "Aplicaciones web robustas, rápidas y mantenibles. Sin plantillas genéricas: código hecho para tu negocio."],
-  ["database", "Bases de datos", "Diseño, modelado y optimización de datos. Tu información organizada, segura y lista para escalar."],
-  ["plug", "Integraciones con terceros", "Pasarelas de pago, CRMs, APIs externas, automatizaciones. Todo conectado y funcionando."],
-  ["server", "Infraestructura y hosting", "Servidores configurados, dominios, SSL, CI/CD. Tu proyecto online, rápido y protegido."],
-  ["bar-chart-3", "Analytics y conversión", "Métricas reales, tracking de eventos y optimización continua para que tu inversión se traduzca en resultados."],
-];
+const t = getDict(getLang(Astro)).services;
 ---
 
 <section id="servicios" class="scroll-mt-20 border-b border-line bg-surface">
   <div class="shell flex flex-col gap-14 py-24">
-    <SectionHeader eyebrow="02 / SERVICIOS" title="Servicios">
-      <p class="text-lg leading-relaxed text-muted">
-        Todo lo que tu proyecto necesita para funcionar, crecer y convertir.
-      </p>
+    <SectionHeader eyebrow={t.eyebrow} title={t.title}>
+      <p class="text-lg leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
 
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
-        items.map(([icon, title, body]) => (
+        t.items.map(([icon, title, body]) => (
           <Card icon={icon} title={title}>
             {body}
           </Card>

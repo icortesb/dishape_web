@@ -1,31 +1,30 @@
 ---
-// Métricas ilustrativas — reemplazar por números reales antes de publicar.
-const metrics = [
-  { prefix: "+", count: 40, suffix: "%", label: "conversión promedio" },
-  { prefix: "−", count: 55, suffix: "%", label: "tiempo de carga" },
-  { prefix: "", count: 95, suffix: "+", label: "Core Web Vitals" },
-  { prefix: "+", count: 35, suffix: "%", label: "tráfico orgánico (SEO)" },
-];
+import { getLang, getDict } from "../i18n";
+const t = getDict(getLang(Astro)).trust;
 ---
 
 <section class="border-b border-line bg-surface">
-  <div class="shell grid grid-cols-2 gap-8 py-9 md:grid-cols-4">
-    {
-      metrics.map((m) => (
-        <div class="reveal flex flex-col gap-1.5">
-          <span
-            class="text-3xl font-bold text-accent-light"
-            data-count={m.count}
-            data-prefix={m.prefix}
-            data-suffix={m.suffix}
-          >
-            {m.prefix}
-            {m.count}
-            {m.suffix}
-          </span>
-          <span class="font-mono text-xs text-faint">{m.label}</span>
-        </div>
-      ))
-    }
+  <div class="shell flex flex-col gap-7 py-10">
+    <span class="eyebrow reveal">{t.caption}</span>
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      {
+        t.metrics.map((m) => (
+          <div class="reveal flex flex-col gap-1.5">
+            <span
+              class="text-3xl font-bold text-accent-light"
+              data-count={m.count}
+              data-prefix={m.prefix}
+              data-suffix={m.suffix}
+            >
+              {m.prefix}
+              {m.count}
+              {m.suffix}
+            </span>
+            <span class="text-xs leading-snug text-faint">{m.label}</span>
+          </div>
+        ))
+      }
+    </div>
+    <span class="reveal font-mono text-[11px] text-faint/70">{t.sources}</span>
   </div>
 </section>

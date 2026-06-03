@@ -1,0 +1,75 @@
+---
+import { getLang, getDict } from "../i18n";
+const t = getDict(getLang(Astro)).consent;
+const enabled = !!import.meta.env.PUBLIC_GTM_ID;
+---
+
+{
+  enabled && (
+    <div
+      data-consent-banner
+      hidden
+      class="fixed inset-x-0 bottom-0 z-[60] border-t border-line bg-surface/95 backdrop-blur-md"
+    >
+      <div class="shell flex flex-col items-center gap-4 py-4 sm:flex-row sm:justify-between">
+        <p class="max-w-2xl text-sm leading-relaxed text-muted">{t.message}</p>
+        <div class="flex shrink-0 gap-3">
+          <button
+            data-consent="reject"
+            class="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+          >
+            {t.reject}
+          </button>
+          <button
+            data-consent="accept"
+            class="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+          >
+            {t.accept}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script is:inline>
+  (function () {
+    var banner = document.querySelector("[data-consent-banner]");
+    if (!banner) return;
+    var KEY = "dishape-consent";
+    var tz = "";
+    try {
+      tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    var isEU = tz.indexOf("Europe/") === 0;
+    var stored = null;
+    try {
+      stored = localStorage.getItem(KEY);
+    } catch (e) {}
+
+    // Only EU visitors who haven't chosen yet see the banner.
+    if (isEU && !stored) banner.hidden = false;
+
+    function choose(granted) {
+      try {
+        localStorage.setItem(KEY, granted ? "granted" : "denied");
+      } catch (e) {}
+      if (granted && typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
+          ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
+          analytics_storage: "granted",
+        });
+      }
+      banner.hidden = true;
+    }
+
+    banner.querySelector('[data-consent="accept"]').addEventListener("click", function () {
+      choose(true);
+    });
+    banner.querySelector('[data-consent="reject"]').addEventListener("click", function () {
+      choose(false);
+    });
+  })();
+</script>
