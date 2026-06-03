@@ -1,7 +1,7 @@
 // Shared, language-agnostic site constants.
 export const SITE = {
   name: "dishape",
-  url: "https://dishape.com.ar",
+  url: "https://dishape.dev",
   email: "dishape.dev@gmail.com",
   whatsapp: "5491158583740", // E.164 without "+", used for wa.me links
   whatsappDisplay: "+54 9 11 5858-3740",

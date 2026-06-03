@@ -1,4 +1,4 @@
-# dishape.com.ar — setup & operations
+# dishape.dev — setup & operations
 
 ## Architecture
 
@@ -17,7 +17,7 @@ Copy `.env.example` → `.env` and fill it in:
 | Var | Purpose |
 |-----|---------|
 | `RESEND_API_KEY` | Contact form email (https://resend.com/api-keys) |
-| `CONTACT_FROM` | Verified sender, e.g. `dishape <no-reply@dishape.com.ar>` |
+| `CONTACT_FROM` | Verified sender, e.g. `dishape <no-reply@dishape.dev>` |
 | `CONTACT_TO` | Inbox for submissions (`dishape.dev@gmail.com`) |
 | `PUBLIC_GTM_ID` | GTM container `GTM-XXXXXXX`. Blank = no analytics injected. |
 | `HOST` / `PORT` | Node server bind (default `0.0.0.0:4321`) |
@@ -27,7 +27,7 @@ The rest are read at **runtime**.
 
 ## Email (Resend)
 
-1. Add domain `dishape.com.ar` in Resend → add the DKIM/SPF DNS records → wait for verified.
+1. Add domain `dishape.dev` in Resend → add the DKIM/SPF DNS records → wait for verified.
 2. Set `CONTACT_FROM` to an address on that domain.
 3. Before the domain is verified you can test with `onboarding@resend.dev`.
 

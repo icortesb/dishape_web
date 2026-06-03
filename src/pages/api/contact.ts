@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
       replyTo: email,
       subject: `Nuevo contacto: ${name}${company ? ` · ${company}` : ""}`,
       html: `
-        <h2>Nuevo mensaje desde dishape.com.ar</h2>
+        <h2>Nuevo mensaje desde dishape.dev</h2>
         <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         ${company ? `<p><strong>Empresa:</strong> ${escapeHtml(company)}</p>` : ""}
