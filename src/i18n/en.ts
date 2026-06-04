@@ -1,8 +1,8 @@
 export const en = {
   meta: {
-    title: "dishape — Full-stack development, from idea to deploy",
+    title: "dishape — Web design, development and infrastructure from one person",
     description:
-      "Design, development, infrastructure, integrations, AI and analytics. A single senior technical lead who understands your business and owns the numbers.",
+      "The same person designs, builds, ships and maintains your website. Design, development, infrastructure and analytics in one place, with no vendors to coordinate.",
   },
   nav: {
     services: "Services",
@@ -16,13 +16,13 @@ export const en = {
   },
   hero: {
     badge: "AVAILABLE FOR NEW PROJECTS",
-    title: "Your web project, from idea to deploy — with a single technical lead.",
+    title: "The same person who designs your website builds it, ships it and maintains it.",
     subtitle:
-      "Design, development, databases, infrastructure, integrations and analytics. One senior person who understands the business and owns the numbers.",
+      "Design, development, infrastructure and analytics in one place. No splitting the project across vendors, no paying each middleman's markup.",
     ctaPrimary: "Let's talk about your project",
     ctaSecondary: "See services",
     panelFile: "flow.ts",
-    panelComment: "// what I deliver, end to end",
+    panelComment: "// the pieces I handle on every project",
     flow: [
       ["design", "UI/UX interfaces"],
       ["development", "frontend + backend"],
@@ -33,63 +33,65 @@ export const en = {
     ],
   },
   trust: {
-    // Industry benchmarks with sources — NOT dishape's own results.
-    // Swap for real client metrics once available.
-    caption: "What getting it right is worth",
+    // Industry benchmarks with sources — used as a diagnostic lens, not as dishape's own results.
+    // Intentional (authority by diagnosis): we are NOT presenting case studies or testimonials.
+    caption: "What's at stake when a site is built badly",
     metrics: [
       { prefix: "", count: 53, suffix: "%", label: "abandon a site that takes over 3 s to load" },
       { prefix: "+", count: 8, suffix: "%", label: "more conversions for every 0.1 s of speed gained" },
       { prefix: "", count: 68, suffix: "%", label: "of online experiences begin with a search engine" },
       { prefix: "−", count: 24, suffix: "%", label: "lower abandonment when Core Web Vitals pass" },
     ],
+    stance:
+      "That's why performance is the first thing I solve on every project, before any other layer. It's the foundation everything else sits on.",
     sources: "Sources: Google · Deloitte · BrightEdge",
   },
   value: {
     eyebrow: "01 / ALL IN ONE",
-    title: "One person responsible. Everything handled.",
+    title: "One point of contact for the whole project.",
     intro:
-      "Forget about coordinating a designer, a developer, a sysadmin and a marketing agency separately. One senior professional who masters every piece.",
+      "Coordinating a designer, a developer, a sysadmin and an agency separately costs time, and each one's markup adds up on the invoice. Here, one person handles every piece and is accountable for how they fit together.",
     items: [
-      ["user", "A single point of contact", "No middlemen, no misunderstandings. You talk directly to whoever designs, builds and ships your project."],
-      ["timer", "Less time, less friction", "No cross-team meetings or waiting between vendors. A direct flow from idea to implementation."],
-      ["wallet", "Lower costs", "One professional instead of three or four vendors. Less overhead, more budget going straight into your product."],
-      ["layers", "End-to-end vision", "Every technical decision is made with the full picture: design, performance, security and scalability aligned."],
+      ["user", "A single point of contact", "You deal directly with whoever designs, builds and ships the project. No middlemen translating what the business needs."],
+      ["timer", "Less friction", "No cross-team meetings, no waiting between vendors. The project moves in one direction."],
+      ["wallet", "Lower cost", "One person instead of three or four vendors. The budget goes into the product, not into coordination overhead."],
+      ["layers", "Decisions with judgment", "Every technical decision is made with the full picture: design, performance, security and scalability aligned from the start."],
     ],
   },
   services: {
     eyebrow: "02 / SERVICES",
     title: "Services",
-    intro: "Everything your project needs to run, grow and convert.",
+    intro: "Everything a project needs to run well and turn visitors into customers.",
     items: [
-      ["pen-tool", "UI/UX Design", "Clear, attractive interfaces designed so your users do exactly what you need them to do."],
-      ["code", "Custom development", "Robust, fast and maintainable web apps. No generic templates: code built for your business."],
-      ["database", "Databases", "Data design, modelling and optimization. Your information organized, secure and ready to scale."],
-      ["plug", "Third-party integrations", "Payment gateways, CRMs, external APIs, automations. Everything connected and working."],
-      ["server", "Infrastructure & hosting", "Configured servers, domains, SSL, CI/CD. Your project online, fast and protected."],
-      ["bar-chart-3", "Analytics & conversion", "Real metrics, event tracking and continuous optimization so your investment turns into results."],
+      ["pen-tool", "UI/UX Design", "Tidy interfaces where every element guides the user toward the action that matters: buy, contact, sign up."],
+      ["code", "Custom development", "Apps built for the business, not adapted from a template. Your own code, maintainable and extendable without rewriting from scratch."],
+      ["database", "Databases", "Data modelling and optimization designed from the start so queries stay fast as the volume grows."],
+      ["plug", "Third-party integrations", "Payment gateways, CRMs, APIs and automations wired into the systems the business already uses."],
+      ["server", "Infrastructure & hosting", "Servers, domains, SSL certificates and automated deployment. The part almost nobody sees, and the one that decides whether the site stays up under load."],
+      ["bar-chart-3", "Analytics & conversion", "Tracking real events to know what visitors do and where they drop off. Without data, optimizing is guessing."],
     ],
   },
   ai: {
     eyebrow: "03 / AI & AUTOMATION",
-    title: "AI applied where it moves the needle",
+    title: "AI applied to concrete problems, not to hype",
     intro:
-      "I bring in artificial intelligence where it creates real value: fewer manual tasks, 24/7 support and data-driven decisions. No hype — focused on your business outcome.",
+      "Artificial intelligence put where it cuts manual work or improves service: around-the-clock answers, processes that run on their own and decisions backed by data. Only where there's a real problem to solve.",
     items: [
-      ["bot", "Chatbots & assistants", "24/7 service and support with AI that understands your customers and responds the way your business would."],
-      ["workflow", "Process automation", "Workflows that remove repetitive tasks: classify, reply, load and move data with no manual work."],
-      ["share-2", "Agents & MCP", "I connect AI to your tools and data via the Model Context Protocol: so it acts, not just answers."],
-      ["database", "Smart data (RAG)", "Search and answers over your own documents, with automatic analysis and enrichment."],
+      ["bot", "Chatbots & assistants", "Around-the-clock service with AI trained on the business's own information, answering in its tone and handing off to a person when needed."],
+      ["workflow", "Process automation", "Workflows that take over the repetitive tasks: classify, reply, load and move data with no manual work."],
+      ["share-2", "Agents & MCP", "AI wired into the business's tools and data via the Model Context Protocol, so it carries out actions and doesn't just answer."],
+      ["database", "Smart data (RAG)", "Search and answers over the business's own documents, with automatic analysis and enrichment."],
     ],
   },
   process: {
     eyebrow: "04 / PROCESS",
     title: "How I work",
-    intro: "A clear, predictable process. No surprises.",
+    intro: "A clear, predictable process, with a fixed price agreed before starting.",
     steps: [
-      ["1", "We talk and define goals", "I understand your business, your users and what you need to achieve. We define scope, priorities and success metrics."],
-      ["2", "Design & technical proposal", "I design the interface, define the architecture and present a clear proposal with timelines and deliverables."],
-      ["3", "Development & integrations", "I build the product iteratively with partial deliveries. You see real progress, not just promises."],
-      ["4", "Launch & optimization", "Deploy to production, monitoring, analytics and continuous improvement based on real usage data."],
+      ["1", "Defining goals", "First I understand the business, its users and the result it's after. Scope, priorities and success metrics follow from that."],
+      ["2", "Design & technical proposal", "Interface design, architecture, and a proposal with timelines, deliverables and a fixed price."],
+      ["3", "Development & integrations", "The product is built in parts, with partial deliveries. At every stage there's something working to see, not only at the end."],
+      ["4", "Launch & optimization", "Going live, monitoring, analytics and improvements backed by real usage data."],
     ],
   },
   stack: {
@@ -109,22 +111,22 @@ export const en = {
     eyebrow: "06 / RESULTS",
     title: "Benefits for your business",
     intro:
-      "It's not about technology. It's about what technology does for your business.",
+      "The part the business actually feels: the site loads, it shows up on Google, and the sale closes without friction.",
     cta: "Let's talk about your project",
     items: [
-      ["gauge", "Fast, optimized sites", "Superior performance and Core Web Vitals in the green. Your site loads fast and Google rewards it."],
-      ["search", "Technical SEO from day one", "Structure, metadata and performance optimized so people find you on Google."],
-      ["shield-check", "Security & backups", "HTTPS, attack protection, automatic backups. Your business always protected."],
-      ["credit-card", "Payments & automation", "Integration with Stripe, MercadoPago and automated flows that save time and reduce errors."],
-      ["wrench", "Support & maintenance", "Updates, monitoring and ongoing support. I don't leave you alone after launch."],
-      ["smartphone", "100% responsive", "A design that adapts to any device. Your customers reach you from anywhere, with no loss of quality."],
+      ["gauge", "Real speed", "Core Web Vitals in the green and low load times. Every tenth of a second counts: it lifts conversion and your ranking on Google."],
+      ["search", "Technical SEO from day one", "Structure, metadata and performance handled from the start, when fixing them is cheap and not a rebuild."],
+      ["shield-check", "Security & backups", "HTTPS, attack protection and automatic backups, so a single incident doesn't take the business down with it."],
+      ["credit-card", "Payments & automation", "Stripe, MercadoPago and automated flows that charge, invoice and record with no manual steps to get stuck on."],
+      ["wrench", "Support & maintenance", "Updates, monitoring and support after launch. The site isn't abandoned the day it goes live."],
+      ["smartphone", "Flawless on mobile", "Where most customers land first. The site looks and works right on any screen, with no broken version."],
     ],
   },
   contact: {
     eyebrow: "07 / CONTACT",
     title: "Ready to start your project?",
     intro:
-      "Tell me what you need and I'll get back to you within 24 hours with a clear proposal.",
+      "With a short description of the project, I'll send back a clear proposal within 24 hours.",
     form: {
       name: "Name *",
       namePh: "Your name",
@@ -133,15 +135,15 @@ export const en = {
       company: "Company (optional)",
       companyPh: "Your company name",
       message: "Message *",
-      messagePh: "Tell me about your project: what you need and your timeline.",
+      messagePh: "A short description of the project: what you need and your timeline.",
       submit: "Send message",
       sending: "Sending…",
-      success: "Message sent! I'll get back to you within 24 hours.",
-      error: "Couldn't send. Please try again or reach me on WhatsApp.",
+      success: "Message sent. I'll reply within 24 hours.",
+      error: "The message couldn't be sent. You can also reach me on WhatsApp.",
     },
-    asideTitle: "Prefer to reach out directly?",
+    asideTitle: "Rather talk directly?",
     asideBody:
-      "If you already know what you need or prefer a more direct conversation, reach me through any of these channels.",
+      "For a more direct conversation, or if the project is already defined, any of these channels works.",
     calendlyLabel: "Video call",
     calendlyValue: "Book a 10-min call",
     emailLabel: "Email",
@@ -150,7 +152,7 @@ export const en = {
     responseTime: "Reply within 24 hours",
   },
   footer: {
-    tagline: "Professional full-stack development, from idea to deploy.",
+    tagline: "Web design, development and infrastructure from one person.",
     rights: "All rights reserved.",
   },
   consent: {

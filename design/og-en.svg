@@ -41,13 +41,13 @@
   <text x="150" y="106" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="46" fill="#f1f1f4">dishape<tspan fill="#3fb950">.</tspan></text>
 
   <!-- headline -->
-  <text x="66" y="318" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92" fill="#f1f1f4">From idea</text>
-  <text x="66" y="430" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92"><tspan fill="#f1f1f4">to </tspan><tspan fill="#56d364">deploy.</tspan></text>
+  <text x="66" y="318" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92" fill="#f1f1f4">Your website,</text>
+  <text x="66" y="430" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92"><tspan fill="#f1f1f4">from </tspan><tspan fill="#56d364">one person.</tspan></text>
   <!-- caret cursor -->
-  <rect x="628" y="368" width="40" height="62" rx="2" fill="#3fb950" fill-opacity="0.85"/>
+  <rect x="959" y="368" width="40" height="62" rx="2" fill="#3fb950" fill-opacity="0.85"/>
 
   <!-- subtitle -->
-  <text x="68" y="498" font-family="JetBrainsMono Nerd Font Mono" font-weight="400" font-size="27" fill="#a1a1b5">Senior full-stack development · one technical lead</text>
+  <text x="68" y="498" font-family="JetBrainsMono Nerd Font Mono" font-weight="400" font-size="27" fill="#a1a1b5">One person, no agencies, no middlemen</text>
 
   <!-- footer prompt -->
   <text x="66" y="566" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="30"><tspan fill="#3fb950">&gt; </tspan><tspan fill="#f1f1f4">dishape.dev</tspan></text>

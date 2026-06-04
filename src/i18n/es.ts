@@ -1,8 +1,8 @@
 export const es = {
   meta: {
-    title: "dishape — Desarrollo full-stack, de la idea al deploy",
+    title: "dishape — Diseño, desarrollo e infraestructura web de una sola mano",
     description:
-      "Diseño, desarrollo, infraestructura, integraciones, IA y analítica. Un solo responsable técnico senior que entiende tu negocio y responde por los números.",
+      "La misma persona diseña, programa, publica y mantiene tu web. Diseño, desarrollo, infraestructura y analítica en un solo lugar, sin coordinar proveedores.",
   },
   nav: {
     services: "Servicios",
@@ -17,13 +17,13 @@ export const es = {
   hero: {
     badge: "DISPONIBLE PARA NUEVOS PROYECTOS",
     title:
-      "Tu proyecto web, de la idea al deploy — con un solo responsable técnico.",
+      "La misma persona que diseña tu web la programa, la publica y la mantiene.",
     subtitle:
-      "Diseño, desarrollo, bases de datos, infraestructura, integraciones y analítica. Una sola persona senior que entiende el negocio y responde por los números.",
+      "Diseño, desarrollo, infraestructura y analítica en un solo lugar. Sin repartir el proyecto entre varios proveedores ni pagar el margen de cada intermediario.",
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver servicios",
     panelFile: "flujo.ts",
-    panelComment: "// lo que entrego, de punta a punta",
+    panelComment: "// las piezas que resuelvo en cada proyecto",
     flow: [
       ["diseño", "interfaces UI/UX"],
       ["desarrollo", "frontend + backend"],
@@ -34,63 +34,65 @@ export const es = {
     ],
   },
   trust: {
-    // Benchmarks de industria con fuente — NO son resultados propios.
-    // Reemplazar por métricas reales de clientes cuando las haya.
-    caption: "El impacto de hacer las cosas bien",
+    // Datos de industria con fuente — usados como lente diagnóstica, no como resultados propios.
+    // Es intencional (autoridad por diagnóstico): no presentamos casos ni testimonios.
+    caption: "Lo que está en juego cuando un sitio está mal hecho",
     metrics: [
       { prefix: "", count: 53, suffix: "%", label: "abandona un sitio que tarda más de 3 s en cargar" },
       { prefix: "+", count: 8, suffix: "%", label: "más conversión por cada 0,1 s de mejora en velocidad" },
       { prefix: "", count: 68, suffix: "%", label: "de las experiencias online empiezan en un buscador" },
       { prefix: "−", count: 24, suffix: "%", label: "menos abandono al cumplir Core Web Vitals" },
     ],
+    stance:
+      "Por eso en cada proyecto el rendimiento es lo primero que resuelvo, antes que cualquier otra capa. Es la base sobre la que se apoya todo lo demás.",
     sources: "Fuentes: Google · Deloitte · BrightEdge",
   },
   value: {
     eyebrow: "01 / TODO EN UNO",
-    title: "Un solo responsable. Todo resuelto.",
+    title: "Un solo interlocutor para todo el proyecto.",
     intro:
-      "Olvidate de coordinar diseñador, programador, administrador de servidores y agencia de marketing por separado. Un profesional senior que domina todas las piezas.",
+      "Coordinar diseñador, programador, administrador de servidores y agencia por separado cuesta tiempo, y el margen de cada uno se suma a la factura. Acá hay una sola persona que domina todas las piezas y responde por cómo encajan entre sí.",
     items: [
-      ["user", "Un único responsable", "Sin intermediarios ni malentendidos. Hablás directo con quien diseña, programa y despliega tu proyecto."],
-      ["timer", "Menos tiempo, menos fricción", "Sin reuniones entre equipos ni esperas entre proveedores. Un flujo directo de la idea a la implementación."],
-      ["wallet", "Costos reducidos", "Un solo profesional en lugar de tres o cuatro proveedores. Menos overhead, más inversión directa en tu producto."],
-      ["layers", "Visión integral", "Cada decisión técnica se toma con perspectiva completa: diseño, rendimiento, seguridad y escalabilidad alineados."],
+      ["user", "Un único interlocutor", "El trato es directo con quien diseña, programa y publica el proyecto. Sin intermediarios que traduzcan lo que el negocio necesita."],
+      ["timer", "Menos fricción", "Sin reuniones entre equipos ni esperas entre proveedores. El proyecto avanza en una sola dirección."],
+      ["wallet", "Menos costo", "Una sola persona en lugar de tres o cuatro proveedores. El presupuesto va al producto, no a coordinar el overhead."],
+      ["layers", "Decisiones con criterio", "Cada decisión técnica se toma con el panorama completo: diseño, rendimiento, seguridad y escalabilidad alineados desde el inicio."],
     ],
   },
   services: {
     eyebrow: "02 / SERVICIOS",
     title: "Servicios",
-    intro: "Todo lo que tu proyecto necesita para funcionar, crecer y convertir.",
+    intro: "Todo lo que un proyecto necesita para funcionar bien y convertir visitas en clientes.",
     items: [
-      ["pen-tool", "Diseño UI/UX", "Interfaces claras, atractivas y pensadas para que tus usuarios hagan lo que necesitás que hagan."],
-      ["code", "Desarrollo a medida", "Aplicaciones web robustas, rápidas y mantenibles. Sin plantillas genéricas: código hecho para tu negocio."],
-      ["database", "Bases de datos", "Diseño, modelado y optimización de datos. Tu información organizada, segura y lista para escalar."],
-      ["plug", "Integraciones con terceros", "Pasarelas de pago, CRMs, APIs externas, automatizaciones. Todo conectado y funcionando."],
-      ["server", "Infraestructura y hosting", "Servidores configurados, dominios, SSL, CI/CD. Tu proyecto online, rápido y protegido."],
-      ["bar-chart-3", "Analytics y conversión", "Métricas reales, tracking de eventos y optimización continua para que tu inversión se traduzca en resultados."],
+      ["pen-tool", "Diseño UI/UX", "Interfaces ordenadas, donde cada elemento guía al usuario hacia la acción que importa: comprar, contactar, registrarse."],
+      ["code", "Desarrollo a medida", "Aplicaciones hechas para el negocio, no adaptadas de una plantilla. Código propio que se puede mantener y ampliar sin reescribir desde cero."],
+      ["database", "Bases de datos", "Modelado y optimización de datos pensados desde el inicio para que las consultas sigan siendo rápidas cuando el volumen crezca."],
+      ["plug", "Integraciones con terceros", "Pasarelas de pago, CRMs, APIs y automatizaciones conectadas a los sistemas que el negocio ya usa."],
+      ["server", "Infraestructura y hosting", "Servidores, dominios, certificados SSL y despliegue automático. La parte que casi nadie ve y que define si el sitio se cae o aguanta."],
+      ["bar-chart-3", "Analítica y conversión", "Medición de eventos reales para saber qué hacen los visitantes y dónde se van. Sin datos, optimizar es adivinar."],
     ],
   },
   ai: {
     eyebrow: "03 / IA & AUTOMATIZACIÓN",
-    title: "IA aplicada donde mueve la aguja",
+    title: "IA aplicada a problemas concretos, no a la moda",
     intro:
-      "Integro inteligencia artificial donde genera valor real: menos tareas manuales, atención 24/7 y decisiones con datos. Sin humo — con foco en el resultado de tu negocio.",
+      "Inteligencia artificial puesta donde reduce trabajo manual o mejora la atención: respuestas a toda hora, procesos que corren solos y decisiones apoyadas en datos. Solo donde hay un problema real que resolver.",
     items: [
-      ["bot", "Chatbots y asistentes", "Atención y soporte 24/7 con IA que entiende a tus clientes y responde como tu negocio lo haría."],
-      ["workflow", "Automatización de procesos", "Flujos que eliminan tareas repetitivas: clasificar, responder, cargar y mover datos sin intervención manual."],
-      ["share-2", "Agentes y MCP", "Conecto la IA a tus herramientas y datos vía Model Context Protocol: que actúe, no que solo responda."],
-      ["database", "Datos inteligentes (RAG)", "Búsqueda y respuestas sobre tus propios documentos, con análisis y enriquecimiento automático."],
+      ["bot", "Chatbots y asistentes", "Atención a toda hora con IA entrenada sobre la información del negocio, que responde con su tono y deriva a una persona cuando hace falta."],
+      ["workflow", "Automatización de procesos", "Flujos que se encargan de las tareas repetitivas: clasificar, responder, cargar y mover datos sin intervención manual."],
+      ["share-2", "Agentes y MCP", "La IA conectada a las herramientas y los datos del negocio vía Model Context Protocol, para que ejecute acciones y no solo responda."],
+      ["database", "Datos inteligentes (RAG)", "Búsqueda y respuestas sobre los documentos propios del negocio, con análisis y enriquecimiento automático."],
     ],
   },
   process: {
     eyebrow: "04 / PROCESO",
     title: "Cómo trabajo",
-    intro: "Un proceso claro y predecible. Sin sorpresas.",
+    intro: "Un proceso claro y predecible, con un precio cerrado antes de empezar.",
     steps: [
-      ["1", "Conversamos y definimos objetivos", "Entiendo tu negocio, tus usuarios y lo que necesitás lograr. Definimos alcance, prioridades y métricas de éxito."],
-      ["2", "Diseño y propuesta técnica", "Diseño la interfaz, defino la arquitectura y presento una propuesta clara con tiempos y entregables."],
-      ["3", "Desarrollo e integraciones", "Construyo el producto iterativamente con entregas parciales. Ves avances reales, no solo promesas."],
-      ["4", "Lanzamiento y optimización", "Deploy a producción, monitoreo, analytics y mejora continua basada en datos reales de uso."],
+      ["1", "Definición de objetivos", "Primero entiendo el negocio, sus usuarios y qué resultado se busca. De ahí salen el alcance, las prioridades y las métricas de éxito."],
+      ["2", "Diseño y propuesta técnica", "Diseño de la interfaz, definición de la arquitectura y una propuesta con tiempos, entregables y precio cerrado."],
+      ["3", "Desarrollo e integraciones", "El producto se construye por partes, con entregas parciales. En cada etapa hay algo funcionando para ver, no solo al final."],
+      ["4", "Lanzamiento y optimización", "Puesta en producción, monitoreo, analítica y mejoras apoyadas en los datos reales de uso."],
     ],
   },
   stack: {
@@ -110,22 +112,22 @@ export const es = {
     eyebrow: "06 / RESULTADOS",
     title: "Beneficios para tu negocio",
     intro:
-      "No se trata de tecnología. Se trata de lo que la tecnología hace por tu negocio.",
+      "La parte que se nota en el negocio: que el sitio cargue, que aparezca en Google y que la venta se concrete sin fricción.",
     cta: "Hablemos de tu proyecto",
     items: [
-      ["gauge", "Sitios veloces y optimizados", "Rendimiento superior y Core Web Vitals en verde. Tu sitio carga rápido y Google lo premia."],
-      ["search", "SEO técnico desde el día uno", "Estructura, metadatos y rendimiento optimizados para que te encuentren en Google."],
-      ["shield-check", "Seguridad y backups", "HTTPS, protección contra ataques, copias de seguridad automáticas. Tu negocio siempre protegido."],
-      ["credit-card", "Pagos y automatización", "Integración con Stripe, MercadoPago y flujos automáticos que ahorran tiempo y reducen errores."],
-      ["wrench", "Soporte y mantenimiento", "Actualizaciones, monitoreo y soporte continuo. No te dejo solo después del lanzamiento."],
-      ["smartphone", "100% responsive", "Diseño adaptable a cualquier dispositivo. Tus clientes acceden desde donde sea, sin perder calidad."],
+      ["gauge", "Velocidad real", "Core Web Vitals en verde y tiempos de carga bajos. Cada décima de segundo cuenta: mejora la conversión y el puesto en Google."],
+      ["search", "SEO técnico desde el día uno", "Estructura, metadatos y rendimiento resueltos desde el inicio, cuando corregirlos es barato y no una reconstrucción."],
+      ["shield-check", "Seguridad y backups", "HTTPS, protección ante ataques y copias de seguridad automáticas, para que un incidente no se lleve puesto el negocio."],
+      ["credit-card", "Pagos y automatización", "Stripe, MercadoPago y flujos automáticos que cobran, facturan y registran sin pasos manuales que se traben."],
+      ["wrench", "Soporte y mantenimiento", "Actualizaciones, monitoreo y soporte después del lanzamiento. El sitio no queda abandonado el día que sale a producción."],
+      ["smartphone", "Impecable en el celular", "Donde la mayoría de los clientes entra primero. El sitio se ve y funciona bien en cualquier pantalla, sin versiones rotas."],
     ],
   },
   contact: {
     eyebrow: "07 / CONTACTO",
-    title: "¿Listo para arrancar tu proyecto?",
+    title: "¿Listo para empezar tu proyecto?",
     intro:
-      "Contame qué necesitás y te respondo en menos de 24 horas con una propuesta clara.",
+      "Con una descripción breve del proyecto, devuelvo una propuesta clara en menos de 24 horas.",
     form: {
       name: "Nombre *",
       namePh: "Tu nombre",
@@ -134,15 +136,15 @@ export const es = {
       company: "Empresa (opcional)",
       companyPh: "Nombre de tu empresa",
       message: "Mensaje *",
-      messagePh: "Contame sobre tu proyecto: qué necesitás y en qué plazos.",
+      messagePh: "Una breve descripción del proyecto: qué se necesita y en qué plazos.",
       submit: "Enviar mensaje",
       sending: "Enviando…",
-      success: "¡Mensaje enviado! Te respondo en menos de 24 horas.",
-      error: "No se pudo enviar. Probá de nuevo o escribime por WhatsApp.",
+      success: "Mensaje enviado. Respondo en menos de 24 horas.",
+      error: "El mensaje no se pudo enviar. Otra opción es escribir por WhatsApp.",
     },
-    asideTitle: "¿Preferís contacto directo?",
+    asideTitle: "¿Hablamos directo?",
     asideBody:
-      "Si ya tenés claro lo que necesitás o preferís una conversación más directa, escribime por cualquiera de estos canales.",
+      "Para una conversación más directa, o si el proyecto ya está definido, cualquiera de estos canales sirve.",
     calendlyLabel: "Videollamada",
     calendlyValue: "Agendar llamada de 10 min",
     emailLabel: "Email",
@@ -151,12 +153,12 @@ export const es = {
     responseTime: "Respuesta en menos de 24 hs",
   },
   footer: {
-    tagline: "Desarrollo full-stack profesional, de la idea al deploy.",
+    tagline: "Diseño, desarrollo e infraestructura web de una sola mano.",
     rights: "Todos los derechos reservados.",
   },
   consent: {
     message:
-      "Usamos cookies para medir el tráfico y mejorar tu experiencia. Podés aceptarlas o rechazarlas.",
+      "Usamos cookies para medir el tráfico y mejorar tu experiencia. Se pueden aceptar o rechazar.",
     accept: "Aceptar",
     reject: "Rechazar",
   },

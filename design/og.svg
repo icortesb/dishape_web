@@ -41,13 +41,13 @@
   <text x="150" y="106" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="46" fill="#f1f1f4">dishape<tspan fill="#3fb950">.</tspan></text>
 
   <!-- headline -->
-  <text x="66" y="318" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92" fill="#f1f1f4">De la idea</text>
-  <text x="66" y="430" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92"><tspan fill="#f1f1f4">al </tspan><tspan fill="#56d364">deploy.</tspan></text>
+  <text x="66" y="318" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92" fill="#f1f1f4">Tu web,</text>
+  <text x="66" y="430" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="92"><tspan fill="#f1f1f4">de una </tspan><tspan fill="#56d364">sola mano.</tspan></text>
   <!-- caret cursor -->
-  <rect x="628" y="368" width="40" height="62" rx="2" fill="#3fb950" fill-opacity="0.85"/>
+  <rect x="1014" y="368" width="40" height="62" rx="2" fill="#3fb950" fill-opacity="0.85"/>
 
   <!-- subtitle -->
-  <text x="68" y="498" font-family="JetBrainsMono Nerd Font Mono" font-weight="400" font-size="27" fill="#a1a1b5">Desarrollo full-stack senior · un solo responsable técnico</text>
+  <text x="68" y="498" font-family="JetBrainsMono Nerd Font Mono" font-weight="400" font-size="27" fill="#a1a1b5">Una sola persona, sin agencias ni intermediarios</text>
 
   <!-- footer prompt -->
   <text x="66" y="566" xml:space="preserve" font-family="JetBrainsMono Nerd Font Mono" font-weight="700" font-size="30"><tspan fill="#3fb950">&gt; </tspan><tspan fill="#f1f1f4">dishape.dev</tspan></text>

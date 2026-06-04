@@ -35,12 +35,12 @@ const uid = Math.random().toString(36).slice(2, 8);
     </linearGradient>
   </defs>
 
-  <!-- cube faces -->
+  {/* cube faces */}
   <path d="M44 4 L80 22 L44 40 L8 22 Z" fill={`url(#top-${uid})`}></path>
   <path d="M8 22 L44 40 L44 84 L8 66 Z" fill={`url(#left-${uid})`}></path>
   <path d="M44 40 L80 22 L80 66 L44 84 Z" fill={`url(#right-${uid})`}></path>
 
-  <!-- negative-space "d" on the front-left face -->
+  {/* negative-space "d" on the front-left face */}
   <g fill={cut}>
     <path d="M34 37 L40 40 L40 78 L34 75 Z"></path>
     <path d="M16 42 L34 51 L34 57 L16 48 Z"></path>
