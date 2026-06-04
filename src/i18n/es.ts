@@ -1,6 +1,6 @@
 export const es = {
   meta: {
-    title: "dishape — Diseño, desarrollo e infraestructura web de una sola mano",
+    title: "Diseño y desarrollo web a medida | dishape",
     description:
       "La misma persona diseña, programa, publica y mantiene tu web. Diseño, desarrollo, infraestructura y analítica en un solo lugar, sin coordinar proveedores.",
   },

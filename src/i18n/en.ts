@@ -1,6 +1,6 @@
 export const en = {
   meta: {
-    title: "dishape — Web design, development and infrastructure from one person",
+    title: "Custom web design & development | dishape",
     description:
       "The same person designs, builds, ships and maintains your website. Design, development, infrastructure and analytics in one place, with no vendors to coordinate.",
   },
