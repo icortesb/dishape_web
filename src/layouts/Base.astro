@@ -10,11 +10,12 @@ import { getLang, getDict } from "../i18n";
 interface Props {
   title?: string;
   description?: string;
+  alternates?: { es: string; en: string };
 }
 
 const lang = getLang(Astro);
 const meta = getDict(lang).meta;
-const { title = meta.title, description = meta.description } = Astro.props;
+const { title = meta.title, description = meta.description, alternates } = Astro.props;
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 ---
 
@@ -28,7 +29,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     <meta name="theme-color" content="#0a0a0f" />
 
     <title>{title}</title>
-    <Seo title={title} description={description} />
+    <Seo title={title} description={description} alternates={alternates} />
     <Analytics />
   </head>
   <body class="min-h-screen bg-base text-ink antialiased">

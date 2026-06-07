@@ -1,0 +1,27 @@
+---
+import Base from "../layouts/Base.astro";
+import ServicePage from "../components/ServicePage.astro";
+import { getDict, type ServiceKey } from "../i18n";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  const es = getDict("es").servicePages;
+  const en = getDict("en").servicePages;
+  return (Object.keys(es) as ServiceKey[]).map((key) => ({
+    params: { servicio: es[key].slug },
+    props: { data: es[key], esSlug: es[key].slug, enSlug: en[key].slug },
+  }));
+}
+
+const { data, esSlug, enSlug } = Astro.props;
+const alternates = {
+  es: getRelativeLocaleUrl("es", esSlug),
+  en: getRelativeLocaleUrl("en", enSlug),
+};
+---
+
+<Base title={data.metaTitle} description={data.metaDescription} alternates={alternates}>
+  <ServicePage data={data} />
+</Base>

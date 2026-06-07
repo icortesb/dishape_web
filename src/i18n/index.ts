@@ -8,6 +8,10 @@ export const defaultLang = "es" as const;
 export const ui = { es, en };
 export type Lang = keyof typeof ui;
 
+/** Shape of a single service page's localized content. */
+export type ServiceKey = keyof typeof es.servicePages;
+export type ServicePageData = (typeof es.servicePages)[ServiceKey];
+
 /** Resolve the active locale from the global Astro object inside any component. */
 export function getLang(astro: { currentLocale?: string }): Lang {
   const l = astro.currentLocale;

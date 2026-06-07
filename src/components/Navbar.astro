@@ -7,13 +7,14 @@ import { SITE } from "../site";
 
 const lang = getLang(Astro);
 const t = getDict(lang).nav;
+const home = getRelativeLocaleUrl(lang, "");
 
 const links = [
-  { label: t.services, href: "#servicios" },
-  { label: t.ai, href: "#ia" },
-  { label: t.process, href: "#proceso" },
-  { label: t.stack, href: "#stack" },
-  { label: t.contact, href: "#contacto" },
+  { label: t.services, href: `${home}#servicios` },
+  { label: t.ai, href: `${home}#ia` },
+  { label: t.process, href: `${home}#proceso` },
+  { label: t.stack, href: `${home}#stack` },
+  { label: t.contact, href: `${home}#contacto` },
 ];
 
 const other: Lang = lang === "es" ? "en" : "es";
@@ -22,7 +23,7 @@ const otherUrl = getRelativeLocaleUrl(other, "");
 
 <header class="sticky top-0 z-50 border-b border-line bg-base/80 backdrop-blur-md">
   <nav class="shell flex items-center justify-between py-4">
-    <a href="#top" class="flex items-center gap-2.5" aria-label="dishape — inicio">
+    <a href={home} class="flex items-center gap-2.5" aria-label="dishape — inicio">
       <LogoMark class="h-8 w-8" cut="#0a0a0f" />
       <Wordmark class="text-xl" />
     </a>

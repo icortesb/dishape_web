@@ -2,21 +2,29 @@
 import LogoMark from "./LogoMark.astro";
 import Wordmark from "./Wordmark.astro";
 import { Icon } from "astro-icon/components";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLang, getDict } from "../i18n";
 import { SITE, waLink } from "../site";
 
 const lang = getLang(Astro);
 const nav = getDict(lang).nav;
 const t = getDict(lang).footer;
+const servicePages = getDict(lang).servicePages;
+const home = getRelativeLocaleUrl(lang, "");
 
 const links = [
-  { label: nav.services, href: "#servicios" },
-  { label: nav.ai, href: "#ia" },
-  { label: nav.process, href: "#proceso" },
-  { label: nav.stack, href: "#stack" },
-  { label: nav.benefits, href: "#resultados" },
-  { label: nav.contact, href: "#contacto" },
+  { label: nav.services, href: `${home}#servicios` },
+  { label: nav.ai, href: `${home}#ia` },
+  { label: nav.process, href: `${home}#proceso` },
+  { label: nav.stack, href: `${home}#stack` },
+  { label: nav.benefits, href: `${home}#resultados` },
+  { label: nav.contact, href: `${home}#contacto` },
 ];
+
+const serviceLinks = Object.values(servicePages).map((p) => ({
+  label: p.navLabel,
+  href: getRelativeLocaleUrl(lang, p.slug),
+}));
 
 const social = [
   { icon: "github", href: SITE.social.github, label: "GitHub" },
@@ -39,20 +47,43 @@ const year = new Date().getFullYear();
         <p class="text-sm leading-relaxed text-faint">{t.tagline}</p>
       </div>
 
-      <ul class="flex flex-wrap gap-x-8 gap-y-3">
-        {
-          links.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="text-sm font-medium text-muted transition-colors hover:text-ink"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="flex flex-wrap gap-x-16 gap-y-8">
+        <nav class="flex flex-col gap-3">
+          <span class="eyebrow">{t.sectionsTitle}</span>
+          <ul class="flex flex-col gap-2.5">
+            {
+              links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm font-medium text-muted transition-colors hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <nav class="flex flex-col gap-3">
+          <span class="eyebrow">{t.servicesTitle}</span>
+          <ul class="flex flex-col gap-2.5">
+            {
+              serviceLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm font-medium text-muted transition-colors hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
 
       <div class="flex items-center gap-3">
         {

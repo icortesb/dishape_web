@@ -63,6 +63,7 @@ export const es = {
     eyebrow: "02 / SERVICIOS",
     title: "Servicios",
     intro: "Todo lo que un proyecto necesita para funcionar bien y convertir visitas en clientes.",
+    more: "Páginas dedicadas:",
     items: [
       ["pen-tool", "Diseño UI/UX", "Interfaces ordenadas, donde cada elemento guía al usuario hacia la acción que importa: comprar, contactar, registrarse."],
       ["code", "Desarrollo a medida", "Aplicaciones hechas para el negocio, no adaptadas de una plantilla. Código propio que se puede mantener y ampliar sin reescribir desde cero."],
@@ -155,6 +156,166 @@ export const es = {
   footer: {
     tagline: "Diseño, desarrollo e infraestructura web de una sola mano.",
     rights: "Todos los derechos reservados.",
+    sectionsTitle: "Secciones",
+    servicesTitle: "Servicios",
+  },
+  servicePages: {
+    web: {
+      slug: "desarrollo-web",
+      navLabel: "Desarrollo web",
+      metaTitle: "Desarrollo web a medida para empresas | dishape",
+      metaDescription:
+        "Sitios y aplicaciones web a medida, diseñados, programados y mantenidos por una sola persona. Código propio, rápido y pensado para convertir visitas en clientes.",
+      eyebrow: "DESARROLLO WEB",
+      h1: "Desarrollo web a medida, de la primera línea de código al deploy.",
+      subtitle:
+        "Sitios y aplicaciones hechos para tu negocio, no adaptados de una plantilla. La misma persona los diseña, los programa, los publica y los mantiene.",
+      ctaPrimary: "Hablemos de tu proyecto",
+      ctaSecondary: "Ver todo lo que hago",
+      back: "Volver al inicio",
+      includes: {
+        eyebrow: "QUÉ INCLUYE",
+        title: "Todo lo que necesita el proyecto, en un solo lugar",
+        intro:
+          "Desde el diseño hasta el servidor donde corre. Una sola persona responde por cómo encaja cada pieza.",
+        items: [
+          ["pen-tool", "Diseño de la interfaz", "Pantallas pensadas para guiar al usuario hacia la acción que importa, no solo para que se vean bien."],
+          ["code", "Código propio", "Aplicaciones que se pueden mantener y ampliar sin reescribir desde cero cuando el negocio crece."],
+          ["gauge", "Rendimiento desde el inicio", "Core Web Vitals en verde y tiempos de carga bajos, resueltos durante el desarrollo y no después."],
+          ["search", "SEO técnico", "Estructura, metadatos y velocidad listos para que Google entienda e indexe el sitio."],
+          ["smartphone", "Responsive real", "El sitio funciona igual de bien en el celular, donde entra la mayoría de los clientes."],
+          ["server", "Deploy y mantenimiento", "Puesta en producción, hosting y soporte después del lanzamiento. El sitio no queda abandonado."],
+        ],
+      },
+      why: {
+        eyebrow: "POR QUÉ IMPORTA",
+        title: "La velocidad no es un detalle técnico, es conversión",
+        body:
+          "El 53 % de los visitantes abandona un sitio que tarda más de 3 segundos en cargar, y cada 0,1 s de mejora puede sumar hasta un 8 % de conversión. Por eso el rendimiento es lo primero que resuelvo, antes que cualquier otra capa.",
+        points: [
+          ["Un único responsable", "Tratás directo con quien diseña y programa, sin intermediarios que traduzcan lo que el negocio necesita."],
+          ["Sin sorpresas", "Precio cerrado antes de empezar y entregas parciales para ver el avance en cada etapa."],
+          ["Pensado para crecer", "La arquitectura se define para que sumar funciones más adelante no implique rehacer todo."],
+        ],
+      },
+    },
+    ecommerce: {
+      slug: "tienda-online",
+      navLabel: "Tienda online",
+      metaTitle: "Tienda online a medida | dishape",
+      metaDescription:
+        "Tiendas online propias, rápidas y listas para vender. Pagos con Stripe y MercadoPago, integraciones y analítica, desarrolladas y mantenidas por una sola persona.",
+      eyebrow: "TIENDA ONLINE",
+      h1: "Una tienda online propia, lista para vender sin fricción.",
+      subtitle:
+        "Tu propio e-commerce, no un alquiler en una plataforma que cobra comisión por venta. Rápido, integrado con tus medios de pago y pensado para que la compra se concrete.",
+      ctaPrimary: "Hablemos de tu proyecto",
+      ctaSecondary: "Ver todo lo que hago",
+      back: "Volver al inicio",
+      includes: {
+        eyebrow: "QUÉ INCLUYE",
+        title: "De la vidriera al checkout, todo conectado",
+        intro:
+          "Una tienda no es solo un catálogo: es pagos, stock, envíos y datos funcionando juntos sin que nada se trabe.",
+        items: [
+          ["credit-card", "Pagos integrados", "Stripe y MercadoPago conectados para cobrar sin redirecciones que pierdan la venta."],
+          ["package", "Catálogo y stock", "Gestión de productos, variantes e inventario adaptada a cómo trabaja tu negocio."],
+          ["gauge", "Carga rápida", "Cada décima cuenta: una tienda lenta es una venta perdida antes de empezar."],
+          ["smartphone", "Compra desde el celular", "La mayoría compra desde el teléfono. El checkout funciona impecable en cualquier pantalla."],
+          ["bar-chart-3", "Analítica de ventas", "Medición de eventos reales para saber dónde se cae la compra y dónde optimizar."],
+          ["plug", "Integraciones", "Facturación, envíos, CRM y automatizaciones conectadas a los sistemas que ya usás."],
+        ],
+      },
+      why: {
+        eyebrow: "POR QUÉ IMPORTA",
+        title: "Una tienda propia no te cobra comisión por cada venta",
+        body:
+          "Las plataformas de alquiler se llevan un porcentaje de cada operación y te atan a sus reglas. Una tienda a medida es tuya: el margen queda en tu negocio y las decisiones también.",
+        points: [
+          ["Sin comisión por venta", "Pagás el desarrollo una vez, no un porcentaje de cada compra para siempre."],
+          ["Control total", "Diseño, reglas y datos son tuyos, sin depender de lo que permita una plataforma cerrada."],
+          ["Optimizada para convertir", "Cada paso del checkout pensado para reducir el abandono, con datos para seguir mejorando."],
+        ],
+      },
+    },
+    ai: {
+      slug: "chatbots-ia",
+      navLabel: "Chatbots & IA",
+      metaTitle: "Chatbots e IA para empresas | dishape",
+      metaDescription:
+        "Chatbots y asistentes con IA entrenados sobre la información de tu negocio. Atención a toda hora, integrados a tus herramientas, aplicados a problemas concretos.",
+      eyebrow: "CHATBOTS & IA",
+      h1: "IA aplicada a tu negocio, no a la moda.",
+      subtitle:
+        "Chatbots y asistentes entrenados sobre tu propia información, que responden a toda hora con tu tono y derivan a una persona cuando hace falta.",
+      ctaPrimary: "Hablemos de tu proyecto",
+      ctaSecondary: "Ver todo lo que hago",
+      back: "Volver al inicio",
+      includes: {
+        eyebrow: "QUÉ INCLUYE",
+        title: "Atención que no duerme, entrenada sobre tu negocio",
+        intro:
+          "No un bot enlatado: un asistente que conoce tu información, habla con tu tono y sabe cuándo dar paso a una persona.",
+        items: [
+          ["bot", "Chatbots a medida", "Atención automática entrenada sobre la información real del negocio, no respuestas genéricas."],
+          ["clock", "Disponible 24/7", "Responde consultas a cualquier hora, sin que se pierda una oportunidad por horario."],
+          ["database", "Datos propios (RAG)", "Búsqueda y respuestas sobre tus documentos, con análisis y enriquecimiento automático."],
+          ["share-2", "Agentes y MCP", "La IA conectada a tus herramientas vía Model Context Protocol, para que ejecute acciones y no solo responda."],
+          ["workflow", "Deriva cuando hace falta", "Identifica cuándo una consulta necesita una persona y pasa el contexto completo."],
+          ["bar-chart-3", "Medición", "Registro de qué preguntan los usuarios para mejorar la atención con datos."],
+        ],
+      },
+      why: {
+        eyebrow: "POR QUÉ IMPORTA",
+        title: "La IA suma cuando resuelve un problema real, no cuando está de moda",
+        body:
+          "Puesta donde corresponde, la IA reduce trabajo manual y mejora la atención: respuestas inmediatas, procesos que corren solos y decisiones apoyadas en datos. Puesta de adorno, solo agrega ruido.",
+        points: [
+          ["Sobre un problema concreto", "Primero el problema, después la herramienta. La IA va solo donde hay algo real que resolver."],
+          ["Integrada, no aislada", "Conectada a las herramientas y datos que ya usás, para que ejecute y no solo conteste."],
+          ["Con tu voz", "Entrenada sobre tu información y tu tono, para que la atención se sienta parte del negocio."],
+        ],
+      },
+    },
+    automation: {
+      slug: "automatizacion",
+      navLabel: "Automatización",
+      metaTitle: "Automatización de procesos | dishape",
+      metaDescription:
+        "Automatización de tareas repetitivas y flujos de trabajo: clasificar, responder, cargar y mover datos sin intervención manual. Integrado a las herramientas que ya usás.",
+      eyebrow: "AUTOMATIZACIÓN",
+      h1: "Las tareas repetitivas se las dejás al software.",
+      subtitle:
+        "Flujos que se encargan del trabajo manual y repetitivo: clasificar, responder, cargar y mover datos entre tus sistemas, sin que nadie tenga que hacerlo a mano.",
+      ctaPrimary: "Hablemos de tu proyecto",
+      ctaSecondary: "Ver todo lo que hago",
+      back: "Volver al inicio",
+      includes: {
+        eyebrow: "QUÉ INCLUYE",
+        title: "Menos trabajo manual, menos errores",
+        intro:
+          "Todo lo que hoy alguien hace a mano de forma repetitiva es candidato a automatizarse: tiempo que vuelve al negocio.",
+        items: [
+          ["workflow", "Flujos a medida", "Automatizaciones diseñadas sobre cómo trabaja tu negocio, no plantillas rígidas."],
+          ["plug", "Conexión entre sistemas", "Tus herramientas, CRMs y APIs hablando entre sí sin copiar y pegar datos."],
+          ["mail", "Respuestas automáticas", "Mensajes, notificaciones y seguimientos que salen solos en el momento justo."],
+          ["database", "Carga y movimiento de datos", "Información que se clasifica, registra y mueve entre sistemas sin intervención manual."],
+          ["file-text", "Reportes automáticos", "Informes que se generan y envían solos, listos para tomar decisiones."],
+          ["shield-check", "Menos errores", "Lo que hace el software no se olvida ni se equivoca al tipear. Menos errores, menos retrabajo."],
+        ],
+      },
+      why: {
+        eyebrow: "POR QUÉ IMPORTA",
+        title: "El tiempo en tareas repetitivas es tiempo que no vuelve",
+        body:
+          "Cada proceso manual cuesta horas y abre la puerta a errores. Automatizarlo libera ese tiempo para lo que de verdad mueve el negocio, y baja el costo de cada operación.",
+        points: [
+          ["Tiempo recuperado", "Las horas que hoy se van en tareas repetitivas vuelven al trabajo que importa."],
+          ["Menos errores", "El software no se cansa ni se distrae: la misma tarea sale igual siempre."],
+          ["Escala sin sumar costos", "Más volumen no significa más trabajo manual ni más gente para lo mismo."],
+        ],
+      },
+    },
   },
   consent: {
     message:

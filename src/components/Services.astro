@@ -1,9 +1,15 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import Card from "./Card.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLang, getDict } from "../i18n";
 
-const t = getDict(getLang(Astro)).services;
+const lang = getLang(Astro);
+const t = getDict(lang).services;
+const serviceLinks = Object.values(getDict(lang).servicePages).map((p) => ({
+  label: p.navLabel,
+  href: getRelativeLocaleUrl(lang, p.slug),
+}));
 ---
 
 <section id="servicios" class="scroll-mt-20 border-b border-line bg-surface">
@@ -18,6 +24,20 @@ const t = getDict(getLang(Astro)).services;
           <Card icon={icon} title={title}>
             {body}
           </Card>
+        ))
+      }
+    </div>
+
+    <div class="reveal flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+      <span class="text-faint">{t.more}</span>
+      {
+        serviceLinks.map((link) => (
+          <a
+            href={link.href}
+            class="font-medium text-accent-light transition-colors hover:text-ink"
+          >
+            {link.label}
+          </a>
         ))
       }
     </div>

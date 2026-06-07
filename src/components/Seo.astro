@@ -7,17 +7,23 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  /** Localized paths for the ES/EN counterparts of this page (defaults to home). */
+  alternates?: { es: string; en: string };
 }
-const { title, description, image } = Astro.props;
+const { title, description, image, alternates: altPaths } = Astro.props;
 const lang = getLang(Astro);
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(image ?? (lang === "en" ? "/og-en.png" : "/og.png"), Astro.site).href;
 
+const paths = altPaths ?? {
+  es: getRelativeLocaleUrl("es", ""),
+  en: getRelativeLocaleUrl("en", ""),
+};
 const alternates = [
-  { hreflang: "es", href: new URL(getRelativeLocaleUrl("es", ""), Astro.site).href },
-  { hreflang: "en", href: new URL(getRelativeLocaleUrl("en", ""), Astro.site).href },
-  { hreflang: "x-default", href: new URL(getRelativeLocaleUrl("es", ""), Astro.site).href },
+  { hreflang: "es", href: new URL(paths.es, Astro.site).href },
+  { hreflang: "en", href: new URL(paths.en, Astro.site).href },
+  { hreflang: "x-default", href: new URL(paths.es, Astro.site).href },
 ];
 
 const ogLocale = lang === "es" ? "es_AR" : "en_US";
@@ -34,6 +40,7 @@ const jsonLd = {
   priceRange: "$$",
   areaServed: ["AR", "Latin America", "Worldwide"],
   knowsLanguage: ["es", "en"],
+  sameAs: [SITE.social.github, SITE.social.linkedin],
 };
 ---
 
