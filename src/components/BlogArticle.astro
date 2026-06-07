@@ -1,0 +1,93 @@
+---
+import Navbar from "./Navbar.astro";
+import Footer from "./Footer.astro";
+import WhatsAppFab from "./WhatsAppFab.astro";
+import { Icon } from "astro-icon/components";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLang, getDict } from "../i18n";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+const { post } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).blog;
+const dateLocale = lang === "es" ? "es-AR" : "en-US";
+
+const blogHome = getRelativeLocaleUrl(lang, "blog");
+const contact = `${getRelativeLocaleUrl(lang, "")}#contacto`;
+const related = getDict(lang).servicePages[post.data.relatedService];
+const relatedUrl = getRelativeLocaleUrl(lang, related.slug);
+---
+
+<Navbar />
+<main>
+  <article id="top" class="border-b border-line bg-base">
+    <div class="shell py-20 lg:py-24">
+      <div class="mx-auto flex max-w-3xl flex-col gap-6">
+        <a
+          href={blogHome}
+          class="flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
+        >
+          <Icon name="lucide:arrow-left" class="h-4 w-4" />
+          {t.back}
+        </a>
+
+        <div class="flex items-center gap-3">
+          <span class="eyebrow">{post.data.category}</span>
+          <span class="text-xs text-faint">
+            {post.data.readingTime} {t.readingSuffix}
+          </span>
+        </div>
+
+        <h1
+          class="text-4xl font-bold leading-[1.12] tracking-tight text-ink sm:text-[2.75rem]"
+        >
+          {post.data.title}
+        </h1>
+        <p class="text-lg leading-relaxed text-muted">{post.data.description}</p>
+        <span class="text-sm text-faint">
+          {t.postedOn}{" "}
+          {post.data.pubDate.toLocaleDateString(dateLocale, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
+
+        <div class="article mt-4">
+          <slot />
+        </div>
+
+        <a
+          href={relatedUrl}
+          data-cta="blog_related_service"
+          class="mt-8 flex items-center justify-between gap-4 rounded-2xl border border-line bg-card p-6 transition-colors hover:border-accent/30"
+        >
+          <span class="flex flex-col gap-1">
+            <span class="text-xs text-faint">{t.relatedTitle}</span>
+            <span class="font-semibold text-ink">{related.navLabel}</span>
+          </span>
+          <Icon name="lucide:arrow-right" class="h-5 w-5 shrink-0 text-accent-light" />
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <section class="bg-surface">
+    <div class="shell flex flex-col items-start gap-5 py-16">
+      <h2 class="text-2xl font-bold tracking-tight text-ink sm:text-3xl">{t.ctaTitle}</h2>
+      <p class="max-w-xl leading-relaxed text-muted">{t.ctaBody}</p>
+      <a
+        href={contact}
+        data-cta="blog_cta"
+        class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+      >
+        {t.ctaButton}
+      </a>
+    </div>
+  </section>
+</main>
+<Footer />
+<WhatsAppFab />

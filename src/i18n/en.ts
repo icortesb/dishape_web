@@ -10,6 +10,7 @@ export const en = {
     process: "Process",
     stack: "Stack",
     benefits: "Benefits",
+    blog: "Blog",
     contact: "Contact",
     cta: "Let's talk",
     book: "Book 10 min",
@@ -315,6 +316,23 @@ export const en = {
         ],
       },
     },
+  },
+  blog: {
+    metaTitle: "Blog | dishape",
+    metaDescription:
+      "Articles on web development, online stores, performance and AI applied to business. Clear answers to what's worth knowing before starting a project.",
+    eyebrow: "BLOG",
+    title: "Notes on web, business and conversion",
+    intro:
+      "What's worth knowing before starting a project: pricing, technical decisions and why some things move sales and others don't.",
+    readingSuffix: "read",
+    back: "Back to blog",
+    postedOn: "Published on",
+    relatedTitle: "Related service",
+    ctaTitle: "Have a project in mind?",
+    ctaBody:
+      "With a short description, I'll send back a clear proposal within 24 hours.",
+    ctaButton: "Let's talk about your project",
   },
   consent: {
     message:

@@ -1,0 +1,22 @@
+---
+import Base from "../../layouts/Base.astro";
+import BlogList from "../../components/BlogList.astro";
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getDict } from "../../i18n";
+
+export const prerender = true;
+
+const t = getDict("es").blog;
+const posts = (await getCollection("blog", ({ data }) => data.lang === "es")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const alternates = {
+  es: getRelativeLocaleUrl("es", "blog"),
+  en: getRelativeLocaleUrl("en", "blog"),
+};
+---
+
+<Base title={t.metaTitle} description={t.metaDescription} alternates={alternates}>
+  <BlogList posts={posts} />
+</Base>

@@ -1,0 +1,36 @@
+---
+import Base from "../../../layouts/Base.astro";
+import BlogArticle from "../../../components/BlogArticle.astro";
+import { getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const all = await getCollection("blog");
+  return all
+    .filter((p) => p.data.lang === "en")
+    .map((post) => {
+      const counterpart = all.find(
+        (p) => p.data.lang === "es" && p.data.translationKey === post.data.translationKey,
+      );
+      return {
+        params: { slug: post.data.slug },
+        props: { post, esSlug: counterpart?.data.slug },
+      };
+    });
+}
+
+const { post, esSlug } = Astro.props;
+const { Content } = await render(post);
+const alternates = {
+  es: esSlug ? getRelativeLocaleUrl("es", `blog/${esSlug}`) : getRelativeLocaleUrl("es", "blog"),
+  en: getRelativeLocaleUrl("en", `blog/${post.data.slug}`),
+};
+---
+
+<Base title={`${post.data.title} | dishape`} description={post.data.description} alternates={alternates}>
+  <BlogArticle post={post}>
+    <Content />
+  </BlogArticle>
+</Base>

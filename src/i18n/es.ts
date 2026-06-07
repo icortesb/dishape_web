@@ -10,6 +10,7 @@ export const es = {
     process: "Proceso",
     stack: "Stack",
     benefits: "Beneficios",
+    blog: "Blog",
     contact: "Contacto",
     cta: "Hablemos",
     book: "Agendar 10 min",
@@ -193,7 +194,7 @@ export const es = {
         body:
           "El 53 % de los visitantes abandona un sitio que tarda más de 3 segundos en cargar, y cada 0,1 s de mejora puede sumar hasta un 8 % de conversión. Por eso el rendimiento es lo primero que resuelvo, antes que cualquier otra capa.",
         points: [
-          ["Un único responsable", "Tratás directo con quien diseña y programa, sin intermediarios que traduzcan lo que el negocio necesita."],
+          ["Un único responsable", "El trato es directo con quien diseña y programa, sin intermediarios que traduzcan lo que el negocio necesita."],
           ["Sin sorpresas", "Precio cerrado antes de empezar y entregas parciales para ver el avance en cada etapa."],
           ["Pensado para crecer", "La arquitectura se define para que sumar funciones más adelante no implique rehacer todo."],
         ],
@@ -223,7 +224,7 @@ export const es = {
           ["gauge", "Carga rápida", "Cada décima cuenta: una tienda lenta es una venta perdida antes de empezar."],
           ["smartphone", "Compra desde el celular", "La mayoría compra desde el teléfono. El checkout funciona impecable en cualquier pantalla."],
           ["bar-chart-3", "Analítica de ventas", "Medición de eventos reales para saber dónde se cae la compra y dónde optimizar."],
-          ["plug", "Integraciones", "Facturación, envíos, CRM y automatizaciones conectadas a los sistemas que ya usás."],
+          ["plug", "Integraciones", "Facturación, envíos, CRM y automatizaciones conectadas a los sistemas que ya usas."],
         ],
       },
       why: {
@@ -232,7 +233,7 @@ export const es = {
         body:
           "Las plataformas de alquiler se llevan un porcentaje de cada operación y te atan a sus reglas. Una tienda a medida es tuya: el margen queda en tu negocio y las decisiones también.",
         points: [
-          ["Sin comisión por venta", "Pagás el desarrollo una vez, no un porcentaje de cada compra para siempre."],
+          ["Sin comisión por venta", "Pagas el desarrollo una vez, no un porcentaje de cada compra para siempre."],
           ["Control total", "Diseño, reglas y datos son tuyos, sin depender de lo que permita una plataforma cerrada."],
           ["Optimizada para convertir", "Cada paso del checkout pensado para reducir el abandono, con datos para seguir mejorando."],
         ],
@@ -272,7 +273,7 @@ export const es = {
           "Puesta donde corresponde, la IA reduce trabajo manual y mejora la atención: respuestas inmediatas, procesos que corren solos y decisiones apoyadas en datos. Puesta de adorno, solo agrega ruido.",
         points: [
           ["Sobre un problema concreto", "Primero el problema, después la herramienta. La IA va solo donde hay algo real que resolver."],
-          ["Integrada, no aislada", "Conectada a las herramientas y datos que ya usás, para que ejecute y no solo conteste."],
+          ["Integrada, no aislada", "Conectada a las herramientas y datos que ya usas, para que ejecute y no solo conteste."],
           ["Con tu voz", "Entrenada sobre tu información y tu tono, para que la atención se sienta parte del negocio."],
         ],
       },
@@ -282,9 +283,9 @@ export const es = {
       navLabel: "Automatización",
       metaTitle: "Automatización de procesos | dishape",
       metaDescription:
-        "Automatización de tareas repetitivas y flujos de trabajo: clasificar, responder, cargar y mover datos sin intervención manual. Integrado a las herramientas que ya usás.",
+        "Automatización de tareas repetitivas y flujos de trabajo: clasificar, responder, cargar y mover datos sin intervención manual. Integrado a las herramientas que ya usas.",
       eyebrow: "AUTOMATIZACIÓN",
-      h1: "Las tareas repetitivas se las dejás al software.",
+      h1: "Las tareas repetitivas se las dejas al software.",
       subtitle:
         "Flujos que se encargan del trabajo manual y repetitivo: clasificar, responder, cargar y mover datos entre tus sistemas, sin que nadie tenga que hacerlo a mano.",
       ctaPrimary: "Hablemos de tu proyecto",
@@ -316,6 +317,23 @@ export const es = {
         ],
       },
     },
+  },
+  blog: {
+    metaTitle: "Blog | dishape",
+    metaDescription:
+      "Artículos sobre desarrollo web, tiendas online, rendimiento e IA aplicada a negocios. Respuestas claras a lo que conviene saber antes de encarar un proyecto.",
+    eyebrow: "BLOG",
+    title: "Notas sobre web, negocio y conversión",
+    intro:
+      "Lo que conviene saber antes de encarar un proyecto: precios, decisiones técnicas y por qué algunas cosas mueven las ventas y otras no.",
+    readingSuffix: "de lectura",
+    back: "Volver al blog",
+    postedOn: "Publicado el",
+    relatedTitle: "Servicio relacionado",
+    ctaTitle: "¿Tienes un proyecto en mente?",
+    ctaBody:
+      "Con una descripción breve, te devuelvo una propuesta clara en menos de 24 horas.",
+    ctaButton: "Hablemos de tu proyecto",
   },
   consent: {
     message:

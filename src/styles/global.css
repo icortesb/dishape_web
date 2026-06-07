@@ -116,6 +116,80 @@
       padding-inline: 5rem;
     }
   }
+
+  /* Long-form article prose (rendered Markdown). */
+  .article {
+    color: var(--color-muted);
+    font-size: 1.0625rem;
+    line-height: 1.8;
+  }
+  .article > * + * {
+    margin-top: 1.25rem;
+  }
+  .article h2 {
+    color: var(--color-ink);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-top: 2.75rem;
+  }
+  .article h3 {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+  }
+  .article h2 + p,
+  .article h3 + p,
+  .article h2 + ul,
+  .article h3 + ul,
+  .article h2 + ol,
+  .article h3 + ol {
+    margin-top: 0.75rem;
+  }
+  .article strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .article a {
+    color: var(--color-accent-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .article a:hover {
+    color: var(--color-ink);
+  }
+  .article ul,
+  .article ol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 1.25rem;
+  }
+  .article ul {
+    list-style: disc;
+  }
+  .article ol {
+    list-style: decimal;
+  }
+  .article li::marker {
+    color: var(--color-accent);
+  }
+  .article blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    color: var(--color-ink);
+    font-style: italic;
+  }
+  .article code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-elevated);
+    padding: 0.15em 0.4em;
+    border-radius: 6px;
+    color: var(--color-accent-light);
+  }
 }
 
 /* Respect reduced-motion: neutralise any pre-set animation transforms. */
