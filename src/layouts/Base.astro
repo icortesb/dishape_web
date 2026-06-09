@@ -28,6 +28,14 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0a0a0f" />
 
+    <script is:inline>
+      // Remember the visitor's current language so nginx can route them
+      // back to it on a bare "/" visit (manual toggle choice wins over detection).
+      var p = location.pathname;
+      var l = p === "/en" || p.indexOf("/en/") === 0 ? "en" : "es";
+      document.cookie = "lang=" + l + "; path=/; max-age=31536000; samesite=lax";
+    </script>
+
     <title>{title}</title>
     <Seo title={title} description={description} alternates={alternates} />
     <Analytics />
