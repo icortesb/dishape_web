@@ -1,16 +1,41 @@
-name: deploy
+name: ci-deploy
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch: # allows manual runs from the Actions tab
 
+# Serialize per-ref: two pushes to main queue (never deploy concurrently),
+# while PR runs stay independent of the production pipeline.
 concurrency:
-  group: deploy-production
+  group: ci-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run e2e tests (builds + serves the prod artifact)
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   deploy:
+    needs: test # production never ships unless the suite is green
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to VPS over SSH
