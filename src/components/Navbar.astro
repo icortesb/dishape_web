@@ -48,6 +48,7 @@ const otherUrl = getRelativeLocaleUrl(other, "");
       <a
         href={otherUrl}
         hreflang={other}
+        data-set-lang={other}
         class="rounded-md border border-line px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"
         aria-label={`Switch to ${languages[other]}`}
       >
@@ -66,3 +67,16 @@ const otherUrl = getRelativeLocaleUrl(other, "");
     </div>
   </nav>
 </header>
+
+<script is:inline>
+  // Persist the chosen language the instant the toggle is clicked, BEFORE the
+  // browser navigates. Otherwise the request for "/" still carries the old
+  // lang cookie and the nginx edge redirect bounces the visitor back to their
+  // previous language (EN->ES never reaches Spanish).
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("[data-set-lang]");
+    if (!a) return;
+    var l = a.getAttribute("data-set-lang");
+    document.cookie = "lang=" + l + "; path=/; max-age=31536000; samesite=lax";
+  });
+</script>

@@ -11,6 +11,12 @@ export default defineConfig({
   // Only routes that opt out with `export const prerender = false`
   // (e.g. /api/contact) run on-demand on the Node server.
   adapter: node({ mode: "standalone" }),
+  // Spanish is served at "/" (prefixDefaultLocale: false), so "/es" has no
+  // route. Redirect it to its real Spanish URL instead of 404ing.
+  redirects: {
+    "/es": "/",
+    "/es/": "/",
+  },
   i18n: {
     locales: ["es", "en"],
     defaultLocale: "es",
