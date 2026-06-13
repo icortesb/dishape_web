@@ -27,9 +27,19 @@ const alternates = {
   es: esSlug ? getRelativeLocaleUrl("es", `blog/${esSlug}`) : getRelativeLocaleUrl("es", "blog"),
   en: getRelativeLocaleUrl("en", `blog/${post.data.slug}`),
 };
+const article = {
+  publishedTime: post.data.pubDate.toISOString(),
+  headline: post.data.title,
+};
 ---
 
-<Base title={`${post.data.title} | dishape`} description={post.data.description} alternates={alternates}>
+<Base
+  title={`${post.data.title} | dishape`}
+  description={post.data.description}
+  alternates={alternates}
+  ogType="article"
+  article={article}
+>
   <BlogArticle post={post}>
     <Content />
   </BlogArticle>

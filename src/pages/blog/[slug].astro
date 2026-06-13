@@ -25,11 +25,23 @@ const { post, enSlug } = Astro.props;
 const { Content } = await render(post);
 const alternates = {
   es: getRelativeLocaleUrl("es", `blog/${post.data.slug}`),
-  en: enSlug ? getRelativeLocaleUrl("en", `blog/${enSlug}`) : getRelativeLocaleUrl("en", "blog"),
+  // Only declare the EN hreflang when a real counterpart exists — pointing at
+  // the blog index would break reciprocity and get the pair dropped.
+  en: enSlug ? getRelativeLocaleUrl("en", `blog/${enSlug}`) : undefined,
+};
+const article = {
+  publishedTime: post.data.pubDate.toISOString(),
+  headline: post.data.title,
 };
 ---
 
-<Base title={`${post.data.title} | dishape`} description={post.data.description} alternates={alternates}>
+<Base
+  title={`${post.data.title} | dishape`}
+  description={post.data.description}
+  alternates={alternates}
+  ogType="article"
+  article={article}
+>
   <BlogArticle post={post}>
     <Content />
   </BlogArticle>

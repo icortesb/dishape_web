@@ -49,11 +49,13 @@ const relatedUrl = getRelativeLocaleUrl(lang, related.slug);
         <p class="text-lg leading-relaxed text-muted">{post.data.description}</p>
         <span class="text-sm text-faint">
           {t.postedOn}{" "}
-          {post.data.pubDate.toLocaleDateString(dateLocale, {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString(dateLocale, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
         </span>
 
         <div class="article mt-4">

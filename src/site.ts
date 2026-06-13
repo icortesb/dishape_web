@@ -10,6 +10,9 @@ export const SITE = {
     github: "https://github.com/icortesb",
     linkedin: "https://www.linkedin.com/in/ivan-cortes-buenard/",
   },
+  // Author identity for BlogPosting schema (a linkable Person is a trust
+  // signal, not a seniority claim — kept out of the visible byline).
+  author: "Iván Cortés",
 } as const;
 
 export const waLink = (text?: string) =>

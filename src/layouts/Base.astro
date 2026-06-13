@@ -10,12 +10,20 @@ import { getLang, getDict } from "../i18n";
 interface Props {
   title?: string;
   description?: string;
-  alternates?: { es: string; en: string };
+  alternates?: { es: string; en?: string };
+  ogType?: "website" | "article";
+  article?: { publishedTime: string; headline: string };
 }
 
 const lang = getLang(Astro);
 const meta = getDict(lang).meta;
-const { title = meta.title, description = meta.description, alternates } = Astro.props;
+const {
+  title = meta.title,
+  description = meta.description,
+  alternates,
+  ogType,
+  article,
+} = Astro.props;
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 ---
 
@@ -37,7 +45,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     </script>
 
     <title>{title}</title>
-    <Seo title={title} description={description} alternates={alternates} />
+    <Seo title={title} description={description} alternates={alternates} ogType={ogType} article={article} />
     <Analytics />
   </head>
   <body class="min-h-screen bg-base text-ink antialiased">

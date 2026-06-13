@@ -30,7 +30,10 @@ export default defineConfig({
       filter: (page) => !page.includes("/lab"),
       i18n: {
         defaultLocale: "es",
-        locales: { es: "es-AR", en: "en-US" },
+        // Bare language codes (not es-AR/en-US) so the sitemap hreflang matches
+        // the on-page <link rel="alternate"> codes and targets all Spanish/English
+        // regions, not just AR/US. Conflicting codes get ignored by Google.
+        locales: { es: "es", en: "en" },
       },
     }),
   ],
