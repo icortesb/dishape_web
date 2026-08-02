@@ -23,7 +23,11 @@ export default defineConfig({
   webServer: {
     command: "npm run build && node ./dist/server/entry.mjs",
     url: BASE,
-    env: { HOST: "127.0.0.1", PORT: String(PORT) },
+    env: {
+      HOST: "127.0.0.1",
+      PORT: String(PORT),
+      AUDIT_DATA_DIR: "./test-results/audit-data",
+    },
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
