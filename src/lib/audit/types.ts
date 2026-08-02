@@ -59,3 +59,38 @@ export type Check = {
   severity: Severity;
   run: (ctx: PageContext) => CheckResult;
 };
+
+export type VitalsResult = {
+  /** Lighthouse performance score, 0-100. */
+  score: number | null;
+  /** Lab metrics, in ms except cls. INP has no lab equivalent — TBT proxies it. */
+  lab: {
+    lcp: number | null;
+    cls: number | null;
+    tbt: number | null;
+    fcp: number | null;
+  };
+  /** Real-user data from CrUX. null when the origin has too little traffic. */
+  field: { lcp: number | null; cls: number | null; inp: number | null } | null;
+  transferBytes: number | null;
+  renderBlockingMs: number | null;
+  imageSavingsBytes: number | null;
+};
+
+export type AuditRecord = {
+  id: string;
+  url: string;
+  normalizedUrl: string;
+  createdAt: string;
+  lang: "es" | "en";
+  page: {
+    status: number;
+    finalUrl: string;
+    redirects: number;
+    bytes: number;
+    title: string | null;
+  };
+  checks: CheckResult[];
+  vitals: VitalsResult | null;
+  vitalsError: string | null;
+};

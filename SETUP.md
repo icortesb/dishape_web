@@ -20,6 +20,7 @@ Copy `.env.example` → `.env` and fill it in:
 | `CONTACT_FROM` | Verified sender, e.g. `dishape <no-reply@dishape.dev>` |
 | `CONTACT_TO` | Inbox for submissions (`dishape.dev@gmail.com`) |
 | `PUBLIC_GTM_ID` | GTM container `GTM-XXXXXXX`. Blank = no analytics injected. |
+| `AUDIT_DATA_DIR` | Where audit reports are stored (must be **outside** the release dir, see below). |
 | `HOST` / `PORT` | Node server bind (default `0.0.0.0:4321`) |
 
 `PUBLIC_*` vars are baked in at **build time** — rebuild after changing them.
@@ -50,6 +51,21 @@ Configure these **tags inside GTM** (no code changes needed):
 contact-form success and on WhatsApp click. In GTM create a *Custom Event*
 trigger on `generate_lead` and fire GA4 `generate_lead` + Meta `Lead` from it.
 Mark `generate_lead` as a key event/conversion in GA4 and in Google/Meta Ads.
+
+## Site auditor data directory
+
+Audit reports are stored as JSON files in `AUDIT_DATA_DIR`. **This directory must
+live outside the release directory** — the VPS deploy does `git reset --hard` on
+`/opt/dishape`, so persistent data must go elsewhere (e.g. `/var/lib/dishape/audits`).
+
+On deployment, create the directory and set permissions:
+
+```bash
+sudo mkdir -p /var/lib/dishape/audits
+sudo chown dishape:dishape /var/lib/dishape/audits
+```
+
+Then set `AUDIT_DATA_DIR=/var/lib/dishape/audits` in the Node process environment.
 
 ## Still TODO before launch
 
