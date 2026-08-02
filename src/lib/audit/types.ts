@@ -1,3 +1,5 @@
+import type { HTMLElement } from "node-html-parser";
+
 export type AuditErrorCode =
   | "url_invalid"
   | "url_blocked"
@@ -18,8 +20,6 @@ export type SafeFetchOk = {
 
 export type SafeFetchResult = SafeFetchOk | { ok: false; error: AuditErrorCode };
 
-import type { HTMLElement } from "node-html-parser";
-
 export type PageContext = {
   url: URL;
   status: number;
@@ -30,10 +30,14 @@ export type PageContext = {
   doc: HTMLElement;
   /** null when robots.txt could not be fetched at all. */
   robotsTxt: string | null;
-  /** null when we never looked (no candidate URL). */
+  /** null when could not determine (network error, timeout, or invalid URL).
+   *  true if we got a 2xx. false if we got another status or the URL was blocked. */
   sitemapOk: boolean | null;
-  /** null when the page declares no og:image. */
+  /** null when the page declares no og:image. false if present but unreachable or unparseable.
+   *  true if we got a 2xx. */
   ogImageOk: boolean | null;
-  /** true when http:// redirects to https:// for this host. */
+  /** null when http:// check fails (network error, timeout).
+   *  true when http:// redirects to https:// for this host.
+   *  false otherwise. */
   httpRedirectsToHttps: boolean | null;
 };

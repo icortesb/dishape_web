@@ -95,6 +95,8 @@ type RawResponse = { status: number; headers: Headers; body: IncomingMessage };
 
 function requestOnce(
   url: URL,
+  method: "GET" | "HEAD",
+  accept: string,
   timeoutMs: number,
   deps: SafeFetchDeps,
 ): Promise<RawResponse> {
@@ -103,9 +105,9 @@ function requestOnce(
     const req = send(
       url,
       {
-        method: "GET",
+        method,
         lookup: pinnedLookup(deps),
-        headers: { "User-Agent": UA, Accept: "text/html,application/xhtml+xml" },
+        headers: { "User-Agent": UA, Accept: accept },
         timeout: timeoutMs,
       },
       (res) => {
@@ -126,13 +128,14 @@ function requestOnce(
 /** Read the body, aborting past the cap — content-length is attacker-controlled. */
 async function readCapped(
   body: IncomingMessage,
+  maxBytes: number,
 ): Promise<{ ok: true; text: string; bytes: number } | { ok: false }> {
   const chunks: Buffer[] = [];
   let bytes = 0;
   for await (const chunk of body) {
     const buf = chunk as Buffer;
     bytes += buf.length;
-    if (bytes > MAX_BYTES) {
+    if (bytes > maxBytes) {
       body.destroy();
       return { ok: false };
     }
@@ -144,69 +147,168 @@ async function readCapped(
 /** Seam so tests can drive the redirect loop with a controlled address policy. */
 export type SafeFetchDeps = { isBlocked: (ip: string) => boolean };
 
+type GuardedOk = {
+  ok: true;
+  finalUrl: string;
+  status: number;
+  headers: Headers;
+  body: IncomingMessage;
+  redirects: number;
+};
+type GuardedResult = GuardedOk | { ok: false; error: AuditErrorCode };
+
+type GuardedInit = {
+  method: "GET" | "HEAD";
+  accept: string;
+  /** false stops at the first 3xx and returns it — used to observe a redirect
+   *  rather than follow it. */
+  followRedirects?: boolean;
+};
+
+/**
+ * The common redirect-validating loop used by both safeFetch and safeProbe.
+ * Holds all SSRF defenses: URL validation, literal IP checking, per-hop
+ * re-validation, and redirect limits.
+ */
+async function guardedRequest(
+  rawUrl: string,
+  deps: SafeFetchDeps,
+  init: GuardedInit,
+): Promise<GuardedResult> {
+  let current = validUrl(rawUrl);
+  if (!current) return { ok: false, error: "url_invalid" };
+
+  // One budget for the whole chain: a per-hop timeout lets three slow
+  // redirects stretch a 10s bound to 40s.
+  const deadline = Date.now() + TIMEOUT_MS;
+  let redirects = 0;
+
+  while (true) {
+    // URL.hostname keeps the brackets on IPv6 literals; isIP() rejects that
+    // form, and Node's client never calls the lookup hook for a literal —
+    // so without stripping them the address is never checked at all.
+    const literal = current.hostname.replace(/^\[|\]$/g, "");
+    if (isIP(literal) && deps.isBlocked(literal)) {
+      return { ok: false, error: "url_blocked" };
+    }
+
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) return { ok: false, error: "url_unreachable" };
+
+    let res: RawResponse;
+    try {
+      res = await requestOnce(current, init.method, init.accept, remaining, deps);
+    } catch (err) {
+      const blocked = (err as { code?: string })?.code === BLOCKED_ADDRESS;
+      return { ok: false, error: blocked ? "url_blocked" : "url_unreachable" };
+    }
+
+    if (res.status >= 300 && res.status < 400) {
+      res.body.resume(); // drain, or the socket leaks
+      const shouldFollow = init.followRedirects ?? true;
+      if (!shouldFollow) {
+        // Caller requested to stop here without following
+        return {
+          ok: true,
+          finalUrl: current.href,
+          status: res.status,
+          headers: res.headers,
+          body: res.body,
+          redirects,
+        };
+      }
+      const location = res.headers.get("location");
+      if (!location) return { ok: false, error: "url_unreachable" };
+      if (++redirects > MAX_REDIRECTS) return { ok: false, error: "url_unreachable" };
+      const next = validUrl(new URL(location, current).href);
+      if (!next) return { ok: false, error: "url_blocked" };
+      current = next;
+      continue;
+    }
+
+    return {
+      ok: true,
+      finalUrl: current.href,
+      status: res.status,
+      headers: res.headers,
+      body: res.body,
+      redirects,
+    };
+  }
+}
+
 export function createSafeFetch(
   deps: SafeFetchDeps = { isBlocked: isBlockedAddress },
 ) {
   return async function safeFetch(rawUrl: string): Promise<SafeFetchResult> {
-    let current = validUrl(rawUrl);
-    if (!current) return { ok: false, error: "url_invalid" };
+    const res = await guardedRequest(rawUrl, deps, {
+      method: "GET",
+      accept: "text/html,application/xhtml+xml",
+    });
+    if (!res.ok) return res;
 
-    // One budget for the whole chain: a per-hop timeout lets three slow
-    // redirects stretch a 10s bound to 40s.
-    const deadline = Date.now() + TIMEOUT_MS;
-    let redirects = 0;
-
-    while (true) {
-      // URL.hostname keeps the brackets on IPv6 literals; isIP() rejects that
-      // form, and Node's client never calls the lookup hook for a literal —
-      // so without stripping them the address is never checked at all.
-      const literal = current.hostname.replace(/^\[|\]$/g, "");
-      if (isIP(literal) && deps.isBlocked(literal)) {
-        return { ok: false, error: "url_blocked" };
-      }
-
-      const remaining = deadline - Date.now();
-      if (remaining <= 0) return { ok: false, error: "url_unreachable" };
-
-      let res: RawResponse;
-      try {
-        res = await requestOnce(current, remaining, deps);
-      } catch (err) {
-        const blocked = (err as { code?: string })?.code === BLOCKED_ADDRESS;
-        return { ok: false, error: blocked ? "url_blocked" : "url_unreachable" };
-      }
-
-      if (res.status >= 300 && res.status < 400) {
-        res.body.resume(); // drain, or the socket leaks
-        const location = res.headers.get("location");
-        if (!location) return { ok: false, error: "url_unreachable" };
-        if (++redirects > MAX_REDIRECTS) return { ok: false, error: "url_unreachable" };
-        const next = validUrl(new URL(location, current).href);
-        if (!next) return { ok: false, error: "url_blocked" };
-        current = next;
-        continue;
-      }
-
-      const type = res.headers.get("content-type") ?? "";
-      if (!/text\/html|application\/xhtml\+xml/i.test(type)) {
-        res.body.resume();
-        return { ok: false, error: "not_html" };
-      }
-
-      const read = await readCapped(res.body);
-      if (!read.ok) return { ok: false, error: "too_large" };
-
-      return {
-        ok: true,
-        finalUrl: current.href,
-        status: res.status,
-        headers: res.headers,
-        html: read.text,
-        bytes: read.bytes,
-        redirects,
-      };
+    const type = res.headers.get("content-type") ?? "";
+    if (!/text\/html|application\/xhtml\+xml/i.test(type)) {
+      res.body.resume();
+      return { ok: false, error: "not_html" };
     }
+
+    const read = await readCapped(res.body, MAX_BYTES);
+    if (!read.ok) return { ok: false, error: "too_large" };
+
+    return {
+      ok: true,
+      finalUrl: res.finalUrl,
+      status: res.status,
+      headers: res.headers,
+      html: read.text,
+      bytes: read.bytes,
+      redirects: res.redirects,
+    };
   };
 }
 
 export const safeFetch = createSafeFetch();
+
+export type ProbeResult =
+  | { ok: true; status: number; text: string; finalUrl?: string }
+  | { ok: false; error: AuditErrorCode };
+
+/**
+ * Same SSRF guard as safeFetch, for the auxiliary URLs an audit has to touch
+ * (robots.txt, sitemap, og:image). Those come from the audited site's own
+ * markup, so they are exactly as untrusted as the URL the visitor typed —
+ * and they are not HTML, so safeFetch's content-type gate cannot serve them.
+ */
+export function createSafeProbe(
+  deps: SafeFetchDeps = { isBlocked: isBlockedAddress },
+) {
+  return async function safeProbe(
+    rawUrl: string,
+    options: {
+      method?: "GET" | "HEAD";
+      maxBytes?: number;
+      followRedirects?: boolean;
+    } = {},
+  ): Promise<ProbeResult> {
+    const { method = "HEAD", maxBytes = 256 * 1024, followRedirects = true } =
+      options;
+    const res = await guardedRequest(rawUrl, deps, {
+      method,
+      accept: "*/*",
+      followRedirects,
+    });
+    if (!res.ok) return res;
+
+    if (method === "HEAD") {
+      res.body.resume();
+      return { ok: true, status: res.status, text: "", finalUrl: res.finalUrl };
+    }
+
+    const read = await readCapped(res.body, maxBytes);
+    if (!read.ok) return { ok: false, error: "too_large" };
+    return { ok: true, status: res.status, text: read.text, finalUrl: res.finalUrl };
+  };
+}
+
+export const safeProbe = createSafeProbe();
