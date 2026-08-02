@@ -1,4 +1,6 @@
-import { lookup } from "node:dns/promises";
+import { lookup as dnsLookup } from "node:dns";
+import { request as httpRequest, type IncomingMessage } from "node:http";
+import { request as httpsRequest } from "node:https";
 import { isIP } from "node:net";
 import type { SafeFetchResult } from "./types";
 
@@ -8,10 +10,13 @@ const MAX_REDIRECTS = 3;
 const UA =
   "Mozilla/5.0 (compatible; dishape-auditor/1.0; +https://dishape.dev/auditoria)";
 
+const BLOCKED_ADDRESS = "ERR_BLOCKED_ADDRESS";
+
 /**
  * True when the address belongs to a range that must never be reachable from a
  * user-supplied URL: loopback, RFC1918 private space, link-local (which includes
- * the 169.254.169.254 cloud metadata endpoint), multicast and reserved.
+ * the 169.254.169.254 cloud metadata endpoint), multicast and reserved, and
+ * Shared Address Space (CGNAT).
  */
 export function isBlockedAddress(ip: string): boolean {
   const version = isIP(ip);
@@ -20,6 +25,7 @@ export function isBlockedAddress(ip: string): boolean {
     const [a, b] = ip.split(".").map(Number);
     if (a === 0 || a === 127) return true;            // this-network, loopback
     if (a === 10) return true;                         // 10/8
+    if (a === 100 && b >= 64 && b <= 127) return true; // 100.64/10, CGNAT
     if (a === 172 && b >= 16 && b <= 31) return true;  // 172.16/12
     if (a === 192 && b === 168) return true;           // 192.168/16
     if (a === 169 && b === 254) return true;           // link-local + metadata
@@ -41,18 +47,6 @@ export function isBlockedAddress(ip: string): boolean {
   return true; // not a parseable IP — refuse rather than guess
 }
 
-/** Resolve the hostname and refuse if any resolved address is blocked. */
-async function assertPublicHost(hostname: string): Promise<boolean> {
-  if (isIP(hostname)) return !isBlockedAddress(hostname);
-  try {
-    const addrs = await lookup(hostname, { all: true });
-    if (addrs.length === 0) return false;
-    return addrs.every((a) => !isBlockedAddress(a.address));
-  } catch {
-    return false;
-  }
-}
-
 function validUrl(raw: string): URL | null {
   let url: URL;
   try {
@@ -66,72 +60,140 @@ function validUrl(raw: string): URL | null {
 }
 
 /**
- * Fetch a user-supplied URL with SSRF defenses. Redirects are followed manually
- * so every hop is validated — validating only the first hop is the classic hole:
- * a public host can 302 you straight to 169.254.169.254.
+ * Resolve and validate in one step, then hand the connection the very address
+ * we approved. Validating with a separate dns.lookup() and letting the client
+ * resolve again leaves a window for DNS rebinding: the attacker's nameserver
+ * answers with a public IP for our check and a private one for the connection.
  */
-export async function safeFetch(rawUrl: string): Promise<SafeFetchResult> {
-  let current = validUrl(rawUrl);
-  if (!current) return { ok: false, error: "url_invalid" };
-
-  let redirects = 0;
-
-  while (true) {
-    if (!(await assertPublicHost(current.hostname))) {
-      return { ok: false, error: "url_blocked" };
-    }
-
-    let res: Response;
-    try {
-      res = await fetch(current.href, {
-        redirect: "manual",
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-        headers: { "User-Agent": UA, Accept: "text/html,application/xhtml+xml" },
-      });
-    } catch {
-      return { ok: false, error: "url_unreachable" };
-    }
-
-    if (res.status >= 300 && res.status < 400) {
-      const location = res.headers.get("location");
-      if (!location) return { ok: false, error: "url_unreachable" };
-      if (++redirects > MAX_REDIRECTS) return { ok: false, error: "url_unreachable" };
-      const next = validUrl(new URL(location, current).href);
-      if (!next) return { ok: false, error: "url_blocked" };
-      current = next;
-      continue;
-    }
-
-    const type = res.headers.get("content-type") ?? "";
-    if (!/text\/html|application\/xhtml\+xml/i.test(type)) {
-      return { ok: false, error: "not_html" };
-    }
-
-    // Read by chunk and abort past the cap — content-length is attacker-controlled.
-    const reader = res.body?.getReader();
-    if (!reader) return { ok: false, error: "url_unreachable" };
-
-    const chunks: Uint8Array[] = [];
-    let bytes = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      bytes += value.byteLength;
-      if (bytes > MAX_BYTES) {
-        await reader.cancel();
-        return { ok: false, error: "too_large" };
+function pinnedLookup(deps: SafeFetchDeps) {
+  return (
+    hostname: string,
+    options: unknown,
+    callback: (err: Error | null, address?: string, family?: number) => void,
+  ) => {
+    dnsLookup(hostname, options as never, (err, address, family) => {
+      if (err) return callback(err);
+      if (deps.isBlocked(address as string)) {
+        return callback(Object.assign(new Error("blocked"), { code: BLOCKED_ADDRESS }));
       }
-      chunks.push(value);
-    }
-
-    return {
-      ok: true,
-      finalUrl: current.href,
-      status: res.status,
-      headers: res.headers,
-      html: new TextDecoder().decode(await new Blob(chunks).arrayBuffer()),
-      bytes,
-      redirects,
-    };
-  }
+      callback(null, address as string, family as number);
+    });
+  };
 }
+
+type RawResponse = { status: number; headers: Headers; body: IncomingMessage };
+
+function requestOnce(
+  url: URL,
+  timeoutMs: number,
+  deps: SafeFetchDeps,
+): Promise<RawResponse> {
+  return new Promise((resolve, reject) => {
+    const send = url.protocol === "https:" ? httpsRequest : httpRequest;
+    const req = send(
+      url,
+      {
+        method: "GET",
+        lookup: pinnedLookup(deps),
+        headers: { "User-Agent": UA, Accept: "text/html,application/xhtml+xml" },
+        timeout: timeoutMs,
+      },
+      (res) => {
+        const headers = new Headers();
+        for (const [key, value] of Object.entries(res.headers)) {
+          if (Array.isArray(value)) value.forEach((v) => headers.append(key, v));
+          else if (value !== undefined) headers.set(key, value);
+        }
+        resolve({ status: res.statusCode ?? 0, headers, body: res });
+      },
+    );
+    req.on("timeout", () => req.destroy(new Error("timeout")));
+    req.on("error", reject);
+    req.end();
+  });
+}
+
+/** Read the body, aborting past the cap — content-length is attacker-controlled. */
+async function readCapped(
+  body: IncomingMessage,
+): Promise<{ ok: true; text: string; bytes: number } | { ok: false }> {
+  const chunks: Buffer[] = [];
+  let bytes = 0;
+  for await (const chunk of body) {
+    const buf = chunk as Buffer;
+    bytes += buf.length;
+    if (bytes > MAX_BYTES) {
+      body.destroy();
+      return { ok: false };
+    }
+    chunks.push(buf);
+  }
+  return { ok: true, text: Buffer.concat(chunks).toString("utf8"), bytes };
+}
+
+/** Seam so tests can drive the redirect loop with a controlled address policy. */
+export type SafeFetchDeps = { isBlocked: (ip: string) => boolean };
+
+export function createSafeFetch(
+  deps: SafeFetchDeps = { isBlocked: isBlockedAddress },
+) {
+  return async function safeFetch(rawUrl: string): Promise<SafeFetchResult> {
+    let current = validUrl(rawUrl);
+    if (!current) return { ok: false, error: "url_invalid" };
+
+    // One budget for the whole chain: a per-hop timeout lets three slow
+    // redirects stretch a 10s bound to 40s.
+    const deadline = Date.now() + TIMEOUT_MS;
+    let redirects = 0;
+
+    while (true) {
+      // Literal IPs never reach the lookup hook, so they are checked here.
+      if (isIP(current.hostname) && deps.isBlocked(current.hostname)) {
+        return { ok: false, error: "url_blocked" };
+      }
+
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) return { ok: false, error: "url_unreachable" };
+
+      let res: RawResponse;
+      try {
+        res = await requestOnce(current, remaining, deps);
+      } catch (err) {
+        const blocked = (err as { code?: string })?.code === BLOCKED_ADDRESS;
+        return { ok: false, error: blocked ? "url_blocked" : "url_unreachable" };
+      }
+
+      if (res.status >= 300 && res.status < 400) {
+        res.body.resume(); // drain, or the socket leaks
+        const location = res.headers.get("location");
+        if (!location) return { ok: false, error: "url_unreachable" };
+        if (++redirects > MAX_REDIRECTS) return { ok: false, error: "url_unreachable" };
+        const next = validUrl(new URL(location, current).href);
+        if (!next) return { ok: false, error: "url_blocked" };
+        current = next;
+        continue;
+      }
+
+      const type = res.headers.get("content-type") ?? "";
+      if (!/text\/html|application\/xhtml\+xml/i.test(type)) {
+        res.body.resume();
+        return { ok: false, error: "not_html" };
+      }
+
+      const read = await readCapped(res.body);
+      if (!read.ok) return { ok: false, error: "too_large" };
+
+      return {
+        ok: true,
+        finalUrl: current.href,
+        status: res.status,
+        headers: res.headers,
+        html: read.text,
+        bytes: read.bytes,
+        redirects,
+      };
+    }
+  };
+}
+
+export const safeFetch = createSafeFetch();

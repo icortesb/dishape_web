@@ -32,4 +32,20 @@ test.describe("normalizeUrl", () => {
     expect(normalizeUrl("not a url at all")).toBeNull();
     expect(normalizeUrl("javascript:alert(1)")).toBeNull();
   });
+
+  test("preserves port in normalized URL", () => {
+    expect(normalizeUrl("https://example.com:8443/a")).toBe("https://example.com:8443/a");
+  });
+
+  test("port differentiates origins from default port", () => {
+    expect(normalizeUrl("https://example.com:8443/a")).not.toBe(
+      normalizeUrl("https://example.com/a"),
+    );
+  });
+
+  test("adds scheme when user omits it with a port", () => {
+    expect(normalizeUrl("example.com:8080/precios")).toBe(
+      "https://example.com:8080/precios",
+    );
+  });
 });
