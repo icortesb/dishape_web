@@ -476,13 +476,13 @@ export const en = {
       "seo.canonical": {
         name: "Canonical URL",
         why: "It tells Google which version of the page is the official one. Without it, variants with parameters compete against each other and split the signal.",
-        found: "The declared canonical is {found}.",
+        found: "This page does not declare a canonical URL of its own.",
         fix: "Add <link rel=\"canonical\"> pointing to the absolute, definitive URL of this same page.",
       },
       "seo.html.lang": {
         name: "Declared language",
         why: "Without the lang attribute, search engines guess the language and screen readers mispronounce it.",
-        found: "The declared language is \"{found}\".",
+        found: "The <html> tag does not declare a lang attribute.",
         fix: "Add the lang attribute to the <html> tag, for example <html lang=\"en\">.",
       },
       "seo.robots.txt": {

@@ -477,13 +477,13 @@ export const es = {
       "seo.canonical": {
         name: "URL canónica",
         why: "Le dice a Google cuál es la versión oficial de la página. Sin ella, las variantes con parámetros compiten entre sí y reparten la señal.",
-        found: "La canónica declarada es {found}.",
+        found: "Esta página no declara una URL canónica propia.",
         fix: "Agregá <link rel=\"canonical\"> apuntando a la URL absoluta y definitiva de esta misma página.",
       },
       "seo.html.lang": {
         name: "Idioma declarado",
         why: "Sin el atributo lang, los buscadores adivinan el idioma y los lectores de pantalla lo pronuncian mal.",
-        found: "El idioma declarado es \"{found}\".",
+        found: "La etiqueta <html> no declara el atributo lang.",
         fix: "Agregá el atributo lang a la etiqueta <html>, por ejemplo <html lang=\"es\">.",
       },
       "seo.robots.txt": {
