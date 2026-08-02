@@ -11,6 +11,11 @@ export function normalizeUrl(input: string): string | null {
   const trimmed = input.trim();
   if (!trimmed) return null;
 
+  // "example.com:8080/x" is a bare host:port and gets https://. "mailto:x@y"
+  // and "tel:123" declare a scheme we cannot audit — reject rather than coerce.
+  const opaque = /^([a-z][a-z0-9+.-]*):(?!\/\/)([^/?#]*)/i.exec(trimmed);
+  if (opaque && !/^\d+$/.test(opaque[2])) return null;
+
   // Bare hosts ("example.com") are the common user input; assume https.
   // Require // after the scheme to avoid confusing "example.com:8080" as a scheme.
   const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed)

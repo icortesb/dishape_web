@@ -69,14 +69,24 @@ function pinnedLookup(deps: SafeFetchDeps) {
   return (
     hostname: string,
     options: unknown,
-    callback: (err: Error | null, address?: string, family?: number) => void,
+    callback: (err: Error | null, address?: unknown, family?: number) => void,
   ) => {
     dnsLookup(hostname, options as never, (err, address, family) => {
       if (err) return callback(err);
-      if (deps.isBlocked(address as string)) {
+
+      // Node calls this hook with { all: true } whenever autoSelectFamily is
+      // on (the default since Node 20), and then `address` is an array of
+      // { address, family } rather than a string. Both shapes must be handled,
+      // and every candidate address checked — one bad entry taints the set.
+      const candidates = Array.isArray(address)
+        ? address.map((entry) => entry.address)
+        : [address as string];
+
+      if (candidates.some((ip) => deps.isBlocked(ip))) {
         return callback(Object.assign(new Error("blocked"), { code: BLOCKED_ADDRESS }));
       }
-      callback(null, address as string, family as number);
+
+      callback(null, address, family as number);
     });
   };
 }
@@ -147,8 +157,11 @@ export function createSafeFetch(
     let redirects = 0;
 
     while (true) {
-      // Literal IPs never reach the lookup hook, so they are checked here.
-      if (isIP(current.hostname) && deps.isBlocked(current.hostname)) {
+      // URL.hostname keeps the brackets on IPv6 literals; isIP() rejects that
+      // form, and Node's client never calls the lookup hook for a literal —
+      // so without stripping them the address is never checked at all.
+      const literal = current.hostname.replace(/^\[|\]$/g, "");
+      if (isIP(literal) && deps.isBlocked(literal)) {
         return { ok: false, error: "url_blocked" };
       }
 

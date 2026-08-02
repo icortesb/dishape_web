@@ -48,4 +48,16 @@ test.describe("normalizeUrl", () => {
       "https://example.com:8080/precios",
     );
   });
+
+  test("rejects opaque schemes (mailto)", () => {
+    expect(normalizeUrl("mailto:test@example.com")).toBeNull();
+  });
+
+  test("rejects opaque schemes (tel)", () => {
+    expect(normalizeUrl("tel:+541155555555")).toBeNull();
+  });
+
+  test("rejects opaque schemes (urn)", () => {
+    expect(normalizeUrl("urn:isbn:0451450523")).toBeNull();
+  });
 });

@@ -86,4 +86,43 @@ test.describe("safeFetch rejects hostile input", () => {
       server.close();
     }
   });
+
+  test("resolves a hostname through the lookup hook and returns the body", async () => {
+    // "localhost" (a name, not a literal) is the only way to exercise pinnedLookup
+    // without touching the network. The injected policy permits loopback so the
+    // local server is reachable; every other range stays blocked.
+    const server = createServer((_req, res) => {
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end("<html><head><title>ok</title></head><body>hola</body></html>");
+    });
+    await new Promise<void>((r) => server.listen(0, "127.0.0.1", r));
+    const { port } = server.address() as { port: number };
+
+    const fetchAllowingLoopback = createSafeFetch({
+      isBlocked: (ip) => ip !== "127.0.0.1" && ip !== "::1" && isBlockedAddress(ip),
+    });
+
+    try {
+      const result = await fetchAllowingLoopback(`http://localhost:${port}/`);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.status).toBe(200);
+        expect(result.html).toContain("<title>ok</title>");
+      }
+    } finally {
+      server.close();
+    }
+  });
+
+  test("blocks bracketed IPv6 loopback literal", async () => {
+    const r = await safeFetch("http://[::1]:1/");
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toBe("url_blocked");
+  });
+
+  test("blocks bracketed IPv6 link-local literal", async () => {
+    const r = await safeFetch("http://[fe80::1]:1/");
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toBe("url_blocked");
+  });
 });
