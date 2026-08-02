@@ -40,3 +40,17 @@ test.describe("POST /api/audit — input rejection", () => {
     expect(res.status()).toBe(400);
   });
 });
+
+test.describe("GET /api/audit/:id/vitals", () => {
+  test("404s on an unknown id", async ({ request }) => {
+    const res = await request.get("/api/audit/zzzzzzzz/vitals");
+    expect(res.status()).toBe(404);
+  });
+
+  test("404s on a path-traversal id instead of reading the filesystem", async ({
+    request,
+  }) => {
+    const res = await request.get("/api/audit/..%2F..%2Fetc%2Fpasswd/vitals");
+    expect([404, 400]).toContain(res.status());
+  });
+});
