@@ -446,9 +446,10 @@ export const es = {
       },
       "seo.title.length": {
         name: "Largo del título",
-        why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre {min} y {max} caracteres se ve completo.",
+        why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
         found: "El título tiene {actual} caracteres.",
-        fix: "Ajustá el título a un rango de {min} a {max} caracteres, poniendo lo más importante al principio.",
+        foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
+        fix: "Ajustá el título a un rango de 30 a 60 caracteres, poniendo lo más importante al principio.",
       },
       "seo.description.present": {
         name: "Meta descripción",
@@ -458,9 +459,10 @@ export const es = {
       },
       "seo.description.length": {
         name: "Largo de la meta descripción",
-        why: "Google trunca las descripciones largas a mitad de frase. Entre {min} y {max} caracteres se muestra entera.",
+        why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
         found: "La meta descripción tiene {actual} caracteres.",
-        fix: "Reescribí la descripción para que entre en {min} a {max} caracteres.",
+        foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
+        fix: "Reescribí la descripción para que entre en 70 a 160 caracteres.",
       },
       "seo.h1.unique": {
         name: "Encabezado principal único",
@@ -472,12 +474,14 @@ export const es = {
         name: "Jerarquía de encabezados",
         why: "Los encabezados forman el índice de la página. Saltear niveles rompe esa estructura para buscadores y lectores de pantalla.",
         found: "Hay un salto de {from} a {to} sin pasar por el nivel intermedio.",
+        foundEmpty: "Esta página no tiene encabezados que evaluar.",
         fix: "Usá los encabezados en orden, sin saltear niveles. Si el salto es por estética, cambiá el tamaño con CSS, no el nivel.",
       },
       "seo.canonical": {
         name: "URL canónica",
         why: "Le dice a Google cuál es la versión oficial de la página. Sin ella, las variantes con parámetros compiten entre sí y reparten la señal.",
-        found: "Esta página no declara una URL canónica propia.",
+        found: "La canónica declarada es {found}.",
+        foundEmpty: "Esta página no declara una URL canónica propia.",
         fix: "Agregá <link rel=\"canonical\"> apuntando a la URL absoluta y definitiva de esta misma página.",
       },
       "seo.html.lang": {
@@ -508,6 +512,7 @@ export const es = {
         name: "Etiquetas hreflang",
         why: "En un sitio con varios idiomas, indican qué versión mostrar a cada usuario. Un conjunto incompleto hace que Google las ignore por completo.",
         found: "Encontramos {count} etiquetas hreflang con un problema de configuración.",
+        foundEmpty: "Esta página no declara etiquetas hreflang.",
         fix: "Cada versión debe listar todas las alternativas, incluida ella misma, con códigos de idioma válidos.",
       },
       "seo.https": {

@@ -3,7 +3,7 @@ import { parse } from "node-html-parser";
 import { es } from "../../src/i18n/es";
 import { en } from "../../src/i18n/en";
 import { registry, runChecks } from "../../src/lib/audit/registry";
-import { interpolate } from "../../src/lib/audit/copy";
+import { interpolate, resolveFound } from "../../src/lib/audit/copy";
 import type { PageContext } from "../../src/lib/audit/types";
 
 test.describe("audit copy", () => {
@@ -36,6 +36,18 @@ test.describe("audit copy", () => {
         }
       }
     }
+  });
+
+  // foundEmpty is optional, so the plain key-set comparison above can't see
+  // it — a check could gain foundEmpty in one language and not the other
+  // without failing anything else.
+  test("foundEmpty is present in both languages wherever it appears", () => {
+    const esChecks = es.audit.checks as Record<string, { foundEmpty?: string }>;
+    const enChecks = en.audit.checks as Record<string, { foundEmpty?: string }>;
+    const mismatched = Object.keys(esChecks).filter(
+      (id) => Boolean(esChecks[id].foundEmpty) !== Boolean(enChecks[id]?.foundEmpty),
+    );
+    expect(mismatched).toEqual([]);
   });
 });
 
@@ -76,17 +88,24 @@ function pageCtx(html: string, over: Partial<PageContext> = {}): PageContext {
   };
 }
 
+type CheckCopy = { found: string; why: string; fix: string; foundEmpty?: string };
+const dicts = [
+  { lang: "es", checks: es.audit.checks as Record<string, CheckCopy> },
+  { lang: "en", checks: en.audit.checks as Record<string, CheckCopy> },
+];
+
 test.describe("audit copy resolves against real check output", () => {
-  // The report only renders the found/why/fix block for non-pass results
-  // (FindingList puts "pass" in the collapsed section, which never calls
-  // interpolate). A placeholder that only resolves on the pass branch — like
-  // seo.html.lang's {found}, which was only ever populated when lang WAS
-  // present — is invisible to a naive check and still renders literally to
-  // every visitor whose page fails the check.
-  test("found/why/fix never leave a stray {placeholder} for any displayed (fail/warn) result", () => {
+  // The report renders the found/why/fix block for every result except
+  // "pass" — FindingList puts "pass" in the collapsed section (never calls
+  // interpolate), but "fail", "warn" AND "na" all reach it. A placeholder
+  // that only resolves on the pass branch — like seo.html.lang's old
+  // {found}, which was only ever populated when lang WAS present — is
+  // invisible to a naive check and still renders literally to every visitor
+  // whose page fails the check.
+  test("found/why/fix never leave a stray {placeholder} for any displayed (non-pass) result", () => {
     const fixtures: PageContext[] = [
-      // A bare page: forces the "nothing declared at all" fail branches. This
-      // is exactly where seo.canonical and seo.html.lang broke — their
+      // A bare page: forces the "nothing declared at all" fail/na branches.
+      // This is exactly where seo.canonical and seo.html.lang broke — their
       // fail-with-no-evidence path is the page's ordinary state, not an edge case.
       pageCtx("<html></html>", {
         robotsTxt: null,
@@ -121,23 +140,21 @@ test.describe("audit copy resolves against real check output", () => {
     ];
 
     const results = fixtures.flatMap((fixture) => runChecks(fixture));
-    const displayed = results.filter((r) => r.status === "fail" || r.status === "warn");
+    const displayed = results.filter((r) => r.status !== "pass");
 
     // Sanity check: if this collapses to near-zero the fixtures stopped
     // exercising anything and the assertion below would pass for free.
     expect(displayed.length).toBeGreaterThan(20);
 
     const violations: string[] = [];
-    const dicts = [
-      { lang: "es", checks: es.audit.checks as Record<string, { found: string; why: string; fix: string }> },
-      { lang: "en", checks: en.audit.checks as Record<string, { found: string; why: string; fix: string }> },
-    ];
     for (const { lang, checks } of dicts) {
       for (const r of results) {
-        if (r.status !== "fail" && r.status !== "warn") continue;
+        if (r.status === "pass") continue;
         const copy = checks[r.id];
         if (!copy) continue;
-        for (const field of ["found", "why", "fix"] as const) {
+        const found = resolveFound(copy, r.evidence);
+        if (/\{\w+\}/.test(found)) violations.push(`${lang}:${r.id}.found -> "${found}"`);
+        for (const field of ["why", "fix"] as const) {
           const out = interpolate(copy[field], r.evidence);
           if (/\{\w+\}/.test(out)) {
             violations.push(`${lang}:${r.id}.${field} -> "${out}"`);
@@ -146,5 +163,49 @@ test.describe("audit copy resolves against real check output", () => {
       }
     }
     expect([...new Set(violations)]).toEqual([]);
+  });
+
+  // seo.canonical has three displayable branches sharing one `found` template:
+  // nothing declared (no evidence), a declared href that fails URL parsing
+  // (evidence carries the raw href), and a declared href on a foreign host
+  // (evidence carries the resolved absolute URL). A single blanket sentence
+  // can only ever be true for one of these — these three assertions pin down
+  // that resolveFound picks the *right* sentence for each, not merely a
+  // brace-free one.
+  test.describe("seo.canonical selects the right sentence per branch", () => {
+    const seoCanonical = (html: string, over: Partial<PageContext> = {}) =>
+      runChecks(pageCtx(html, over)).find((r) => r.id === "seo.canonical")!;
+
+    test("cross-host warn names the foreign URL", () => {
+      const result = seoCanonical(
+        '<link rel="canonical" href="https://otrodominio.com/x">',
+      );
+      expect(result.status).toBe("warn");
+      for (const { lang, checks } of dicts) {
+        const found = resolveFound(checks["seo.canonical"], result.evidence);
+        expect(found, lang).toContain("otrodominio.com");
+      }
+    });
+
+    test("an unparseable href renders the declared value, not the empty sentence", () => {
+      const result = seoCanonical('<link rel="canonical" href="http://[invalid">');
+      expect(result.status).toBe("fail");
+      expect(result.evidence).toMatchObject({ found: "http://[invalid" });
+      for (const { lang, checks } of dicts) {
+        const found = resolveFound(checks["seo.canonical"], result.evidence);
+        expect(found, lang).toContain("http://[invalid");
+        expect(found, lang).not.toBe(checks["seo.canonical"].foundEmpty);
+      }
+    });
+
+    test("no canonical at all renders the empty sentence", () => {
+      const result = seoCanonical("<html></html>");
+      expect(result.status).toBe("fail");
+      expect(result.evidence).toBeUndefined();
+      for (const { lang, checks } of dicts) {
+        const found = resolveFound(checks["seo.canonical"], result.evidence);
+        expect(found, lang).toBe(checks["seo.canonical"].foundEmpty);
+      }
+    });
   });
 });

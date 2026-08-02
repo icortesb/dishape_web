@@ -445,9 +445,10 @@ export const en = {
       },
       "seo.title.length": {
         name: "Title length",
-        why: "Google truncates long titles and discounts very short ones as uninformative. Between {min} and {max} characters shows in full.",
+        why: "Google truncates long titles and discounts very short ones as uninformative. Between 30 and 60 characters shows in full.",
         found: "The title is {actual} characters long.",
-        fix: "Adjust the title to {min}–{max} characters, with the most important part first.",
+        foundEmpty: "This page has no title, so there's no length to measure.",
+        fix: "Adjust the title to 30–60 characters, with the most important part first.",
       },
       "seo.description.present": {
         name: "Meta description",
@@ -457,9 +458,10 @@ export const en = {
       },
       "seo.description.length": {
         name: "Meta description length",
-        why: "Google cuts long descriptions off mid-sentence. Between {min} and {max} characters shows in full.",
+        why: "Google cuts long descriptions off mid-sentence. Between 70 and 160 characters shows in full.",
         found: "The meta description is {actual} characters long.",
-        fix: "Rewrite the description to fit within {min} to {max} characters.",
+        foundEmpty: "This page has no meta description, so there's no length to measure.",
+        fix: "Rewrite the description to fit within 70 to 160 characters.",
       },
       "seo.h1.unique": {
         name: "Single main heading",
@@ -471,12 +473,14 @@ export const en = {
         name: "Heading hierarchy",
         why: "Headings form the page's outline. Skipping levels breaks that structure for search engines and screen readers.",
         found: "There's a jump from {from} to {to} without passing through the level in between.",
+        foundEmpty: "This page has no headings to evaluate.",
         fix: "Use headings in order, without skipping levels. If the jump is for visual reasons, change the size with CSS, not the level.",
       },
       "seo.canonical": {
         name: "Canonical URL",
         why: "It tells Google which version of the page is the official one. Without it, variants with parameters compete against each other and split the signal.",
-        found: "This page does not declare a canonical URL of its own.",
+        found: "The declared canonical is {found}.",
+        foundEmpty: "This page does not declare a canonical URL of its own.",
         fix: "Add <link rel=\"canonical\"> pointing to the absolute, definitive URL of this same page.",
       },
       "seo.html.lang": {
@@ -507,6 +511,7 @@ export const en = {
         name: "Hreflang tags",
         why: "On a site with multiple languages, they indicate which version to show each user. An incomplete set makes Google ignore them entirely.",
         found: "We found {count} hreflang tags with a configuration problem.",
+        foundEmpty: "This page does not declare hreflang tags.",
         fix: "Each version must list all alternatives, including itself, with valid language codes.",
       },
       "seo.https": {
