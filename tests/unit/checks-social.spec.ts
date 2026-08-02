@@ -89,7 +89,16 @@ test.describe("social.jsonld", () => {
 
   test("warns when a block is present but has no @type", () => {
     const html = '<script type="application/ld+json">{"name":"x"}</script>';
-    expect(run("social.jsonld", ctx(html)).status).toBe("warn");
+    const r = run("social.jsonld", ctx(html));
+    expect(r.status).toBe("warn");
+    expect(r.evidence).toMatchObject({ reason: "no-type" });
+  });
+
+  test("warns when a block is present but does not parse", () => {
+    const html = '<script type="application/ld+json">{ broken json,,, }</script>';
+    const r = run("social.jsonld", ctx(html));
+    expect(r.status).toBe("warn");
+    expect(r.evidence).toMatchObject({ reason: "unparseable" });
   });
 
   test("passes and lists the types found", () => {
