@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
-import { fetchVitals } from "../../../../lib/audit/checks/vitals";
+import { resolveVitals } from "../../../../lib/audit/checks/vitals";
 import { getAudit, updateAudit } from "../../../../lib/audit/store";
-import type { VitalsResult } from "../../../../lib/audit/types";
 
 export const prerender = false;
 
@@ -10,9 +9,6 @@ const json = (data: unknown, status = 200) =>
     status,
     headers: { "Content-Type": "application/json" },
   });
-
-// Two viewers opening the same fresh report must not trigger two PSI runs.
-const inFlight = new Map<string, Promise<VitalsResult>>();
 
 export const GET: APIRoute = async ({ params }) => {
   const id = params.id ?? "";
@@ -23,15 +19,8 @@ export const GET: APIRoute = async ({ params }) => {
     return json({ ok: true, status: "ready", vitals: record.vitals });
   }
 
-  let pending = inFlight.get(id);
-  if (!pending) {
-    pending = fetchVitals(record.page.finalUrl);
-    inFlight.set(id, pending);
-    pending.finally(() => inFlight.delete(id));
-  }
-
   try {
-    const vitals = await pending;
+    const vitals = await resolveVitals(id, record.page.finalUrl);
     await updateAudit(id, { vitals, vitalsError: null });
     return json({ ok: true, status: "ready", vitals });
   } catch (err) {

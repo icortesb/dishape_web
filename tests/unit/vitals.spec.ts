@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { mapPsiResponse } from "../../src/lib/audit/checks/vitals";
+import { mapPsiResponse, createVitalsResolver } from "../../src/lib/audit/checks/vitals";
 
 const psi = {
   lighthouseResult: {
@@ -56,5 +56,78 @@ test.describe("mapPsiResponse", () => {
   test("field is null when the origin has no CrUX sample", () => {
     const v = mapPsiResponse({ lighthouseResult: psi.lighthouseResult });
     expect(v.field).toBeNull();
+  });
+});
+
+const stubVitals = (score: number) => ({
+  score,
+  lab: { lcp: null, cls: null, tbt: null, fcp: null },
+  field: null,
+  transferBytes: null,
+  renderBlockingMs: null,
+  imageSavingsBytes: null,
+});
+
+test.describe("createVitalsResolver", () => {
+  test("concurrent calls for the same id share one upstream call", async () => {
+    let calls = 0;
+    const value = stubVitals(90);
+    const resolver = createVitalsResolver(async () => {
+      calls++;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      return value;
+    });
+
+    const [a, b] = await Promise.all([
+      resolver("id-concurrent", "https://example.com"),
+      resolver("id-concurrent", "https://example.com"),
+    ]);
+
+    expect(a).toBe(value);
+    expect(b).toBe(value);
+    expect(calls).toBe(1);
+  });
+
+  test("a failure cleans up so a later call for the same id retries", async () => {
+    let calls = 0;
+    const resolver = createVitalsResolver(async () => {
+      calls++;
+      if (calls === 1) throw new Error("first attempt fails");
+      return stubVitals(50);
+    });
+
+    await expect(
+      resolver("id-retry", "https://example.com"),
+    ).rejects.toThrow("first attempt fails");
+
+    // If the in-flight entry weren't removed on failure, this would resolve
+    // (or reject) with the same cached promise instead of calling again.
+    const second = await resolver("id-retry", "https://example.com");
+    expect(second.score).toBe(50);
+    expect(calls).toBe(2);
+  });
+
+  test("a rejection produces no unhandled rejection", async () => {
+    const resolver = createVitalsResolver(async () => {
+      throw new Error("boom");
+    });
+
+    let unhandled: unknown = null;
+    const onUnhandledRejection = (reason: unknown) => {
+      unhandled = reason;
+    };
+    process.on("unhandledRejection", onUnhandledRejection);
+
+    try {
+      await expect(
+        resolver("id-unhandled", "https://example.com"),
+      ).rejects.toThrow("boom");
+      // Let the microtask queue (and the check phase, where Node reports
+      // unhandled rejections) drain before asserting nothing fired.
+      await new Promise((resolve) => setImmediate(resolve));
+      expect(unhandled).toBeNull();
+    } finally {
+      process.off("unhandledRejection", onUnhandledRejection);
+    }
   });
 });

@@ -87,3 +87,33 @@ export async function fetchVitals(url: string): Promise<VitalsResult> {
 
   return mapPsiResponse(await res.json());
 }
+
+/**
+ * Two people opening the same fresh report must not trigger two 25-second
+ * upstream calls against the quota, so concurrent resolutions of one id share
+ * a promise.
+ *
+ * The `.catch` after `.finally` is not redundant: `.finally` returns a *new*
+ * promise that rejects with the same reason, and nothing else ever handles it.
+ * Without it, every PSI failure leaks an unhandled rejection.
+ *
+ * The factory exists so tests can inject a fetcher and drive the failure and
+ * concurrency paths without touching the network.
+ */
+export function createVitalsResolver(
+  fetcher: (url: string) => Promise<VitalsResult> = fetchVitals,
+) {
+  const inFlight = new Map<string, Promise<VitalsResult>>();
+
+  return function resolveVitals(id: string, url: string): Promise<VitalsResult> {
+    let pending = inFlight.get(id);
+    if (!pending) {
+      pending = fetcher(url);
+      inFlight.set(id, pending);
+      pending.finally(() => inFlight.delete(id)).catch(() => {});
+    }
+    return pending;
+  };
+}
+
+export const resolveVitals = createVitalsResolver();
