@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { parse } from "node-html-parser";
 import { extractMeta, extractJsonLd, buildPageContext } from "../../src/lib/audit/parse";
-import { createSafeProbe, isBlockedAddress } from "../../src/lib/audit/safeFetch";
+import { createSafeProbe, isBlockedAddress, safeProbe, type ProbeResult } from "../../src/lib/audit/safeFetch";
 import { createServer } from "node:http";
 import type { SafeFetchOk } from "../../src/lib/audit/types";
 
@@ -54,6 +54,22 @@ test.describe("buildPageContext", () => {
   const probeAllowingLoopback = createSafeProbe({
     isBlocked: (ip) => ip !== "127.0.0.1" && ip !== "::1" && isBlockedAddress(ip),
   });
+
+  /**
+   * Records what the probe was asked for and what it answered, so a test can
+   * assert an address was refused rather than merely unreachable — a timeout
+   * and a block both surface as `false` downstream, and only one of them means
+   * the guard did its job.
+   */
+  function recordingProbe(inner = safeProbe) {
+    const calls: { url: string; result: ProbeResult }[] = [];
+    const probe = async (url: string, options?: Parameters<typeof safeProbe>[1]) => {
+      const result = await inner(url, options);
+      calls.push({ url, result });
+      return result;
+    };
+    return { probe: probe as typeof safeProbe, calls };
+  }
 
   test("fetches robots.txt, validates sitemap, and validates og:image", async () => {
     const server = createServer((req, res) => {
@@ -163,13 +179,21 @@ test.describe("buildPageContext", () => {
       finalUrl: "http://example.com/",
       status: 200,
       headers: new Headers({ "content-type": "text/html" }),
-      html: `<html><head><meta property="og:image" content="ht!tp://[invalid"></head></html>`,
+      // Invalid IPv6 bracket literal — genuinely unparseable, will throw in new URL()
+      html: `<html><head><meta property="og:image" content="http://[not-ipv6]/"></head></html>`,
       bytes: 100,
       redirects: 0,
     };
 
-    const ctx = await buildPageContext(mockFetch, probeAllowingLoopback);
+    const { probe, calls } = recordingProbe(probeAllowingLoopback);
+    const ctx = await buildPageContext(mockFetch, probe);
+
+    // og:image present but unparseable → false
     expect(ctx.ogImageOk).toBe(false);
+
+    // Prove the catch branch was hit: the malformed URL was never probed
+    const imageProbes = calls.filter((c) => c.url.includes("image"));
+    expect(imageProbes.length).toBe(0);
   });
 
   test("og:image pointing at blocked address is not fetched and returns false", async () => {
@@ -183,10 +207,24 @@ test.describe("buildPageContext", () => {
       redirects: 0,
     };
 
-    // Use the real safeProbe, not the loopback-allowing one
-    const ctx = await buildPageContext(mockFetch);
-    // og:image points to blocked address, so probe returns url_blocked error → false
+    // Use the real safeProbe to test production address blocking
+    const { probe, calls } = recordingProbe(safeProbe);
+    const start = Date.now();
+    const ctx = await buildPageContext(mockFetch, probe);
+    const elapsed = Date.now() - start;
+
+    // og:image points to blocked address → false
     expect(ctx.ogImageOk).toBe(false);
+
+    // Prove the address was blocked, not merely unreachable:
+    // - The probe rejected it as url_blocked (not a timeout)
+    const imageCall = calls.find((c) => c.url.includes("169.254.169.254"));
+    expect(imageCall).toBeDefined();
+    expect(imageCall?.result).toEqual({ ok: false, error: "url_blocked" });
+
+    // - Elapsed time is <1s (a real connection attempt to link-local cannot be that fast)
+    // Pre-fix code would timeout at 5s; this proves no connection attempt was made
+    expect(elapsed).toBeLessThan(1000);
   });
 
   test("og:image absent returns null", async () => {
