@@ -26,14 +26,23 @@ test.describe("takeToken", () => {
 });
 
 test.describe("clientIp", () => {
-  test("takes the first entry of X-Forwarded-For (nginx sits in front)", () => {
+  test("takes the last X-Forwarded-For entry, which nginx appends", () => {
+    // A client that sends its own X-Forwarded-For gets it prepended, not
+    // trusted: bucketing on the first entry would let it pick its own bucket.
     const req = new Request("https://dishape.dev/api/audit", {
-      headers: { "x-forwarded-for": "203.0.113.9, 10.0.0.1" },
+      headers: { "x-forwarded-for": "1.2.3.4, 190.55.10.20" },
+    });
+    expect(clientIp(req)).toBe("190.55.10.20");
+  });
+
+  test("falls back to x-real-ip when there is no forwarded chain", () => {
+    const req = new Request("https://dishape.dev/api/audit", {
+      headers: { "x-real-ip": "203.0.113.9" },
     });
     expect(clientIp(req)).toBe("203.0.113.9");
   });
 
-  test("falls back to a constant when the header is absent", () => {
+  test("falls back to unknown when the header is absent", () => {
     const req = new Request("https://dishape.dev/api/audit");
     expect(clientIp(req)).toBe("unknown");
   });
