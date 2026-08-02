@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLang, getDict } from "../../i18n";
+
+interface Props {
+  problemCount: number;
+  auditId: string;
+  auditedUrl: string;
+  /** Analytics label, e.g. "audit_report_top". */
+  location: string;
+}
+const { problemCount, auditId, auditedUrl, location } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).audit.cta;
+
+const params = new URLSearchParams({ ref: "audit", id: auditId, url: auditedUrl });
+const href = `${getRelativeLocaleUrl(lang, "")}?${params}#contacto`;
+const clean = problemCount === 0;
+---
+
+<aside class="rounded-2xl border border-accent/25 bg-accent/[0.06] p-8">
+  <h2 class="text-2xl font-semibold text-ink">
+    {clean ? t.titleClean : t.title.replace("{count}", String(problemCount))}
+  </h2>
+  <p class="mt-3 max-w-2xl text-muted">{clean ? t.bodyClean : t.body}</p>
+  <a
+    href={href}
+    data-cta={location}
+    class="mt-6 inline-block rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+  >
+    {t.button}
+  </a>
+</aside>

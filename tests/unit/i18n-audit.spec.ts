@@ -3,7 +3,14 @@ import { parse } from "node-html-parser";
 import { es } from "../../src/i18n/es";
 import { en } from "../../src/i18n/en";
 import { registry, runChecks } from "../../src/lib/audit/registry";
-import { interpolate, resolveFound } from "../../src/lib/audit/copy";
+import {
+  checkCopy,
+  checkText,
+  interpolate,
+  resolveFound,
+  LOCALIZED_EVIDENCE_KEYS,
+  type CheckCopy,
+} from "../../src/lib/audit/copy";
 import type { PageContext } from "../../src/lib/audit/types";
 
 test.describe("audit copy", () => {
@@ -88,7 +95,6 @@ function pageCtx(html: string, over: Partial<PageContext> = {}): PageContext {
   };
 }
 
-type CheckCopy = { found: string; why: string; fix: string; foundEmpty?: string };
 const dicts = [
   { lang: "es", checks: es.audit.checks as Record<string, CheckCopy> },
   { lang: "en", checks: en.audit.checks as Record<string, CheckCopy> },
@@ -207,5 +213,123 @@ test.describe("audit copy resolves against real check output", () => {
         expect(found, lang).toBe(checks["seo.canonical"].foundEmpty);
       }
     });
+  });
+});
+
+/**
+ * Three checks put an internal enum token in their evidence — `reason`
+ * ("missing", "unreachable", "no-type"…) and `source` ("meta", "header") — and
+ * interpolate it straight into an otherwise-localized sentence. Unfixed, the
+ * Spanish report reads "La imagen para compartir tiene un problema: missing.".
+ * The stray-placeholder guard above cannot see it: the placeholder resolves
+ * cleanly, it just resolves to an English identifier.
+ */
+test.describe("evidence enum tokens are localized", () => {
+  /** Checks whose evidence carries a token that reaches the visitor. */
+  const tokenChecks = ["social.og.image", "social.jsonld", "seo.noindex"];
+
+  test("both languages label exactly the same tokens", () => {
+    for (const id of tokenChecks) {
+      const esKeys = Object.keys(checkCopy("es", id)?.evidenceLabels ?? {}).sort();
+      const enKeys = Object.keys(checkCopy("en", id)?.evidenceLabels ?? {}).sort();
+      expect(esKeys.length, `${id} has no labels`).toBeGreaterThan(0);
+      expect(enKeys, id).toEqual(esKeys);
+    }
+  });
+
+  test("each token renders as its label and never as the raw token", () => {
+    for (const lang of ["es", "en"] as const) {
+      for (const id of tokenChecks) {
+        const copy = checkCopy(lang, id)!;
+        for (const [token, label] of Object.entries(copy.evidenceLabels ?? {})) {
+          // Both keys are tried: only the one the template names shows up.
+          for (const key of LOCALIZED_EVIDENCE_KEYS) {
+            const { found } = checkText(copy, { [key]: token });
+            if (!copy.found.includes(`{${key}}`)) continue;
+            expect(found, `${lang}:${id}:${key}=${token}`).toContain(label);
+            expect(found, `${lang}:${id}:${key}=${token}`).not.toContain(token);
+          }
+        }
+      }
+    }
+  });
+
+  test("every token a check actually emits has a label", () => {
+    // Drive the real checks rather than trusting a hand-written token list:
+    // a new branch with a new token fails here instead of shipping raw.
+    const results = [
+      pageCtx("<html></html>"),
+      pageCtx('<meta property="og:image" content="/img.png">'),
+      pageCtx('<meta property="og:image" content="https://example.com/i.jpg">', {
+        ogImageOk: false,
+      }),
+      pageCtx('<meta property="og:image" content="https://example.com/i.jpg">', {
+        ogImageOk: null,
+      }),
+      pageCtx('<script type="application/ld+json">{nope}</script>'),
+      pageCtx('<script type="application/ld+json">{"a":1}</script>'),
+      pageCtx('<meta name="robots" content="noindex">'),
+    ].flatMap((ctx) => runChecks(ctx));
+
+    const seen = new Set<string>();
+    const unlabeled: string[] = [];
+    for (const r of results) {
+      for (const key of LOCALIZED_EVIDENCE_KEYS) {
+        const token = r.evidence?.[key];
+        if (typeof token !== "string") continue;
+        seen.add(`${r.id}:${token}`);
+        for (const lang of ["es", "en"] as const) {
+          if (!checkCopy(lang, r.id)?.evidenceLabels?.[token]) {
+            unlabeled.push(`${lang}:${r.id}:${key}=${token}`);
+          }
+        }
+      }
+    }
+    // Guard the guard: if the fixtures stop reaching these branches the
+    // assertion below would pass against a dictionary with no labels at all.
+    expect(seen.size).toBeGreaterThanOrEqual(6);
+    expect([...new Set(unlabeled)]).toEqual([]);
+  });
+});
+
+test.describe("checkText", () => {
+  test("falls back to foundEmpty when the evidence cannot fill found", () => {
+    const copy: CheckCopy = {
+      name: "n",
+      why: "w",
+      found: "Tiene {actual} caracteres.",
+      foundEmpty: "No hay título que medir.",
+      fix: "f",
+    };
+    expect(checkText(copy, undefined).found).toBe("No hay título que medir.");
+    expect(checkText(copy, { actual: 12 }).found).toBe("Tiene 12 caracteres.");
+  });
+
+  test("localizes the token in why and fix too, not only in found", () => {
+    const copy: CheckCopy = {
+      name: "n",
+      why: "Porque {reason}.",
+      found: "Encontramos {reason}.",
+      fix: "Resolvé {reason}.",
+      evidenceLabels: { missing: "que no hay ninguna" },
+    };
+    expect(checkText(copy, { reason: "missing" })).toEqual({
+      found: "Encontramos que no hay ninguna.",
+      why: "Porque que no hay ninguna.",
+      fix: "Resolvé que no hay ninguna.",
+    });
+  });
+
+  test("leaves evidence that is not an enum token alone", () => {
+    const copy: CheckCopy = {
+      name: "n",
+      why: "w",
+      found: "La canónica es {found}.",
+      fix: "f",
+      evidenceLabels: { missing: "no declarada" },
+    };
+    // `found` carries site data, never a token — a page whose canonical URL
+    // happens to read "missing" must still render verbatim.
+    expect(checkText(copy, { found: "missing" }).found).toBe("La canónica es missing.");
   });
 });

@@ -63,18 +63,22 @@ mm.add(
           !el.closest("#top") &&
           el.getBoundingClientRect().top > window.innerHeight * 0.85,
       );
-    gsap.set(reveals, { autoAlpha: 0, y: 32 });
+    // A page can legitimately have none — the audit report is all above-the-fold
+    // diagnosis — and GSAP logs "target not found" when handed an empty set.
+    if (reveals.length > 0) {
+      gsap.set(reveals, { autoAlpha: 0, y: 32 });
 
-    ScrollTrigger.batch(reveals, {
-      start: "top 85%",
-      onEnter: (batch) =>
-        gsap.to(batch, {
-          autoAlpha: 1,
-          y: 0,
-          stagger: 0.08,
-          overwrite: true,
-        }),
-    });
+      ScrollTrigger.batch(reveals, {
+        start: "top 85%",
+        onEnter: (batch) =>
+          gsap.to(batch, {
+            autoAlpha: 1,
+            y: 0,
+            stagger: 0.08,
+            overwrite: true,
+          }),
+      });
+    }
 
     // ---- Subtle blueprint-grid parallax ----
     gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {

@@ -382,7 +382,13 @@ export const en = {
       passedCount: "{passed} of {total} checks",
       showPassed: "Show the {count} checks that passed",
       hidePassed: "Hide the ones that passed",
-      status: { pass: "Good", warn: "Needs work", fail: "Problem" },
+      status: {
+        pass: "Good",
+        warn: "Needs work",
+        fail: "Problem",
+        // Not a verdict: we could not determine this one either way.
+        na: "Undetermined",
+      },
       severity: { critical: "Critical", important: "Important", minor: "Minor" },
       found: "What we found",
       why: "Why it matters",
@@ -393,6 +399,7 @@ export const en = {
         "We couldn't measure performance right now. The rest of the diagnosis still stands.",
       fieldTitle: "Real user data",
       labTitle: "Lab measurement",
+      weight: "Weight",
       noFieldData:
         "This site doesn't have enough traffic for Google to report real user data.",
       sharePreview: "How your link looks when shared",
@@ -505,6 +512,10 @@ export const en = {
         name: "Indexable page",
         why: "A noindex directive asks Google to exclude the page from results. On a public page it's almost always a configuration mistake.",
         found: "The page is declared noindex ({source}).",
+        evidenceLabels: {
+          meta: "via the robots tag in the <head>",
+          header: "via X-Robots-Tag on the server response",
+        },
         fix: "Remove the noindex directive from the meta robots tag or the X-Robots-Tag header. It's usually left over from a staging environment.",
       },
       "seo.hreflang": {
@@ -542,6 +553,12 @@ export const en = {
         name: "Share image",
         why: "A link without an image takes up a fraction of the space in the feed and gets far fewer clicks than one with a visual card.",
         found: "The share image has a problem: {reason}.",
+        evidenceLabels: {
+          missing: "the page declares none",
+          unreachable: "the declared URL does not respond",
+          relative: "the URL is not absolute",
+          unverified: "we could not confirm the URL responds",
+        },
         fix: "Publish a 1200×630 px image and declare it in og:image with the full absolute URL, including https://",
       },
       "social.twitter.card": {
@@ -554,6 +571,11 @@ export const en = {
         name: "Structured data",
         why: "It tells Google what this page is in a format it understands. It enables rich results and is increasingly important for AI assistants to cite the site.",
         found: "The structured data has a problem: {reason}.",
+        evidenceLabels: {
+          missing: "there is no JSON-LD block",
+          unparseable: "the block is not valid JSON",
+          "no-type": "the block declares no @type",
+        },
         fix: "Add a JSON-LD block with the type that applies (Organization, Product, Article, LocalBusiness…).",
       },
       "social.favicon": {

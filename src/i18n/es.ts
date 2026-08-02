@@ -383,7 +383,13 @@ export const es = {
       passedCount: "{passed} de {total} chequeos",
       showPassed: "Ver los {count} chequeos que pasaron",
       hidePassed: "Ocultar los que pasaron",
-      status: { pass: "Bien", warn: "A mejorar", fail: "Problema" },
+      status: {
+        pass: "Bien",
+        warn: "A mejorar",
+        fail: "Problema",
+        // Not a verdict: we could not determine this one either way.
+        na: "Sin determinar",
+      },
       severity: { critical: "Crítico", important: "Importante", minor: "Menor" },
       found: "Qué encontramos",
       why: "Por qué importa",
@@ -394,6 +400,7 @@ export const es = {
         "No pudimos medir el rendimiento en este momento. El resto del diagnóstico sigue siendo válido.",
       fieldTitle: "Datos de usuarios reales",
       labTitle: "Medición de laboratorio",
+      weight: "Peso",
       noFieldData:
         "Este sitio no tiene tráfico suficiente para que Google reporte datos de usuarios reales.",
       sharePreview: "Así se ve tu link al compartirlo",
@@ -506,6 +513,10 @@ export const es = {
         name: "Página indexable",
         why: "Una directiva noindex le pide a Google que excluya la página de los resultados. En una página pública casi siempre es un error de configuración.",
         found: "La página se declara noindex ({source}).",
+        evidenceLabels: {
+          meta: "por la etiqueta robots del <head>",
+          header: "por el encabezado HTTP X-Robots-Tag",
+        },
         fix: "Quitá la directiva noindex del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
       },
       "seo.hreflang": {
@@ -543,6 +554,12 @@ export const es = {
         name: "Imagen al compartir",
         why: "Un link sin imagen ocupa una fracción del espacio en el feed y recibe muchos menos clics que uno con tarjeta visual.",
         found: "La imagen para compartir tiene un problema: {reason}.",
+        evidenceLabels: {
+          missing: "no hay ninguna declarada",
+          unreachable: "la URL declarada no responde",
+          relative: "la URL es relativa, no absoluta",
+          unverified: "no pudimos confirmar que la URL responda",
+        },
         fix: "Publicá una imagen de 1200×630 px y declarala en og:image con la URL absoluta completa, incluido https://",
       },
       "social.twitter.card": {
@@ -555,6 +572,11 @@ export const es = {
         name: "Datos estructurados",
         why: "Le explican a Google qué es esta página en un formato que entiende. Habilitan resultados enriquecidos y son cada vez más importantes para que los asistentes de IA citen el sitio.",
         found: "Los datos estructurados tienen un problema: {reason}.",
+        evidenceLabels: {
+          missing: "no hay ningún bloque JSON-LD",
+          unparseable: "el bloque no es JSON válido",
+          "no-type": "el bloque no declara @type",
+        },
         fix: "Agregá un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
       },
       "social.favicon": {

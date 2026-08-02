@@ -1,0 +1,18 @@
+---
+import Base from "../../../layouts/Base.astro";
+import AuditReport from "../../../components/audit/AuditReport.astro";
+import { getAudit } from "../../../lib/audit/store";
+import { getDict } from "../../../i18n";
+
+export const prerender = false;
+
+const record = await getAudit(Astro.params.id ?? "");
+if (!record) return new Response(null, { status: 404 });
+
+const t = getDict("es").audit;
+const host = new URL(record.page.finalUrl).host;
+---
+
+<Base title={`Auditoría de ${host} | dishape`} description={t.meta.description} noindex>
+  <AuditReport record={record} />
+</Base>

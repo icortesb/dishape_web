@@ -1,0 +1,58 @@
+---
+import { getLang, getDict } from "../../i18n";
+import { checkCopy, checkText } from "../../lib/audit/copy";
+import type { CheckResult } from "../../lib/audit/types";
+
+interface Props {
+  results: CheckResult[];
+  finalUrl: string;
+}
+const { results, finalUrl } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).audit.report;
+
+const find = (id: string) => results.find((r) => r.id === id);
+const image = find("social.og.image");
+const title = find("social.og.title")?.evidence?.found;
+const description = find("social.og.description")?.evidence?.found;
+
+// Only a verified image gets rendered: a relative or unreachable one would
+// either 404 here or silently render off our own domain.
+const imageUrl = image?.status === "pass" ? String(image.evidence?.found ?? "") : null;
+
+// When there is no image to show, say what is actually wrong with it. The
+// check's own sentence is already branch-accurate — "we could not verify it"
+// for na, "none is declared" for a missing one — where a single blanket
+// "this page has no image" would be a claim we never verified.
+const imageCopy = checkCopy(lang, "social.og.image");
+const caption =
+  image && imageCopy ? checkText(imageCopy, image.evidence).found : t.sharePreviewBroken;
+
+const host = new URL(finalUrl).host;
+---
+
+<section class="flex flex-col gap-4">
+  <h2 class="text-2xl font-semibold text-ink">{t.sharePreview}</h2>
+
+  <div class="max-w-md overflow-hidden rounded-xl border border-line bg-card">
+    {
+      imageUrl ? (
+        <img
+          src={imageUrl}
+          alt=""
+          class="aspect-[1200/630] w-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div class="flex aspect-[1200/630] items-center justify-center bg-elevated px-6 text-center text-sm text-faint">
+          {caption}
+        </div>
+      )
+    }
+    <div class="border-t border-line p-4">
+      <p class="text-xs uppercase text-faint">{host}</p>
+      <p class="mt-1 truncate font-medium text-ink">{title ?? host}</p>
+      {description && <p class="mt-1 line-clamp-2 text-sm text-muted">{description}</p>}
+    </div>
+  </div>
+</section>

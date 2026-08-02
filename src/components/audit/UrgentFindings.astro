@@ -1,0 +1,46 @@
+---
+import { getLang, getDict } from "../../i18n";
+import { checkCopy, checkText } from "../../lib/audit/copy";
+import { rankFindings } from "../../lib/audit/score";
+import type { CheckResult } from "../../lib/audit/types";
+
+interface Props {
+  results: CheckResult[];
+}
+const { results } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).audit.report;
+
+// rankFindings already sorts fail-before-warn and critical-before-minor, and
+// drops "na" — a check we could not determine is never urgent.
+const top = rankFindings(results)
+  .filter((r) => r.status === "fail")
+  .slice(0, 3)
+  .flatMap((result) => {
+    const copy = checkCopy(lang, result.id);
+    // A record written before a check was renamed has no copy left; skip it
+    // rather than render an empty card.
+    return copy ? [{ name: copy.name, ...checkText(copy, result.evidence) }] : [];
+  });
+---
+
+<section class="flex flex-col gap-5">
+  <h2 class="text-2xl font-semibold text-ink">{t.urgent}</h2>
+
+  {top.length === 0 && <p class="text-muted">{t.urgentEmpty}</p>}
+
+  <ol class="grid gap-3">
+    {
+      top.map((finding, i) => (
+        <li class="flex gap-4 rounded-xl border border-red-500/25 bg-red-500/[0.06] p-5">
+          <span class="text-2xl font-semibold text-red-400/70">{i + 1}</span>
+          <div>
+            <h3 class="font-semibold text-ink">{finding.name}</h3>
+            <p class="mt-1 text-sm text-muted">{finding.found}</p>
+            <p class="mt-2 text-sm text-muted">{finding.why}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
