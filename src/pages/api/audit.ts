@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { normalizeUrl } from "../../lib/audit/normalizeUrl";
+import { isDotlessHttpHost, normalizeUrl } from "../../lib/audit/normalizeUrl";
 import { safeFetch } from "../../lib/audit/safeFetch";
 import { buildPageContext } from "../../lib/audit/parse";
 import { runChecks } from "../../lib/audit/registry";
@@ -31,17 +31,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   const normalized = normalizeUrl(raw);
   if (!normalized) {
-    // normalizeUrl also returns null for a bare, dot-less host ("localhost",
-    // "printer") — structurally a valid http(s) URL, just not one it can turn
-    // into a canonical cache key. That is exactly the shape of an internal-
-    // network probe, so give safeFetch's DNS-level guard a chance to
-    // reclassify it as "blocked" before we call it "invalid". No token is
-    // spent here: unlike the real audit fetch below, a rejected probe never
-    // gets past DNS resolution, so it never reaches the expensive path the
-    // rate limiter exists to protect.
-    const probe = await safeFetch(raw);
-    const error = !probe.ok && probe.error === "url_blocked" ? "url_blocked" : "url_invalid";
-    return json({ ok: false, error }, 400);
+    // A dot-less host is a real destination we decline to reach, not a typo.
+    // Decided without a network call, so it needs no token.
+    return isDotlessHttpHost(raw)
+      ? json({ ok: false, error: "url_blocked" }, 400)
+      : json({ ok: false, error: "url_invalid" }, 400);
   }
 
   // Serve a recent audit of the same page before spending a token: a repeat

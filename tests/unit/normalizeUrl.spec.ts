@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { normalizeUrl } from "../../src/lib/audit/normalizeUrl";
+import { isDotlessHttpHost, normalizeUrl } from "../../src/lib/audit/normalizeUrl";
 
 test.describe("normalizeUrl", () => {
   test("forces https, drops www, lowercases host", () => {
@@ -59,5 +59,43 @@ test.describe("normalizeUrl", () => {
 
   test("rejects opaque schemes (urn)", () => {
     expect(normalizeUrl("urn:isbn:0451450523")).toBeNull();
+  });
+});
+
+test.describe("isDotlessHttpHost", () => {
+  test("flags a bare unqualified host", () => {
+    expect(isDotlessHttpHost("localhost")).toBe(true);
+  });
+
+  test("flags an unqualified host with scheme and port", () => {
+    expect(isDotlessHttpHost("http://localhost:4321/")).toBe(true);
+  });
+
+  test("flags a bracketed IPv6 literal", () => {
+    expect(isDotlessHttpHost("http://[::1]/")).toBe(true);
+  });
+
+  test("does not flag a qualified domain", () => {
+    expect(isDotlessHttpHost("example.com")).toBe(false);
+  });
+
+  test("does not flag a qualified domain with scheme and path", () => {
+    expect(isDotlessHttpHost("https://example.com/a")).toBe(false);
+  });
+
+  test("does not flag empty input", () => {
+    expect(isDotlessHttpHost("")).toBe(false);
+  });
+
+  test("does not flag garbage", () => {
+    expect(isDotlessHttpHost("not a url")).toBe(false);
+  });
+
+  test("does not flag a javascript scheme", () => {
+    expect(isDotlessHttpHost("javascript:alert(1)")).toBe(false);
+  });
+
+  test("does not flag an opaque mailto scheme", () => {
+    expect(isDotlessHttpHost("mailto:x@y.com")).toBe(false);
   });
 });

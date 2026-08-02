@@ -1,13 +1,9 @@
 /**
- * Canonical form used as the cache key. Two inputs that describe the same page
- * must produce the same string, so we force https, drop "www.", lowercase the
- * host, and discard query and hash (tracking params are not a different page).
- * Path case is preserved — paths are case-sensitive on most servers.
- * Port is preserved — different ports are different origins.
- *
- * Returns null for anything that is not a plausible http(s) URL.
+ * Parse the loose input a visitor types into a URL, or null if it is not a
+ * plausible http(s) address at all. Shared by normalizeUrl and
+ * isDotlessHttpHost so the scheme-coercion rules cannot drift between them.
  */
-export function normalizeUrl(input: string): string | null {
+function parseCandidate(input: string): URL | null {
   const trimmed = input.trim();
   if (!trimmed) return null;
 
@@ -30,6 +26,22 @@ export function normalizeUrl(input: string): string | null {
   }
 
   if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+  return url;
+}
+
+/**
+ * Canonical form used as the cache key. Two inputs that describe the same page
+ * must produce the same string, so we force https, drop "www.", lowercase the
+ * host, and discard query and hash (tracking params are not a different page).
+ * Path case is preserved — paths are case-sensitive on most servers.
+ * Port is preserved — different ports are different origins.
+ *
+ * Returns null for anything that is not a plausible http(s) URL.
+ */
+export function normalizeUrl(input: string): string | null {
+  const url = parseCandidate(input);
+  if (!url) return null;
+
   // A hostname with no dot is either localhost or a typo; neither is auditable.
   if (!url.hostname.includes(".")) return null;
 
@@ -38,4 +50,17 @@ export function normalizeUrl(input: string): string | null {
   const path = url.pathname.replace(/\/+$/, "");
 
   return `https://${host}${port}${path}`;
+}
+
+/**
+ * True when the input names a real but unqualified host — "localhost", a
+ * container name, a bracketed IPv6 literal. normalizeUrl rejects these
+ * alongside genuine garbage, but they are different in kind: the caller aimed
+ * at a host we refuse to reach rather than typing nonsense, and the report
+ * should say so. Decided by parsing alone, so it costs nothing and cannot be
+ * used to make us touch the network.
+ */
+export function isDotlessHttpHost(input: string): boolean {
+  const url = parseCandidate(input);
+  return url !== null && url.hostname.length > 0 && !url.hostname.includes(".");
 }
