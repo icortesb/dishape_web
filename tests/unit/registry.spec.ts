@@ -22,8 +22,8 @@ function ctx(html: string, over: Partial<PageContext> = {}): PageContext {
 }
 
 test.describe("registry", () => {
-  test("has 14 checks", () => {
-    expect(registry.length).toBe(14);
+  test("has 20 checks", () => {
+    expect(registry.length).toBe(20);
   });
 
   test("all checks have unique ids", () => {
@@ -74,7 +74,7 @@ test.describe("registry", () => {
 
       // All other checks should have normal results (not na)
       const otherResults = results.filter((r) => r.id !== "seo.title.present");
-      expect(otherResults.length).toBe(13);
+      expect(otherResults.length).toBe(19);
       // At least some should be pass or other normal statuses, not all na
       const nonNaCount = otherResults.filter((r) => r.status !== "na").length;
       expect(nonNaCount).toBeGreaterThan(0);

@@ -1,11 +1,12 @@
 import { seoChecks } from "./checks/seo";
+import { socialChecks } from "./checks/social";
 import type { Check, CheckResult, PageContext } from "./types";
 
 /**
  * The catalog. Adding a check is: append an entry here (via its category file)
  * and add its strings under `audit.checks.<id>` in src/i18n/{es,en}.ts.
  */
-export const registry: Check[] = [...seoChecks];
+export const registry: Check[] = [...seoChecks, ...socialChecks];
 
 export const checkById = new Map(registry.map((c) => [c.id, c]));
 
