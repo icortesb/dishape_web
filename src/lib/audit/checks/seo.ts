@@ -134,8 +134,15 @@ export const seoChecks: Check[] = [
     id: "seo.sitemap",
     category: "seo",
     severity: "important",
-    run: (ctx) =>
-      ctx.sitemapOk ? result("seo.sitemap", "pass") : result("seo.sitemap", "fail"),
+    run: (ctx) => {
+      // null means the probe itself failed, not that the sitemap is missing —
+      // reporting that as a defect would accuse the site of a problem we never
+      // actually observed.
+      if (ctx.sitemapOk === null) return result("seo.sitemap", "na");
+      return ctx.sitemapOk
+        ? result("seo.sitemap", "pass")
+        : result("seo.sitemap", "fail");
+    },
   },
   {
     id: "seo.noindex",

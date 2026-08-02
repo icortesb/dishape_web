@@ -150,12 +150,98 @@ test.describe("seo.https and redirect", () => {
   });
 });
 
+test.describe("seo.description", () => {
+  test("fails when description is absent", () => {
+    expect(run("seo.description.present", ctx("<html></html>")).status).toBe("fail");
+  });
+
+  test("passes when description is present", () => {
+    expect(run("seo.description.present", ctx('<meta name="description" content="Hello world">')).status).toBe("pass");
+  });
+
+  test("is not applicable when there is no description to measure", () => {
+    expect(run("seo.description.length", ctx("<html></html>")).status).toBe("na");
+  });
+
+  test("warns when the description is too long and reports the length", () => {
+    const long = "a".repeat(175);
+    const r = run("seo.description.length", ctx(`<meta name="description" content="${long}">`));
+    expect(r.status).toBe("warn");
+    expect(r.evidence).toMatchObject({ actual: 175, max: 160 });
+  });
+
+  test("warns when the description is too short", () => {
+    const short = "a".repeat(50);
+    const r = run("seo.description.length", ctx(`<meta name="description" content="${short}">`));
+    expect(r.status).toBe("warn");
+    expect(r.evidence).toMatchObject({ actual: 50, min: 70 });
+  });
+
+  test("passes when description is within the ideal range", () => {
+    const ideal = "a".repeat(100);
+    expect(run("seo.description.length", ctx(`<meta name="description" content="${ideal}">`)).status).toBe("pass");
+  });
+});
+
 test.describe("seo.robots.txt and sitemap", () => {
   test("warns when robots.txt is unreachable", () => {
     expect(run("seo.robots.txt", ctx("<html></html>", { robotsTxt: null })).status).toBe("warn");
   });
 
+  test("passes when robots.txt is reachable", () => {
+    expect(run("seo.robots.txt", ctx("<html></html>", { robotsTxt: "User-agent: *\nAllow: /" })).status).toBe("pass");
+  });
+
   test("fails when no sitemap is reachable", () => {
     expect(run("seo.sitemap", ctx("<html></html>", { sitemapOk: false })).status).toBe("fail");
+  });
+
+  test("passes when sitemap is reachable", () => {
+    expect(run("seo.sitemap", ctx("<html></html>", { sitemapOk: true })).status).toBe("pass");
+  });
+
+  test("is not applicable when sitemap check could not be determined", () => {
+    expect(run("seo.sitemap", ctx("<html></html>", { sitemapOk: null })).status).toBe("na");
+  });
+});
+
+test.describe("seo.https", () => {
+  test("passes when the URL is https", () => {
+    const c = ctx("<html></html>", { url: new URL("https://example.com/pagina") });
+    expect(run("seo.https", c).status).toBe("pass");
+  });
+
+  test("fails when the final URL is http", () => {
+    const c = ctx("<html></html>", { url: new URL("http://example.com/pagina") });
+    expect(run("seo.https", c).status).toBe("fail");
+  });
+});
+
+test.describe("seo.http.redirect", () => {
+  test("passes when http redirects to https", () => {
+    const c = ctx("<html></html>", { httpRedirectsToHttps: true });
+    expect(run("seo.http.redirect", c).status).toBe("pass");
+  });
+
+  test("fails when http does not redirect to https", () => {
+    const c = ctx("<html></html>", { httpRedirectsToHttps: false });
+    expect(run("seo.http.redirect", c).status).toBe("fail");
+  });
+
+  test("is not applicable when the check could not be determined", () => {
+    const c = ctx("<html></html>", { httpRedirectsToHttps: null });
+    expect(run("seo.http.redirect", c).status).toBe("na");
+  });
+});
+
+test.describe("seo.hreflang", () => {
+  test("warns when hreflang set has invalid language codes", () => {
+    const html = `
+      <link rel="alternate" hreflang="es" href="https://example.com/pagina">
+      <link rel="alternate" hreflang="invalid!!!" href="https://example.com/en/pagina">
+    `;
+    const r = run("seo.hreflang", ctx(html));
+    expect(r.status).toBe("warn");
+    expect(r.evidence).toMatchObject({ reason: "invalid-code" });
   });
 });
