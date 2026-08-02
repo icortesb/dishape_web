@@ -340,4 +340,223 @@ export const en = {
     accept: "Accept",
     reject: "Reject",
   },
+  audit: {
+    meta: {
+      title: "Free website audit | Check your site's SEO in seconds | dishape",
+      description:
+        "Paste your site's URL and get a technical diagnosis: SEO, performance and how your site looks when shared. Free, no signup.",
+    },
+    hero: {
+      eyebrow: "FREE TOOL",
+      title: "Find out what's slowing your site down.",
+      subtitle:
+        "A technical diagnosis of your site in under a minute: what Google sees, how fast it loads and what it looks like when someone shares the link. No signup, no cost.",
+      placeholder: "yoursite.com",
+      submit: "Analyze my site",
+      analyzing: "Analyzing…",
+      disclaimer: "We analyze the page you enter, not the whole site.",
+    },
+    errors: {
+      url_invalid: "That address doesn't look valid. Try something like yoursite.com",
+      url_blocked: "We can't analyze internal or private addresses.",
+      url_unreachable: "We couldn't reach that page. Is it online?",
+      not_html: "That address doesn't return a web page.",
+      too_large: "The page is too heavy to analyze.",
+      rate_limited: "You've reached the analysis limit. Try again in a while.",
+      server: "Something failed on our end. Try again.",
+    },
+    report: {
+      auditedOn: "Audited on",
+      urgent: "Most urgent",
+      urgentEmpty: "We didn't find any critical problems on this page.",
+      categories: {
+        seo: "Technical SEO",
+        social: "When shared",
+        perf: "Performance",
+      },
+      categoryIntro: {
+        seo: "What Google finds when it visits this page.",
+        social: "What someone sees when they share the link on WhatsApp or LinkedIn.",
+        perf: "How fast it loads, measured by Google.",
+      },
+      passedCount: "{passed} of {total} checks",
+      showPassed: "Show the {count} checks that passed",
+      hidePassed: "Hide the ones that passed",
+      status: { pass: "Good", warn: "Needs work", fail: "Problem" },
+      severity: { critical: "Critical", important: "Important", minor: "Minor" },
+      found: "What we found",
+      why: "Why it matters",
+      fix: "How to fix it",
+      measuring: "Measuring performance with Google…",
+      measuringNote: "This takes a few seconds.",
+      vitalsUnavailable:
+        "We couldn't measure performance right now. The rest of the diagnosis still stands.",
+      fieldTitle: "Real user data",
+      labTitle: "Lab measurement",
+      noFieldData:
+        "This site doesn't have enough traffic for Google to report real user data.",
+      sharePreview: "How your link looks when shared",
+      sharePreviewBroken:
+        "This page has no image to share, so the link shows up empty.",
+      copyLink: "Copy report link",
+      copied: "Link copied",
+      reAudit: "Analyze another site",
+    },
+    cta: {
+      title: "We found {count} things to fix on this page.",
+      titleClean: "This page is in good shape.",
+      body:
+        "Each of these points has a concrete fix. If you want us to handle them, get in touch and we'll tell you what's involved.",
+      bodyClean:
+        "If you're starting a new project or want to take this further, let's talk.",
+      button: "I want this fixed",
+    },
+    faq: {
+      title: "Frequently asked questions",
+      items: [
+        [
+          "Is it really free?",
+          "Yes. We don't ask for an email or signup, and the full report shows up instantly.",
+        ],
+        [
+          "What exactly does it check?",
+          "About twenty technical checks on the page you enter: technical SEO (what Google understands), how the link looks when shared, and performance measured with Google's PageSpeed Insights API.",
+        ],
+        [
+          "Does it check my whole site?",
+          "No. It checks the exact URL you enter. If you want to review several pages, run the analysis once per page.",
+        ],
+        [
+          "Is the performance data reliable?",
+          "It comes directly from Google's PageSpeed Insights API, the same one PageSpeed uses. You can verify any number by running the official tool.",
+        ],
+        [
+          "Do you store my site or my data?",
+          "We store the report for 30 days so you can share the link. We don't ask for personal data.",
+        ],
+      ] as [string, string][],
+    },
+    checks: {
+      "seo.title.present": {
+        name: "Page title",
+        why: "It's the text Google shows as the headline in search results. Without a title, the search engine makes one up from whatever it finds on the page.",
+        found: "The page has no <title> tag.",
+        fix: "Add a descriptive, unique <title> in the <head>, including the term you want to be found for.",
+      },
+      "seo.title.length": {
+        name: "Title length",
+        why: "Google truncates long titles and discounts very short ones as uninformative. Between {min} and {max} characters shows in full.",
+        found: "The title is {actual} characters long.",
+        fix: "Adjust the title to {min}–{max} characters, with the most important part first.",
+      },
+      "seo.description.present": {
+        name: "Meta description",
+        why: "It's the summary that appears below the title in search results. It doesn't affect ranking, but it does affect how many people click.",
+        found: "The page has no meta description.",
+        fix: "Add <meta name=\"description\" content=\"…\"> with a concrete summary of what the page offers.",
+      },
+      "seo.description.length": {
+        name: "Meta description length",
+        why: "Google cuts long descriptions off mid-sentence. Between {min} and {max} characters shows in full.",
+        found: "The meta description is {actual} characters long.",
+        fix: "Rewrite the description to fit within {min} to {max} characters.",
+      },
+      "seo.h1.unique": {
+        name: "Single main heading",
+        why: "The H1 tells the search engine what the page is about. With several or none, that signal gets diluted.",
+        found: "The page has {actual} H1 headings.",
+        fix: "Keep exactly one H1 per page, with the main topic. Everything else goes as H2 or H3.",
+      },
+      "seo.headings.hierarchy": {
+        name: "Heading hierarchy",
+        why: "Headings form the page's outline. Skipping levels breaks that structure for search engines and screen readers.",
+        found: "There's a jump from {from} to {to} without passing through the level in between.",
+        fix: "Use headings in order, without skipping levels. If the jump is for visual reasons, change the size with CSS, not the level.",
+      },
+      "seo.canonical": {
+        name: "Canonical URL",
+        why: "It tells Google which version of the page is the official one. Without it, variants with parameters compete against each other and split the signal.",
+        found: "The declared canonical is {found}.",
+        fix: "Add <link rel=\"canonical\"> pointing to the absolute, definitive URL of this same page.",
+      },
+      "seo.html.lang": {
+        name: "Declared language",
+        why: "Without the lang attribute, search engines guess the language and screen readers mispronounce it.",
+        found: "The declared language is \"{found}\".",
+        fix: "Add the lang attribute to the <html> tag, for example <html lang=\"en\">.",
+      },
+      "seo.robots.txt": {
+        name: "robots.txt file",
+        why: "It's the first thing a search engine checks on arrival. Without it there's no blocking, but also no way to point to the sitemap.",
+        found: "We couldn't reach /robots.txt.",
+        fix: "Publish a robots.txt at the domain root, even a minimal one, and declare the sitemap location there.",
+      },
+      "seo.sitemap": {
+        name: "Sitemap",
+        why: "It gives Google the full list of pages to index, instead of leaving it to discover them by following links.",
+        found: "We couldn't find an accessible sitemap.",
+        fix: "Generate a sitemap.xml and declare it in robots.txt with the line Sitemap: https://yourdomain.com/sitemap.xml",
+      },
+      "seo.noindex": {
+        name: "Indexable page",
+        why: "A noindex directive asks Google to exclude the page from results. On a public page it's almost always a configuration mistake.",
+        found: "The page is declared noindex ({source}).",
+        fix: "Remove the noindex directive from the meta robots tag or the X-Robots-Tag header. It's usually left over from a staging environment.",
+      },
+      "seo.hreflang": {
+        name: "Hreflang tags",
+        why: "On a site with multiple languages, they indicate which version to show each user. An incomplete set makes Google ignore them entirely.",
+        found: "We found {count} hreflang tags with a configuration problem.",
+        fix: "Each version must list all alternatives, including itself, with valid language codes.",
+      },
+      "seo.https": {
+        name: "Secure connection",
+        why: "Browsers flag any site without HTTPS as \"not secure\", and Google uses it as a ranking signal.",
+        found: "The page is served over HTTP, unencrypted.",
+        fix: "Install a TLS certificate. With Let's Encrypt it's free and renews itself.",
+      },
+      "seo.http.redirect": {
+        name: "Redirect to HTTPS",
+        why: "If the HTTP version still responds, there are two copies of every page and traffic splits between them.",
+        found: "http:// does not redirect to https://",
+        fix: "Set up a permanent 301 redirect from all HTTP traffic to HTTPS.",
+      },
+      "social.og.title": {
+        name: "Share title",
+        why: "It's the headline that shows up when someone pastes the link into WhatsApp, LinkedIn or Slack. Without it, each platform improvises.",
+        found: "No og:title tag.",
+        fix: "Add <meta property=\"og:title\" content=\"…\"> with the title you want to show when shared.",
+      },
+      "social.og.description": {
+        name: "Share description",
+        why: "It's the text below the headline in the link's preview card. It's what decides whether someone clicks or scrolls past.",
+        found: "No og:description tag.",
+        fix: "Add <meta property=\"og:description\"> with a short, concrete summary.",
+      },
+      "social.og.image": {
+        name: "Share image",
+        why: "A link without an image takes up a fraction of the space in the feed and gets far fewer clicks than one with a visual card.",
+        found: "The share image has a problem: {reason}.",
+        fix: "Publish a 1200×630 px image and declare it in og:image with the full absolute URL, including https://",
+      },
+      "social.twitter.card": {
+        name: "X/Twitter card",
+        why: "It defines the preview format on X. Without it the link shows in the smallest format available.",
+        found: "No twitter:card tag.",
+        fix: "Add <meta name=\"twitter:card\" content=\"summary_large_image\">",
+      },
+      "social.jsonld": {
+        name: "Structured data",
+        why: "It tells Google what this page is in a format it understands. It enables rich results and is increasingly important for AI assistants to cite the site.",
+        found: "The structured data has a problem: {reason}.",
+        fix: "Add a JSON-LD block with the type that applies (Organization, Product, Article, LocalBusiness…).",
+      },
+      "social.favicon": {
+        name: "Favicon",
+        why: "It's the tab icon. Without it, the site becomes hard to find among twenty open tabs.",
+        found: "No icon declared.",
+        fix: "Add <link rel=\"icon\" href=\"/favicon.svg\"> in the <head>.",
+      },
+    },
+  },
 } as const;

@@ -341,4 +341,223 @@ export const es = {
     accept: "Aceptar",
     reject: "Rechazar",
   },
+  audit: {
+    meta: {
+      title: "Auditoría web gratis | Analizá tu sitio en segundos | dishape",
+      description:
+        "Pegá la URL de tu sitio y obtené un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
+    },
+    hero: {
+      eyebrow: "HERRAMIENTA GRATUITA",
+      title: "Averiguá qué está frenando a tu sitio.",
+      subtitle:
+        "Un diagnóstico técnico de tu web en menos de un minuto: qué ve Google, qué tan rápido carga y cómo se ve cuando alguien comparte el link. Sin registro y sin costo.",
+      placeholder: "tusitio.com",
+      submit: "Analizar mi sitio",
+      analyzing: "Analizando…",
+      disclaimer: "Analizamos la página que indiques, no todo el sitio.",
+    },
+    errors: {
+      url_invalid: "Esa dirección no parece válida. Probá con algo como tusitio.com",
+      url_blocked: "No podemos analizar direcciones internas o privadas.",
+      url_unreachable: "No pudimos acceder a esa página. ¿Está en línea?",
+      not_html: "Esa dirección no devuelve una página web.",
+      too_large: "La página es demasiado pesada para analizarla.",
+      rate_limited: "Alcanzaste el límite de análisis. Probá de nuevo en un rato.",
+      server: "Algo falló de nuestro lado. Probá de nuevo.",
+    },
+    report: {
+      auditedOn: "Analizado el",
+      urgent: "Lo más urgente",
+      urgentEmpty: "No encontramos problemas críticos en esta página.",
+      categories: {
+        seo: "SEO técnico",
+        social: "Al compartir",
+        perf: "Rendimiento",
+      },
+      categoryIntro: {
+        seo: "Qué encuentra Google cuando entra a esta página.",
+        social: "Qué ve alguien cuando comparte el link en WhatsApp o LinkedIn.",
+        perf: "Qué tan rápido carga, medido por Google.",
+      },
+      passedCount: "{passed} de {total} chequeos",
+      showPassed: "Ver los {count} chequeos que pasaron",
+      hidePassed: "Ocultar los que pasaron",
+      status: { pass: "Bien", warn: "A mejorar", fail: "Problema" },
+      severity: { critical: "Crítico", important: "Importante", minor: "Menor" },
+      found: "Qué encontramos",
+      why: "Por qué importa",
+      fix: "Cómo se resuelve",
+      measuring: "Midiendo el rendimiento con Google…",
+      measuringNote: "Esto tarda unos segundos.",
+      vitalsUnavailable:
+        "No pudimos medir el rendimiento en este momento. El resto del diagnóstico sigue siendo válido.",
+      fieldTitle: "Datos de usuarios reales",
+      labTitle: "Medición de laboratorio",
+      noFieldData:
+        "Este sitio no tiene tráfico suficiente para que Google reporte datos de usuarios reales.",
+      sharePreview: "Así se ve tu link al compartirlo",
+      sharePreviewBroken:
+        "Esta página no tiene imagen para compartir, así que el link se ve vacío.",
+      copyLink: "Copiar link del reporte",
+      copied: "Link copiado",
+      reAudit: "Analizar otro sitio",
+    },
+    cta: {
+      title: "Encontramos {count} cosas para resolver en esta página.",
+      titleClean: "Esta página está bien resuelta.",
+      body:
+        "Cada uno de estos puntos tiene una solución concreta. Si querés que los resolvamos, contanos y te decimos qué implica.",
+      bodyClean:
+        "Si estás por encarar un proyecto nuevo o querés llevar esto más lejos, hablemos.",
+      button: "Quiero resolver esto",
+    },
+    faq: {
+      title: "Preguntas frecuentes",
+      items: [
+        [
+          "¿Es realmente gratis?",
+          "Sí. No pedimos email ni registro, y el reporte completo se ve al instante.",
+        ],
+        [
+          "¿Qué analiza exactamente?",
+          "Alrededor de veinte chequeos técnicos sobre la página que indiques: SEO técnico (qué entiende Google), cómo se ve el link al compartirlo, y rendimiento medido con la API de PageSpeed Insights de Google.",
+        ],
+        [
+          "¿Analiza todo mi sitio?",
+          "No. Analiza la URL exacta que ingreses. Si querés revisar varias páginas, corré el análisis una vez por cada una.",
+        ],
+        [
+          "¿Los datos de rendimiento son confiables?",
+          "Vienen directo de la API de PageSpeed Insights de Google, la misma que usa PageSpeed. Podés verificar cualquier número corriendo la herramienta oficial.",
+        ],
+        [
+          "¿Guardan mi sitio o mis datos?",
+          "Guardamos el reporte por 30 días para que puedas compartir el link. No pedimos datos personales.",
+        ],
+      ] as [string, string][],
+    },
+    checks: {
+      "seo.title.present": {
+        name: "Título de la página",
+        why: "Es el texto que Google muestra como titular en los resultados de búsqueda. Sin título, el buscador inventa uno con lo que encuentra en la página.",
+        found: "La página no tiene etiqueta <title>.",
+        fix: "Agregá un <title> descriptivo y único en el <head>, que incluya el término por el que querés que te encuentren.",
+      },
+      "seo.title.length": {
+        name: "Largo del título",
+        why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre {min} y {max} caracteres se ve completo.",
+        found: "El título tiene {actual} caracteres.",
+        fix: "Ajustá el título a un rango de {min} a {max} caracteres, poniendo lo más importante al principio.",
+      },
+      "seo.description.present": {
+        name: "Meta descripción",
+        why: "Es el resumen que aparece debajo del título en los resultados. No afecta el posicionamiento, pero sí cuánta gente hace clic.",
+        found: "La página no tiene meta descripción.",
+        fix: "Agregá <meta name=\"description\" content=\"…\"> con un resumen concreto de lo que ofrece la página.",
+      },
+      "seo.description.length": {
+        name: "Largo de la meta descripción",
+        why: "Google trunca las descripciones largas a mitad de frase. Entre {min} y {max} caracteres se muestra entera.",
+        found: "La meta descripción tiene {actual} caracteres.",
+        fix: "Reescribí la descripción para que entre en {min} a {max} caracteres.",
+      },
+      "seo.h1.unique": {
+        name: "Encabezado principal único",
+        why: "El H1 le dice al buscador de qué trata la página. Si hay varios o ninguno, esa señal se diluye.",
+        found: "La página tiene {actual} encabezados H1.",
+        fix: "Dejá exactamente un H1 por página, con el tema principal. El resto de los títulos van como H2 o H3.",
+      },
+      "seo.headings.hierarchy": {
+        name: "Jerarquía de encabezados",
+        why: "Los encabezados forman el índice de la página. Saltear niveles rompe esa estructura para buscadores y lectores de pantalla.",
+        found: "Hay un salto de {from} a {to} sin pasar por el nivel intermedio.",
+        fix: "Usá los encabezados en orden, sin saltear niveles. Si el salto es por estética, cambiá el tamaño con CSS, no el nivel.",
+      },
+      "seo.canonical": {
+        name: "URL canónica",
+        why: "Le dice a Google cuál es la versión oficial de la página. Sin ella, las variantes con parámetros compiten entre sí y reparten la señal.",
+        found: "La canónica declarada es {found}.",
+        fix: "Agregá <link rel=\"canonical\"> apuntando a la URL absoluta y definitiva de esta misma página.",
+      },
+      "seo.html.lang": {
+        name: "Idioma declarado",
+        why: "Sin el atributo lang, los buscadores adivinan el idioma y los lectores de pantalla lo pronuncian mal.",
+        found: "El idioma declarado es \"{found}\".",
+        fix: "Agregá el atributo lang a la etiqueta <html>, por ejemplo <html lang=\"es\">.",
+      },
+      "seo.robots.txt": {
+        name: "Archivo robots.txt",
+        why: "Es lo primero que consulta un buscador al llegar. Sin él no hay bloqueo, pero tampoco forma de indicar dónde está el sitemap.",
+        found: "No pudimos acceder a /robots.txt.",
+        fix: "Publicá un robots.txt en la raíz del dominio, aunque sea mínimo, y declará ahí la ubicación del sitemap.",
+      },
+      "seo.sitemap": {
+        name: "Sitemap",
+        why: "Le da a Google la lista completa de páginas a indexar, en vez de dejar que las descubra siguiendo links.",
+        found: "No encontramos un sitemap accesible.",
+        fix: "Generá un sitemap.xml y declaralo en robots.txt con la línea Sitemap: https://tudominio.com/sitemap.xml",
+      },
+      "seo.noindex": {
+        name: "Página indexable",
+        why: "Una directiva noindex le pide a Google que excluya la página de los resultados. En una página pública casi siempre es un error de configuración.",
+        found: "La página se declara noindex ({source}).",
+        fix: "Quitá la directiva noindex del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
+      },
+      "seo.hreflang": {
+        name: "Etiquetas hreflang",
+        why: "En un sitio con varios idiomas, indican qué versión mostrar a cada usuario. Un conjunto incompleto hace que Google las ignore por completo.",
+        found: "Encontramos {count} etiquetas hreflang con un problema de configuración.",
+        fix: "Cada versión debe listar todas las alternativas, incluida ella misma, con códigos de idioma válidos.",
+      },
+      "seo.https": {
+        name: "Conexión segura",
+        why: "Los navegadores marcan como \"no seguro\" cualquier sitio sin HTTPS, y Google lo usa como señal de posicionamiento.",
+        found: "La página se sirve por HTTP, sin cifrar.",
+        fix: "Instalá un certificado TLS. Con Let's Encrypt es gratis y se renueva solo.",
+      },
+      "seo.http.redirect": {
+        name: "Redirección a HTTPS",
+        why: "Si la versión HTTP sigue respondiendo, existen dos copias de cada página y el tráfico se reparte entre ambas.",
+        found: "http:// no redirige a https://",
+        fix: "Configurá una redirección 301 permanente de todo el tráfico HTTP a HTTPS.",
+      },
+      "social.og.title": {
+        name: "Título al compartir",
+        why: "Es el titular que aparece cuando alguien pega el link en WhatsApp, LinkedIn o Slack. Sin él, cada plataforma improvisa.",
+        found: "No hay etiqueta og:title.",
+        fix: "Agregá <meta property=\"og:title\" content=\"…\"> con el título que querés que se vea al compartir.",
+      },
+      "social.og.description": {
+        name: "Descripción al compartir",
+        why: "Es el texto debajo del titular en la tarjeta del link. Es lo que decide si alguien hace clic o sigue de largo.",
+        found: "No hay etiqueta og:description.",
+        fix: "Agregá <meta property=\"og:description\"> con un resumen breve y concreto.",
+      },
+      "social.og.image": {
+        name: "Imagen al compartir",
+        why: "Un link sin imagen ocupa una fracción del espacio en el feed y recibe muchos menos clics que uno con tarjeta visual.",
+        found: "La imagen para compartir tiene un problema: {reason}.",
+        fix: "Publicá una imagen de 1200×630 px y declarala en og:image con la URL absoluta completa, incluido https://",
+      },
+      "social.twitter.card": {
+        name: "Tarjeta de X/Twitter",
+        why: "Define el formato de la vista previa en X. Sin ella el link se muestra en el formato más chico disponible.",
+        found: "No hay etiqueta twitter:card.",
+        fix: "Agregá <meta name=\"twitter:card\" content=\"summary_large_image\">",
+      },
+      "social.jsonld": {
+        name: "Datos estructurados",
+        why: "Le explican a Google qué es esta página en un formato que entiende. Habilitan resultados enriquecidos y son cada vez más importantes para que los asistentes de IA citen el sitio.",
+        found: "Los datos estructurados tienen un problema: {reason}.",
+        fix: "Agregá un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
+      },
+      "social.favicon": {
+        name: "Favicon",
+        why: "Es el ícono de la pestaña. Sin él, el sitio se vuelve difícil de encontrar entre veinte pestañas abiertas.",
+        found: "No hay ícono declarado.",
+        fix: "Agregá <link rel=\"icon\" href=\"/favicon.svg\"> en el <head>.",
+      },
+    },
+  },
 } as const;
