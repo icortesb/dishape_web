@@ -41,3 +41,21 @@ export type PageContext = {
    *  false otherwise. */
   httpRedirectsToHttps: boolean | null;
 };
+
+export type CheckStatus = "pass" | "warn" | "fail" | "na";
+export type CheckCategory = "seo" | "social" | "perf";
+export type Severity = "critical" | "important" | "minor";
+
+export type CheckResult = {
+  id: string;
+  status: CheckStatus;
+  /** Values interpolated into the localized "what we found" string. */
+  evidence?: Record<string, string | number>;
+};
+
+export type Check = {
+  id: string;
+  category: CheckCategory;
+  severity: Severity;
+  run: (ctx: PageContext) => CheckResult;
+};
