@@ -398,6 +398,8 @@ export const es = {
       measuringNote: "Esto tarda unos segundos.",
       vitalsUnavailable:
         "No pudimos medir el rendimiento en este momento. El resto del diagnóstico sigue siendo válido.",
+      // Caption for the score card, where the long sentence does not fit.
+      vitalsUnavailableShort: "No se pudo medir",
       fieldTitle: "Datos de usuarios reales",
       labTitle: "Medición de laboratorio",
       weight: "Peso",
@@ -409,6 +411,9 @@ export const es = {
       copyLink: "Copiar link del reporte",
       copied: "Link copiado",
       reAudit: "Analizar otro sitio",
+      expiredTitle: "Este reporte ya no está disponible.",
+      expiredBody:
+        "Los reportes se guardan 30 días. Pasado ese plazo el link deja de funcionar. Volver a analizar el sitio toma menos de un minuto.",
     },
     cta: {
       title: "Encontramos {count} cosas para resolver en esta página.",
@@ -553,12 +558,15 @@ export const es = {
       "social.og.image": {
         name: "Imagen al compartir",
         why: "Un link sin imagen ocupa una fracción del espacio en el feed y recibe muchos menos clics que uno con tarjeta visual.",
-        found: "La imagen para compartir tiene un problema: {reason}.",
+        // The whole sentence lives in the label: a shared frame like "has a
+        // problem: {reason}" asserts a defect before the branch is known, which
+        // is false for "declares none" and dishonest for the unverified case.
+        found: "{reason}",
         evidenceLabels: {
-          missing: "no hay ninguna declarada",
-          unreachable: "la URL declarada no responde",
-          relative: "la URL es relativa, no absoluta",
-          unverified: "no pudimos confirmar que la URL responda",
+          missing: "Esta página no declara una imagen para compartir.",
+          unreachable: "La imagen declarada no responde.",
+          relative: "La imagen declarada usa una URL relativa, no una absoluta.",
+          unverified: "No pudimos confirmar que la imagen declarada responda.",
         },
         fix: "Publicá una imagen de 1200×630 px y declarala en og:image con la URL absoluta completa, incluido https://",
       },
@@ -571,11 +579,11 @@ export const es = {
       "social.jsonld": {
         name: "Datos estructurados",
         why: "Le explican a Google qué es esta página en un formato que entiende. Habilitan resultados enriquecidos y son cada vez más importantes para que los asistentes de IA citen el sitio.",
-        found: "Los datos estructurados tienen un problema: {reason}.",
+        found: "{reason}",
         evidenceLabels: {
-          missing: "no hay ningún bloque JSON-LD",
-          unparseable: "el bloque no es JSON válido",
-          "no-type": "el bloque no declara @type",
+          missing: "Esta página no incluye datos estructurados.",
+          unparseable: "El bloque JSON-LD declarado no es JSON válido.",
+          "no-type": "El bloque JSON-LD declarado no indica un @type.",
         },
         fix: "Agregá un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
       },

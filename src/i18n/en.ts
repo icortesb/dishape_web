@@ -397,6 +397,8 @@ export const en = {
       measuringNote: "This takes a few seconds.",
       vitalsUnavailable:
         "We couldn't measure performance right now. The rest of the diagnosis still stands.",
+      // Caption for the score card, where the long sentence does not fit.
+      vitalsUnavailableShort: "Could not be measured",
       fieldTitle: "Real user data",
       labTitle: "Lab measurement",
       weight: "Weight",
@@ -408,6 +410,9 @@ export const en = {
       copyLink: "Copy report link",
       copied: "Link copied",
       reAudit: "Analyze another site",
+      expiredTitle: "This report is no longer available.",
+      expiredBody:
+        "Reports are kept for 30 days. After that the link stops working. Running the analysis again takes under a minute.",
     },
     cta: {
       title: "We found {count} things to fix on this page.",
@@ -552,12 +557,15 @@ export const en = {
       "social.og.image": {
         name: "Share image",
         why: "A link without an image takes up a fraction of the space in the feed and gets far fewer clicks than one with a visual card.",
-        found: "The share image has a problem: {reason}.",
+        // The whole sentence lives in the label: a shared frame like "has a
+        // problem: {reason}" asserts a defect before the branch is known, which
+        // is false for "declares none" and dishonest for the unverified case.
+        found: "{reason}",
         evidenceLabels: {
-          missing: "the page declares none",
-          unreachable: "the declared URL does not respond",
-          relative: "the URL is not absolute",
-          unverified: "we could not confirm the URL responds",
+          missing: "This page declares no share image.",
+          unreachable: "The declared image does not respond.",
+          relative: "The declared image URL is not absolute.",
+          unverified: "We could not confirm the declared image responds.",
         },
         fix: "Publish a 1200×630 px image and declare it in og:image with the full absolute URL, including https://",
       },
@@ -570,11 +578,11 @@ export const en = {
       "social.jsonld": {
         name: "Structured data",
         why: "It tells Google what this page is in a format it understands. It enables rich results and is increasingly important for AI assistants to cite the site.",
-        found: "The structured data has a problem: {reason}.",
+        found: "{reason}",
         evidenceLabels: {
-          missing: "there is no JSON-LD block",
-          unparseable: "the block is not valid JSON",
-          "no-type": "the block declares no @type",
+          missing: "This page includes no structured data.",
+          unparseable: "The declared JSON-LD block is not valid JSON.",
+          "no-type": "The declared JSON-LD block states no @type.",
         },
         fix: "Add a JSON-LD block with the type that applies (Organization, Product, Article, LocalBusiness…).",
       },

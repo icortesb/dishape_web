@@ -43,8 +43,18 @@ const passedCount = (s: CategoryScore) =>
     <p class={`mt-2 text-4xl font-semibold ${tone(perfScore)}`} data-perf-score>
       {perfPending ? "—" : (perfScore ?? "—")}
     </p>
-    <p class="mt-1 text-sm text-muted" data-perf-note data-unavailable={t.vitalsUnavailable}>
-      {perfPending ? t.measuring : "PageSpeed Insights"}
+    <p
+      class="mt-1 text-sm text-muted"
+      data-perf-note
+      data-unavailable={t.vitalsUnavailableShort}
+    >
+      {
+        perfPending
+          ? t.measuring
+          : perfScore === null
+            ? t.vitalsUnavailableShort
+            : "PageSpeed Insights"
+      }
     </p>
   </div>
 </div>

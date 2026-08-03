@@ -18,15 +18,17 @@ const description = find("social.og.description")?.evidence?.found;
 
 // Only a verified image gets rendered: a relative or unreachable one would
 // either 404 here or silently render off our own domain.
-const imageUrl = image?.status === "pass" ? String(image.evidence?.found ?? "") : null;
+const imageUrl =
+  image?.status === "pass" && image.evidence?.found ? String(image.evidence.found) : null;
 
-// When there is no image to show, say what is actually wrong with it. The
-// check's own sentence is already branch-accurate — "we could not verify it"
-// for na, "none is declared" for a missing one — where a single blanket
-// "this page has no image" would be a claim we never verified.
+// With no image to show, the check's own sentence says what is actually true of
+// this page — "we could not confirm it responds", "none is declared" — where a
+// blanket "this page has no image" would claim something we never observed.
 const imageCopy = checkCopy(lang, "social.og.image");
 const caption =
-  image && imageCopy ? checkText(imageCopy, image.evidence).found : t.sharePreviewBroken;
+  image && image.status !== "pass" && imageCopy
+    ? checkText(imageCopy, image.evidence).found
+    : t.sharePreviewBroken;
 
 const host = new URL(finalUrl).host;
 ---

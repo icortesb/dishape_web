@@ -254,7 +254,32 @@ test.describe("evidence enum tokens are localized", () => {
     }
   });
 
-  test("every token a check actually emits has a label", () => {
+  /**
+   * A token only reaches the visitor if some sentence names its placeholder.
+   * seo.hreflang emits `reason` today and needs no labels precisely because its
+   * copy never interpolates it — so the requirement is derived from the
+   * templates, not from a hand-kept list of checks.
+   */
+  const namesAToken = (copy: CheckCopy) =>
+    LOCALIZED_EVIDENCE_KEYS.some((key) =>
+      [copy.found, copy.why, copy.fix].some((s) => s.includes(`{${key}}`)),
+    );
+
+  test("a check whose copy names {reason} or {source} ships labels", () => {
+    // Catches the case no fixture can: copy that starts interpolating a token
+    // while the dictionary has nothing to resolve it with.
+    const bare: string[] = [];
+    for (const lang of ["es", "en"] as const) {
+      for (const { id } of registry) {
+        const copy = checkCopy(lang, id);
+        if (!copy || !namesAToken(copy)) continue;
+        if (!copy.evidenceLabels) bare.push(`${lang}:${id}`);
+      }
+    }
+    expect(bare).toEqual([]);
+  });
+
+  test("every token such a check actually emits has a label", () => {
     // Drive the real checks rather than trusting a hand-written token list:
     // a new branch with a new token fails here instead of shipping raw.
     const results = [
@@ -269,17 +294,28 @@ test.describe("evidence enum tokens are localized", () => {
       pageCtx('<script type="application/ld+json">{nope}</script>'),
       pageCtx('<script type="application/ld+json">{"a":1}</script>'),
       pageCtx('<meta name="robots" content="noindex">'),
+      // seo.hreflang's two token branches: exempt only for as long as its copy
+      // does not name them, and covered the moment it does.
+      pageCtx('<link rel="alternate" hreflang="en" href="https://example.com/en/p">'),
+      pageCtx(`
+        <link rel="alternate" hreflang="es" href="https://example.com/pagina">
+        <link rel="alternate" hreflang="not-a-code!!" href="https://example.com/otra">
+      `),
     ].flatMap((ctx) => runChecks(ctx));
 
+    const emitted = new Set<string>();
     const seen = new Set<string>();
     const unlabeled: string[] = [];
     for (const r of results) {
       for (const key of LOCALIZED_EVIDENCE_KEYS) {
         const token = r.evidence?.[key];
         if (typeof token !== "string") continue;
-        seen.add(`${r.id}:${token}`);
+        emitted.add(`${r.id}:${token}`);
         for (const lang of ["es", "en"] as const) {
-          if (!checkCopy(lang, r.id)?.evidenceLabels?.[token]) {
+          const copy = checkCopy(lang, r.id);
+          if (!copy || !namesAToken(copy)) continue;
+          seen.add(`${r.id}:${token}`);
+          if (!copy.evidenceLabels?.[token]) {
             unlabeled.push(`${lang}:${r.id}:${key}=${token}`);
           }
         }
@@ -287,6 +323,7 @@ test.describe("evidence enum tokens are localized", () => {
     }
     // Guard the guard: if the fixtures stop reaching these branches the
     // assertion below would pass against a dictionary with no labels at all.
+    expect(emitted.size).toBeGreaterThanOrEqual(8);
     expect(seen.size).toBeGreaterThanOrEqual(6);
     expect([...new Set(unlabeled)]).toEqual([]);
   });

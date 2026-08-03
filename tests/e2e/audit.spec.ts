@@ -105,9 +105,24 @@ async function seedRecord(id: string, over: Record<string, unknown> = {}) {
 }
 
 test.describe("report page", () => {
-  test("404s on an unknown report id", async ({ request }) => {
+  // Records are swept after 30 days, so the one URL this feature exists to have
+  // forwarded outlives its record. It must read as expired, not as broken.
+  test("an expired report link explains itself in Spanish", async ({ request }) => {
     const res = await request.get("/auditoria/r/zzzzzzzz/", { maxRedirects: 0 });
     expect(res.status()).toBe(404);
+
+    const html = await res.text();
+    expect(html).toContain("Este reporte ya no está disponible");
+    expect(html).toContain('href="/auditoria/"');
+  });
+
+  test("an expired report link explains itself in English", async ({ request }) => {
+    const res = await request.get("/en/audit/r/zzzzzzzz/", { maxRedirects: 0 });
+    expect(res.status()).toBe(404);
+
+    const html = await res.text();
+    expect(html).toContain("This report is no longer available");
+    expect(html).toContain('href="/en/audit/"');
   });
 
   test("renders findings and excludes itself from indexing", async ({ page }) => {
@@ -136,7 +151,8 @@ test.describe("report page", () => {
 
     // The og:image reason is an internal token; the visitor must read Spanish.
     expect(text).not.toContain("problema: missing");
-    expect(text).toContain("no hay ninguna declarada");
+    expect(text).toContain("Esta página no declara una imagen para compartir.");
+    expect(text).not.toContain("tiene un problema");
   });
 
   test("never prints a raw placeholder or an internal enum token (en)", async ({
@@ -150,7 +166,23 @@ test.describe("report page", () => {
     expect(text).toContain("This page has no title, so there's no length to measure.");
     expect(text).not.toMatch(/\{\w+\}/);
     expect(text).not.toContain("problem: missing");
-    expect(text).toContain("the page declares none");
+    expect(text).toContain("This page declares no share image.");
+    expect(text).not.toContain("has a problem");
+  });
+
+  test("an unverified share image is not framed as a defect", async ({ page }) => {
+    const id = "seedes07";
+    // Absolute og:image whose reachability probe never resolved: a live
+    // production state, and the one place an "na" result still reaches the
+    // visitor. Saying it "has a problem" asserts a defect we never observed.
+    await seedRecord(id, {
+      checks: [{ id: "social.og.image", status: "na", evidence: { reason: "unverified" } }],
+    });
+    await page.goto(`/auditoria/r/${id}/`);
+    const text = (await page.locator("main").textContent()) ?? "";
+
+    expect(text).not.toContain("tiene un problema");
+    expect(text).toContain("No pudimos confirmar que la imagen declarada responda.");
   });
 
   test("an undetermined check is never reported as a defect", async ({ page }) => {
@@ -192,6 +224,75 @@ test.describe("report page", () => {
       );
       expect(noise).toEqual([]);
     });
+  });
+
+  test("says performance could not be measured instead of naming the source", async ({
+    page,
+  }) => {
+    const id = "seedes08";
+    await seedRecord(id); // vitalsError is set: the measurement already failed.
+    await page.goto(`/auditoria/r/${id}/`);
+
+    // The card cannot caption an em dash with "PageSpeed Insights" while the
+    // panel below says the measurement failed.
+    await expect(page.locator("[data-perf-note]")).toHaveText("No se pudo medir");
+  });
+
+  test("points hreflang at the same report, not at the homepages", async ({ page }) => {
+    const id = "seedes09";
+    await seedRecord(id);
+    await page.goto(`/auditoria/r/${id}/`);
+
+    const href = (hreflang: string) =>
+      page.locator(`link[rel="alternate"][hreflang="${hreflang}"]`).getAttribute("href");
+    expect(await href("es")).toBe(`https://dishape.dev/auditoria/r/${id}/`);
+    expect(await href("en")).toBe(`https://dishape.dev/en/audit/r/${id}/`);
+  });
+
+  test("the completion event survives the reload that follows it", async ({ page }) => {
+    const id = "seedes10";
+    await seedRecord(id, { vitals: null, vitalsError: null });
+
+    // Model GTM the way it actually behaves: dataLayer.push only appends, a tag
+    // fires on a later tick, and eventCallback runs once it has. Anything that
+    // navigates away in the same tick as the push destroys the event.
+    await page.addInitScript(() => {
+      const loads = Number(sessionStorage.getItem("loads") ?? "0") + 1;
+      sessionStorage.setItem("loads", String(loads));
+      (window as unknown as { dataLayer: unknown }).dataLayer = {
+        push: (event: { event: string; eventCallback?: () => void }) => {
+          setTimeout(() => {
+            const fired = JSON.parse(sessionStorage.getItem("fired") ?? "[]");
+            sessionStorage.setItem("fired", JSON.stringify([...fired, event.event]));
+            event.eventCallback?.();
+          }, 30);
+        },
+      };
+    });
+
+    // Ready once, then unavailable: the reloaded page must settle instead of
+    // looping. In production the endpoint persists the vitals, so the second
+    // load renders them server-side and never asks again.
+    let calls = 0;
+    await page.route(`**/api/audit/${id}/vitals`, async (route) => {
+      calls += 1;
+      await route.fulfill({
+        json:
+          calls === 1
+            ? { ok: true, status: "ready", vitals: { score: 88 } }
+            : { ok: true, status: "unavailable", reason: "seeded" },
+      });
+    });
+
+    await page.goto(`/auditoria/r/${id}/`);
+
+    // The reload tears down the execution context, so a read can land mid
+    // navigation; polling through that is expected, an empty result is not.
+    const read = (key: string) =>
+      page.evaluate((k) => sessionStorage.getItem(k) ?? "", key).catch(() => "");
+
+    await expect.poll(() => read("fired")).toContain("audit_completed");
+    await expect.poll(() => read("loads")).toBe("2");
   });
 
   test("serves the English report at its own route", async ({ page }) => {

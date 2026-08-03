@@ -35,14 +35,31 @@ if (root && pendingPanel) {
       if (scoreEl) scoreEl.textContent = String(data.vitals.score);
       if (noteEl) noteEl.textContent = "PageSpeed Insights";
 
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: "audit_completed", audit_id: id });
-
       // The detail panel was rendered in its "measuring" state and the numbers
       // only exist now. Reloading lets the server render them, instead of
       // shipping a second copy of VitalsPanel's markup and formatting rules in
       // the client bundle.
-      location.reload();
+      let reloaded = false;
+      const reloadOnce = () => {
+        if (reloaded) return;
+        reloaded = true;
+        location.reload();
+      };
+
+      window.dataLayer = window.dataLayer || [];
+      // dataLayer.push only appends — GTM drains it later. Reloading in the
+      // same tick would destroy the event before any tag fired, and the
+      // pending path is the normal path for a fresh audit, so that would mean
+      // recording no completions at all. eventCallback holds the reload until
+      // the queue has drained; the timeout covers a GTM that is absent,
+      // blocked, or declined at the consent banner and would never call back.
+      window.dataLayer.push({
+        event: "audit_completed",
+        audit_id: id,
+        eventCallback: reloadOnce,
+        eventTimeout: 2000,
+      });
+      setTimeout(reloadOnce, 2000);
     })
     .catch(giveUp);
 }

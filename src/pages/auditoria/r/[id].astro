@@ -1,18 +1,31 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Base from "../../../layouts/Base.astro";
 import AuditReport from "../../../components/audit/AuditReport.astro";
+import ReportUnavailable from "../../../components/audit/ReportUnavailable.astro";
 import { getAudit } from "../../../lib/audit/store";
 import { getDict } from "../../../i18n";
 
 export const prerender = false;
 
 const record = await getAudit(Astro.params.id ?? "");
-if (!record) return new Response(null, { status: 404 });
-
 const t = getDict("es").audit;
-const host = new URL(record.page.finalUrl).host;
+
+// Still a 404 for crawlers and monitoring — but with a page that explains why.
+if (!record) Astro.response.status = 404;
+
+const title = record
+  ? `Auditoría de ${new URL(record.page.finalUrl).host} | dishape`
+  : `${t.report.expiredTitle} | dishape`;
+
+const alternates = record
+  ? {
+      es: getRelativeLocaleUrl("es", `auditoria/r/${record.id}`),
+      en: getRelativeLocaleUrl("en", `audit/r/${record.id}`),
+    }
+  : undefined;
 ---
 
-<Base title={`Auditoría de ${host} | dishape`} description={t.meta.description} noindex>
-  <AuditReport record={record} />
+<Base title={title} description={t.meta.description} alternates={alternates} noindex>
+  {record ? <AuditReport record={record} /> : <ReportUnavailable />}
 </Base>
