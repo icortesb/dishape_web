@@ -249,6 +249,25 @@ test.describe("report page", () => {
     expect(await href("en")).toBe(`https://dishape.dev/en/audit/r/${id}/`);
   });
 
+  test("each element falls back to its own copy when the measurement fails", async ({
+    page,
+  }) => {
+    const id = "seedes11";
+    await seedRecord(id, { vitals: null, vitalsError: null });
+    await page.route(`**/api/audit/${id}/vitals`, (route) =>
+      route.fulfill({ json: { ok: true, status: "unavailable", reason: "seeded" } }),
+    );
+
+    await page.goto(`/auditoria/r/${id}/`);
+
+    // The score card has room for a caption; the panel it belongs to has room
+    // for the explanation. Sharing one string collapses the panel to four words.
+    await expect(page.locator("[data-perf-note]")).toHaveText("No se pudo medir");
+    await expect(page.locator("[data-vitals-pending]")).toHaveText(
+      "No pudimos medir el rendimiento en este momento. El resto del diagnóstico sigue siendo válido.",
+    );
+  });
+
   test("the completion event survives the reload that follows it", async ({ page }) => {
     const id = "seedes10";
     await seedRecord(id, { vitals: null, vitalsError: null });

@@ -18,11 +18,26 @@ if (root && pendingPanel) {
   const id = root.dataset.auditId ?? "";
   const scoreEl = document.querySelector<HTMLElement>("[data-perf-score]");
   const noteEl = document.querySelector<HTMLElement>("[data-perf-note]");
-  const unavailable = noteEl?.dataset.unavailable ?? "";
+
+  /**
+   * Swap an element for the fallback sentence it carries itself: the score card
+   * has room for a caption, the panel it belongs to has room for the
+   * explanation, and sharing one string would collapse the panel to four words.
+   * The text goes into the element's own paragraph where it has one, so the
+   * panel keeps its card chrome instead of flattening to a bare text node.
+   */
+  const showUnavailable = (el: HTMLElement | null) => {
+    if (!el) return;
+    const paragraphs = el.querySelectorAll("p");
+    (paragraphs[0] ?? el).textContent = el.dataset.unavailable ?? "";
+    // Whatever followed was about the measurement in progress ("this takes a
+    // few seconds"), which is no longer true.
+    paragraphs.forEach((p, i) => i > 0 && p.remove());
+  };
 
   const giveUp = () => {
-    if (noteEl) noteEl.textContent = unavailable;
-    pendingPanel.textContent = unavailable;
+    showUnavailable(noteEl);
+    showUnavailable(pendingPanel);
   };
 
   fetch(`/api/audit/${id}/vitals`)
