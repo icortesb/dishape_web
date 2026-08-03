@@ -17,6 +17,9 @@ const must200 = [
   "/en/online-store/",
   "/en/ai-chatbots/",
   "/en/automation/",
+  // audit landing — static routes that must win over [servicio].astro
+  "/auditoria/",
+  "/en/audit/",
 ];
 
 // "/es" has no route (Spanish is the root). It must redirect, never 404 — this

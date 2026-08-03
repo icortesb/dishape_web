@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 // Crawl every internal link on the key entry pages and assert none 404/500.
 // This is the broad safety net: a nav item, toggle, or content link pointing at
 // a dead route fails here regardless of which template introduced it.
-const seeds = ["/", "/en/", "/blog/", "/en/blog/"];
+const seeds = ["/", "/en/", "/blog/", "/en/blog/", "/auditoria/", "/en/audit/"];
 const ORIGIN = "http://127.0.0.1:4321";
 
 test.describe("no broken internal links", () => {

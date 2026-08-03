@@ -1,5 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
+import Navbar from "../Navbar.astro";
+import Footer from "../Footer.astro";
 import { getLang, getDict } from "../../i18n";
 
 // Records are swept 30 days after the audit, so a shared report link outlives
@@ -10,6 +12,9 @@ const t = getDict(lang).audit.report;
 const auditPath = lang === "en" ? "audit" : "auditoria";
 ---
 
+{/* An expired link is still a first impression: give it the same way back
+    into the site that every other page has. */}
+<Navbar />
 <main class="shell flex min-h-[60vh] flex-col items-start justify-center gap-6 py-20">
   <h1 class="text-3xl font-semibold text-ink">{t.expiredTitle}</h1>
   <p class="max-w-xl text-muted">{t.expiredBody}</p>
@@ -21,3 +26,4 @@ const auditPath = lang === "en" ? "audit" : "auditoria";
     {t.reAudit}
   </a>
 </main>
+<Footer />

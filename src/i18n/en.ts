@@ -351,10 +351,17 @@ export const en = {
       title: "Find out what's slowing your site down.",
       subtitle:
         "A technical diagnosis of your site in under a minute: what Google sees, how fast it loads and what it looks like when someone shares the link. No signup, no cost.",
+      // Accessible name for the URL field; the design shows only a placeholder.
+      label: "Your site's address",
       placeholder: "yoursite.com",
       submit: "Analyze my site",
       analyzing: "Analyzing…",
       disclaimer: "We analyze the page you enter, not the whole site.",
+    },
+    whatWeCheck: {
+      // {count} comes from the check registry, never from a typed number.
+      eyebrow: "{count} CHECKS",
+      title: "What the audit looks at.",
     },
     errors: {
       url_invalid: "That address doesn't look valid. Try something like yoursite.com",

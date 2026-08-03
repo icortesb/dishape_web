@@ -1,12 +1,61 @@
-// Report page behaviour: finish the performance section after render, and copy
-// the report link. PageSpeed takes ~20s to answer — blocking the whole report
-// on it would lose the visitor — so the page ships with the rest of the
-// diagnosis and this fills the gap in.
+// Audit tool behaviour. Two independent blocks, one per page of the tool:
+// the landing's URL form, and the report page — where the performance section
+// is finished after render (PageSpeed takes ~20s to answer, and blocking the
+// whole report on it would lose the visitor) and the link can be copied.
 
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
   }
+}
+
+const form = document.querySelector<HTMLFormElement>("[data-audit-form]");
+
+if (form) {
+  const input = form.querySelector<HTMLInputElement>("input[name='url']")!;
+  const button = form.querySelector<HTMLButtonElement>("button[type='submit']")!;
+  const errorEl = form.querySelector<HTMLElement>("[data-audit-error]")!;
+  // The API answers with error codes; the sentences live in the dictionary and
+  // travel on the form, so this file never holds a word of Spanish or English.
+  const errors: Record<string, string> = JSON.parse(form.dataset.errors ?? "{}");
+  const reportBase = form.dataset.reportBase ?? "/auditoria/r/";
+  const original = button.textContent ?? "";
+
+  const showError = (code: string) => {
+    errorEl.textContent = errors[code] ?? errors.server ?? code;
+    errorEl.classList.remove("hidden");
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl.classList.add("hidden");
+    button.disabled = true;
+    button.textContent = form.dataset.analyzing ?? original;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "audit_started" });
+
+    try {
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: input.value, lang: form.dataset.lang ?? "es" }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        // Leave the button in its "analyzing" state: the report is one
+        // navigation away, and resetting it mid-flight reads as if the click
+        // had done nothing.
+        location.href = `${reportBase}${data.id}/`;
+        return;
+      }
+      showError(data.error);
+    } catch {
+      showError("server");
+    }
+    button.disabled = false;
+    button.textContent = original;
+  });
 }
 
 const root = document.querySelector<HTMLElement>("[data-audit-id]");

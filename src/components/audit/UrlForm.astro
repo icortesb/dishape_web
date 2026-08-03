@@ -1,0 +1,47 @@
+---
+import { getLang, getDict } from "../../i18n";
+
+// The form posts to /api/audit from the client and forwards the visitor to the
+// report it creates. Everything the handler needs — the strings it may have to
+// print, and where reports live in this language — travels on data attributes
+// so src/scripts/audit.ts stays language-agnostic.
+const lang = getLang(Astro);
+const t = getDict(lang).audit;
+---
+
+<form
+  data-audit-form
+  data-lang={lang}
+  data-analyzing={t.hero.analyzing}
+  data-report-base={lang === "en" ? "/en/audit/r/" : "/auditoria/r/"}
+  data-errors={JSON.stringify(t.errors)}
+  class="flex w-full max-w-xl flex-col gap-3"
+>
+  <label class="sr-only" for="audit-url">{t.hero.label}</label>
+  <div class="flex flex-col gap-3 sm:flex-row">
+    {/* Deliberately type="text": "tusitio.com" has no scheme, and type="url"
+        would have the browser reject it before the server ever normalizes it. */}
+    <input
+      id="audit-url"
+      type="text"
+      name="url"
+      required
+      inputmode="url"
+      autocomplete="url"
+      autocapitalize="none"
+      spellcheck="false"
+      placeholder={t.hero.placeholder}
+      class="w-full rounded-lg border border-line bg-card px-4 py-3.5 text-sm text-ink placeholder:text-faint transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+    />
+    <button
+      type="submit"
+      data-cta="audit_landing"
+      class="shrink-0 rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      {t.hero.submit}
+    </button>
+  </div>
+
+  <p data-audit-error role="alert" class="hidden text-sm text-red-400"></p>
+  <p class="text-xs text-faint">{t.hero.disclaimer}</p>
+</form>

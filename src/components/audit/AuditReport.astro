@@ -1,4 +1,6 @@
 ---
+import Navbar from "../Navbar.astro";
+import Footer from "../Footer.astro";
 import ScoreCards from "./ScoreCards.astro";
 import UrgentFindings from "./UrgentFindings.astro";
 import FindingList from "./FindingList.astro";
@@ -33,7 +35,12 @@ const audited = new Date(record.createdAt).toLocaleDateString(
 );
 ---
 
-<main class="shell flex flex-col gap-16 py-20" data-audit-id={record.id}>
+{/* A report is what a stranger receives by link. Without the site's own
+    navigation the diagnosis is orphaned: nothing says who produced it. The top
+    padding is trimmed so the header the navbar now sits above still opens the
+    page. */}
+<Navbar />
+<main class="shell flex flex-col gap-16 pb-20 pt-12" data-audit-id={record.id}>
   <header class="flex flex-col gap-6">
     <p class="text-sm text-faint">{t.auditedOn} {audited}</p>
     <h1 class="text-4xl font-semibold text-ink">{host}</h1>
@@ -79,3 +86,4 @@ const audited = new Date(record.createdAt).toLocaleDateString(
 
   <ShareButton />
 </main>
+<Footer />

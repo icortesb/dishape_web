@@ -352,10 +352,17 @@ export const es = {
       title: "Averiguá qué está frenando a tu sitio.",
       subtitle:
         "Un diagnóstico técnico de tu web en menos de un minuto: qué ve Google, qué tan rápido carga y cómo se ve cuando alguien comparte el link. Sin registro y sin costo.",
+      // Accessible name for the URL field; the design shows only a placeholder.
+      label: "Dirección de tu sitio",
       placeholder: "tusitio.com",
       submit: "Analizar mi sitio",
       analyzing: "Analizando…",
       disclaimer: "Analizamos la página que indiques, no todo el sitio.",
+    },
+    whatWeCheck: {
+      // {count} comes from the check registry, never from a typed number.
+      eyebrow: "{count} CHEQUEOS",
+      title: "Qué revisa el análisis.",
     },
     errors: {
       url_invalid: "Esa dirección no parece válida. Probá con algo como tusitio.com",

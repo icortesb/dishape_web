@@ -358,4 +358,142 @@ test.describe("report page", () => {
     expect(text).toContain("2.00 MB");
     expect(text).toContain("tráfico suficiente");
   });
+
+  // A report is the artifact a stranger receives by link. Without the site's
+  // own navigation the diagnosis is orphaned: nothing on the page says who
+  // produced it or where else to go.
+  test("carries the site's navigation without displacing the diagnosis", async ({
+    page,
+  }) => {
+    const id = "seedes12";
+    await seedRecord(id);
+    await page.goto(`/auditoria/r/${id}/`);
+
+    await expect(page.locator("body > header nav a[href='/']").first()).toBeVisible();
+    await expect(page.locator("body > footer")).toBeVisible();
+
+    // The chrome contributes no heading: the audited host is still the page's
+    // one and only h1, and it is still what the visitor lands on.
+    const h1 = page.locator("h1");
+    await expect(h1).toHaveCount(1);
+    await expect(h1).toHaveText("ejemplo.com");
+    const box = (await h1.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    expect(box.y + box.height, "the h1 fell below the fold").toBeLessThan(
+      viewport.height,
+    );
+
+    // Reports are generated per visitor; navigation must not make them indexable.
+    const robots = await page.locator('meta[name="robots"]').getAttribute("content");
+    expect(robots).toBe("noindex, follow");
+  });
+
+  test("an expired report still offers the site's navigation", async ({ page }) => {
+    await page.goto("/auditoria/r/zzzzzzzz/");
+    await expect(page.locator("body > header nav a[href='/']").first()).toBeVisible();
+    await expect(page.locator("body > footer")).toBeVisible();
+    await expect(page.locator("main h1")).toHaveText(
+      "Este reporte ya no está disponible.",
+    );
+  });
+});
+
+test.describe("landing page", () => {
+  test("serves 200 in both languages", async ({ request }) => {
+    for (const path of ["/auditoria/", "/en/audit/"]) {
+      const res = await request.get(path, { maxRedirects: 0 });
+      expect(res.status(), path).toBe(200);
+    }
+  });
+
+  test("is not swallowed by the [servicio] catch-all", async ({ page }) => {
+    await page.goto("/auditoria/");
+    await expect(page.locator("[data-audit-form] input[name='url']")).toBeVisible();
+  });
+
+  test("is indexable and declares its counterpart", async ({ page }) => {
+    await page.goto("/auditoria/");
+    const robots = await page.locator('meta[name="robots"]').getAttribute("content");
+    expect(robots).toContain("index");
+    const alt = page.locator('link[rel="alternate"][hreflang="en"]');
+    await expect(alt).toHaveAttribute("href", /\/en\/audit/);
+  });
+
+  test("shows an inline error for an invalid URL without leaving the page", async ({
+    page,
+  }) => {
+    await page.goto("/auditoria/");
+    await page.fill("[data-audit-form] input[name='url']", "no es una url");
+    await page.click("[data-audit-form] button[type='submit']");
+    await expect(page.locator("[data-audit-error]")).toBeVisible();
+    await expect(page.locator("[data-audit-error]")).toHaveText(
+      "Esa dirección no parece válida. Probá con algo como tusitio.com",
+    );
+    expect(page.url()).toContain("/auditoria");
+  });
+
+  test("renders every placeholder it prints", async ({ page }) => {
+    await page.goto("/auditoria/");
+    const text = (await page.locator("main").textContent()) ?? "";
+    // The check count comes from the registry, not from a hand-typed number.
+    expect(text).toMatch(/\d+ CHEQUEOS/);
+    expect(text).not.toMatch(/\{\w+\}/);
+  });
+
+  // Schema that describes something other than the visible page is exactly the
+  // defect this tool reports on other sites.
+  test("the structured data describes the page a visitor actually sees", async ({
+    page,
+  }) => {
+    await page.goto("/auditoria/");
+
+    const graph = (
+      await page.locator('script[type="application/ld+json"]').allTextContents()
+    )
+      .map((raw) => JSON.parse(raw))
+      .flatMap((doc) => doc["@graph"] ?? [doc]);
+
+    const rendered = await page
+      .locator("main details")
+      .evaluateAll((els) =>
+        els.map((el) => ({
+          name: el.querySelector("summary")?.textContent?.trim() ?? "",
+          text: el.querySelector("p")?.textContent?.trim() ?? "",
+        })),
+      );
+    expect(rendered.length, "no FAQ rendered").toBeGreaterThan(3);
+
+    const faq = graph.find((n) => n["@type"] === "FAQPage");
+    expect(faq, "no FAQPage schema").toBeTruthy();
+    expect(
+      faq.mainEntity.map((q: Record<string, any>) => ({
+        name: q.name,
+        text: q.acceptedAnswer.text,
+      })),
+    ).toEqual(rendered);
+
+    const app = graph.find((n) => n["@type"] === "WebApplication");
+    expect(app, "no WebApplication schema").toBeTruthy();
+    // The declared URL is the page's own canonical, not a guess.
+    expect(app.url).toBe(
+      await page.locator('link[rel="canonical"]').getAttribute("href"),
+    );
+    // It is free and ungated: the schema says so because the page does.
+    expect(app.offers).toMatchObject({ price: "0" });
+  });
+
+  test("serves its own copy in English", async ({ page }) => {
+    await page.goto("/en/audit/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator("main h1")).toHaveText(
+      "Find out what's slowing your site down.",
+    );
+    await expect(page.locator('link[rel="alternate"][hreflang="es"]')).toHaveAttribute(
+      "href",
+      "https://dishape.dev/auditoria/",
+    );
+    const text = (await page.locator("main").textContent()) ?? "";
+    expect(text).toMatch(/\d+ CHECKS/);
+    expect(text).not.toMatch(/\{\w+\}/);
+  });
 });
