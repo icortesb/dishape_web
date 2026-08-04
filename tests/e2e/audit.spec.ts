@@ -371,17 +371,28 @@ test.describe("report page", () => {
 
     await expect(page.locator("body > header nav a[href='/']").first()).toBeVisible();
     await expect(page.locator("body > footer")).toBeVisible();
+    // The lowest-friction exit on a page a stranger reached by forwarded link.
+    await expect(page.locator("a[data-cta='whatsapp_fab']")).toBeVisible();
 
     // The chrome contributes no heading: the audited host is still the page's
-    // one and only h1, and it is still what the visitor lands on.
+    // one and only h1.
     const h1 = page.locator("h1");
     await expect(h1).toHaveCount(1);
     await expect(h1).toHaveText("ejemplo.com");
-    const box = (await h1.boundingBox())!;
+
+    // "Above the fold" means the diagnosis, not just its heading: a report
+    // whose h1 fits but whose three scores are pushed under the fold has still
+    // been displaced by the navbar. Measured on a phone, because a report is
+    // usually opened from a link someone was sent.
+    await page.setViewportSize({ width: 375, height: 667 });
+    const cards = page.locator("[data-score-cards]");
+    await expect(cards).toBeVisible();
+    const box = (await cards.boundingBox())!;
     const viewport = page.viewportSize()!;
-    expect(box.y + box.height, "the h1 fell below the fold").toBeLessThan(
-      viewport.height,
-    );
+    expect(
+      box.y + box.height,
+      "the score cards fell below the fold",
+    ).toBeLessThanOrEqual(viewport.height);
 
     // Reports are generated per visitor; navigation must not make them indexable.
     const robots = await page.locator('meta[name="robots"]').getAttribute("content");
@@ -399,6 +410,23 @@ test.describe("report page", () => {
 });
 
 test.describe("landing page", () => {
+  // Unlinked from the site, the tool depends entirely on search for traffic —
+  // and every existing visitor, the ones already convinced enough to be on the
+  // site, never learns it exists.
+  const entryPoints = [
+    { home: "/", audit: "/auditoria/" },
+    { home: "/en/", audit: "/en/audit/" },
+  ];
+  for (const { home, audit } of entryPoints) {
+    test(`${home} links to the audit from the navbar and the footer`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      await expect(page.locator(`body > header nav a[href='${audit}']`)).toHaveCount(1);
+      await expect(page.locator(`body > footer a[href='${audit}']`)).toHaveCount(1);
+    });
+  }
+
   test("serves 200 in both languages", async ({ request }) => {
     for (const path of ["/auditoria/", "/en/audit/"]) {
       const res = await request.get(path, { maxRedirects: 0 });
@@ -411,13 +439,23 @@ test.describe("landing page", () => {
     await expect(page.locator("[data-audit-form] input[name='url']")).toBeVisible();
   });
 
-  test("is indexable and declares its counterpart", async ({ page }) => {
-    await page.goto("/auditoria/");
-    const robots = await page.locator('meta[name="robots"]').getAttribute("content");
-    expect(robots).toContain("index");
-    const alt = page.locator('link[rel="alternate"][hreflang="en"]');
-    await expect(alt).toHaveAttribute("href", /\/en\/audit/);
-  });
+  // The landings are the tool's only organic distribution channel, so the
+  // robots value is pinned EXACTLY: "noindex, follow" contains the substring
+  // "index", so a toContain("index") check passes against the precise
+  // regression it exists to catch.
+  const landings = [
+    { path: "/auditoria/", counterpart: "en", href: /\/en\/audit\/$/ },
+    { path: "/en/audit/", counterpart: "es", href: /dishape\.dev\/auditoria\/$/ },
+  ];
+  for (const { path, counterpart, href } of landings) {
+    test(`${path} is indexable and declares its counterpart`, async ({ page }) => {
+      await page.goto(path);
+      const robots = await page.locator('meta[name="robots"]').getAttribute("content");
+      expect(robots).toBe("index, follow, max-image-preview:large");
+      const alt = page.locator(`link[rel="alternate"][hreflang="${counterpart}"]`);
+      await expect(alt).toHaveAttribute("href", href);
+    });
+  }
 
   test("shows an inline error for an invalid URL without leaving the page", async ({
     page,
@@ -432,55 +470,165 @@ test.describe("landing page", () => {
     expect(page.url()).toContain("/auditoria");
   });
 
+  // role="alert" on a display:none node announces nothing: the live region has
+  // to be in the accessibility tree before its text arrives. Order is what is
+  // observable here, and it is exactly what was wrong.
+  test("reveals the inline error before it writes the text into it", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __alertMutations: string[] }).__alertMutations = [];
+      const attach = () => {
+        const el = document.querySelector("[data-audit-error]");
+        if (!el) return;
+        new MutationObserver((records) => {
+          for (const r of records) {
+            (window as unknown as { __alertMutations: string[] }).__alertMutations.push(
+              r.type === "attributes" ? "class" : "text",
+            );
+          }
+        }).observe(el, {
+          attributes: true,
+          attributeFilter: ["class"],
+          childList: true,
+          characterData: true,
+          subtree: true,
+        });
+      };
+      document.addEventListener("DOMContentLoaded", attach);
+    });
+
+    await page.goto("/auditoria/");
+    await page.fill("[data-audit-form] input[name='url']", "no es una url");
+    await page.click("[data-audit-form] button[type='submit']");
+    await expect(page.locator("[data-audit-error]")).toHaveText(
+      "Esa dirección no parece válida. Probá con algo como tusitio.com",
+    );
+
+    const kinds = await page.evaluate(
+      () => (window as unknown as { __alertMutations: string[] }).__alertMutations,
+    );
+    // The handler hides the node on submit, so there are two class mutations:
+    // the hide, then the reveal. The reveal must precede the text.
+    expect(kinds, "the alert text never landed").toContain("text");
+    expect(
+      kinds.lastIndexOf("class"),
+      "the alert was populated while still display:none — a screen reader announces nothing",
+    ).toBeLessThan(kinds.indexOf("text"));
+  });
+
+  // audit_started fires on the click, so a rejected URL leaves the funnel with
+  // a start and no matching outcome. Without audit_failed the top of the
+  // funnel absorbs every rejection and the conversion rate is unreadable.
+  test("records a failed attempt with its reason", async ({ page }) => {
+    await page.goto("/auditoria/");
+    await page.fill("[data-audit-form] input[name='url']", "no es una url");
+    await page.click("[data-audit-form] button[type='submit']");
+    await expect(page.locator("[data-audit-error]")).toBeVisible();
+
+    const events = await page.evaluate(() =>
+      (
+        (window as unknown as { dataLayer?: Record<string, unknown>[] }).dataLayer ?? []
+      ).map((e) => ({ event: e.event, audit_error: e.audit_error })),
+    );
+    expect(events).toContainEqual({ event: "audit_started", audit_error: undefined });
+    expect(events).toContainEqual({
+      event: "audit_failed",
+      audit_error: "url_invalid",
+    });
+  });
+
   test("renders every placeholder it prints", async ({ page }) => {
     await page.goto("/auditoria/");
     const text = (await page.locator("main").textContent()) ?? "";
-    // The check count comes from the registry, not from a hand-typed number.
-    expect(text).toMatch(/\d+ CHEQUEOS/);
+    // The check count comes from the registry, not from a hand-typed number —
+    // and the registry excludes performance, so the eyebrow has to say so
+    // rather than appear to count the third card in the grid below it.
+    expect(text).toMatch(/\d+ CHEQUEOS \+ RENDIMIENTO/);
     expect(text).not.toMatch(/\{\w+\}/);
   });
 
   // Schema that describes something other than the visible page is exactly the
-  // defect this tool reports on other sites.
-  test("the structured data describes the page a visitor actually sees", async ({
-    page,
-  }) => {
-    await page.goto("/auditoria/");
+  // defect this tool reports on other sites. Run over BOTH languages: the FAQ
+  // arrays are separate per dictionary, so one language can drift out of step
+  // with its own markup while the other stays correct.
+  const schemaPages = [
+    { path: "/auditoria/", lang: "es", appName: "Auditoría web dishape" },
+    { path: "/en/audit/", lang: "en", appName: "dishape Website Audit" },
+  ];
+  for (const { path, lang, appName } of schemaPages) {
+    test(`${path}: the structured data describes the page a visitor actually sees`, async ({
+      page,
+    }) => {
+      await page.goto(path);
 
-    const graph = (
-      await page.locator('script[type="application/ld+json"]').allTextContents()
-    )
-      .map((raw) => JSON.parse(raw))
-      .flatMap((doc) => doc["@graph"] ?? [doc]);
+      const graph = (
+        await page.locator('script[type="application/ld+json"]').allTextContents()
+      )
+        .map((raw) => JSON.parse(raw))
+        .flatMap((doc) => doc["@graph"] ?? [doc]);
 
-    const rendered = await page
-      .locator("main details")
-      .evaluateAll((els) =>
-        els.map((el) => ({
-          name: el.querySelector("summary")?.textContent?.trim() ?? "",
-          text: el.querySelector("p")?.textContent?.trim() ?? "",
+      const rendered = await page
+        .locator("main details")
+        .evaluateAll((els) =>
+          els.map((el) => ({
+            name: el.querySelector("summary")?.textContent?.trim() ?? "",
+            text: el.querySelector("p")?.textContent?.trim() ?? "",
+          })),
+        );
+      expect(rendered.length, "no FAQ rendered").toBeGreaterThan(3);
+
+      const faq = graph.find((n) => n["@type"] === "FAQPage");
+      expect(faq, "no FAQPage schema").toBeTruthy();
+      expect(faq.inLanguage).toBe(lang);
+      expect(
+        faq.mainEntity.map((q: Record<string, any>) => ({
+          name: q.name,
+          text: q.acceptedAnswer.text,
         })),
+      ).toEqual(rendered);
+
+      const app = graph.find((n) => n["@type"] === "WebApplication");
+      expect(app, "no WebApplication schema").toBeTruthy();
+      // A product name, not the pipe-delimited SERP title.
+      expect(app.name).toBe(appName);
+      expect(app.name, "the schema name is the SEO title").not.toContain("|");
+      // The declared URL is the page's own canonical, not a guess.
+      expect(app.url).toBe(
+        await page.locator('link[rel="canonical"]').getAttribute("href"),
       );
-    expect(rendered.length, "no FAQ rendered").toBeGreaterThan(3);
+      // It is free and ungated: the schema says so because the page does.
+      expect(app.offers).toMatchObject({ price: "0" });
+    });
+  }
 
-    const faq = graph.find((n) => n["@type"] === "FAQPage");
-    expect(faq, "no FAQPage schema").toBeTruthy();
-    expect(
-      faq.mainEntity.map((q: Record<string, any>) => ({
-        name: q.name,
-        text: q.acceptedAnswer.text,
-      })),
-    ).toEqual(rendered);
-
-    const app = graph.find((n) => n["@type"] === "WebApplication");
-    expect(app, "no WebApplication schema").toBeTruthy();
-    // The declared URL is the page's own canonical, not a guess.
-    expect(app.url).toBe(
-      await page.locator('link[rel="canonical"]').getAttribute("href"),
-    );
-    // It is free and ungated: the schema says so because the page does.
-    expect(app.offers).toMatchObject({ price: "0" });
-  });
+  // The report's category intros say "this page", meaning the page that was
+  // audited. On the landing nothing has been audited, so reusing them points
+  // the reader at a referent that does not exist.
+  const cardCopy = [
+    {
+      path: "/auditoria/",
+      present: "lo que Google necesita para entender una página",
+      orphaned: "Qué encuentra Google cuando entra a esta página",
+    },
+    {
+      path: "/en/audit/",
+      present: "what Google needs in order to understand a page",
+      orphaned: "What Google finds when it visits this page",
+    },
+  ];
+  for (const { path, present, orphaned } of cardCopy) {
+    test(`${path}: the category cards speak to a visitor with no report yet`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const text = (await page.locator("main").textContent()) ?? "";
+      expect(text).toContain(present);
+      expect(text, "the landing reuses the report's deictic copy").not.toContain(
+        orphaned,
+      );
+    });
+  }
 
   test("serves its own copy in English", async ({ page }) => {
     await page.goto("/en/audit/");
@@ -493,7 +641,7 @@ test.describe("landing page", () => {
       "https://dishape.dev/auditoria/",
     );
     const text = (await page.locator("main").textContent()) ?? "";
-    expect(text).toMatch(/\d+ CHECKS/);
+    expect(text).toMatch(/\d+ CHECKS \+ PERFORMANCE/);
     expect(text).not.toMatch(/\{\w+\}/);
   });
 });

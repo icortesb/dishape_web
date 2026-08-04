@@ -12,6 +12,7 @@ export const es = {
     benefits: "Beneficios",
     blog: "Blog",
     contact: "Contacto",
+    audit: "Auditoría",
     cta: "Hablemos",
     book: "Agendar 10 min",
   },
@@ -346,6 +347,10 @@ export const es = {
       title: "Auditoría web gratis | Analizá tu sitio en segundos | dishape",
       description:
         "Pegá la URL de tu sitio y obtené un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
+      // schema.org WebApplication.name — the product's name, not the SEO
+      // title. The pipe-delimited title above is written for a SERP snippet;
+      // as a schema name it reads as three fragments glued together.
+      appName: "Auditoría web dishape",
     },
     hero: {
       eyebrow: "HERRAMIENTA GRATUITA",
@@ -360,9 +365,21 @@ export const es = {
       disclaimer: "Analizamos la página que indiques, no todo el sitio.",
     },
     whatWeCheck: {
-      // {count} comes from the check registry, never from a typed number.
-      eyebrow: "{count} CHEQUEOS",
+      // {count} comes from the check registry, never from a typed number — and
+      // the registry holds SEO and sharing only. Performance is measured by
+      // PageSpeed, not counted, so the eyebrow names it apart instead of
+      // letting the number appear to cover the third card below it.
+      eyebrow: "{count} CHEQUEOS + RENDIMIENTO",
       title: "Qué revisa el análisis.",
+      // Deliberately not report.categoryIntro: those say "esta página",
+      // meaning the audited page. On the landing nothing has been audited yet,
+      // so the same sentence would point at nothing.
+      cards: {
+        seo: "Título, meta descripción, canónica, encabezados, sitemap, hreflang y HTTPS: lo que Google necesita para entender una página.",
+        social:
+          "Open Graph, Twitter Card y favicon: lo que decide cómo se ve un link cuando alguien lo pega en WhatsApp o LinkedIn.",
+        perf: "Velocidad de carga medida con la API de PageSpeed Insights de Google, con datos de laboratorio y de usuarios reales cuando el sitio tiene tráfico suficiente.",
+      },
     },
     errors: {
       url_invalid: "Esa dirección no parece válida. Probá con algo como tusitio.com",

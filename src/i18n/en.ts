@@ -12,6 +12,7 @@ export const en = {
     benefits: "Benefits",
     blog: "Blog",
     contact: "Contact",
+    audit: "Audit",
     cta: "Let's talk",
     book: "Book 10 min",
   },
@@ -345,6 +346,10 @@ export const en = {
       title: "Free website audit | Check your site's SEO in seconds | dishape",
       description:
         "Paste your site's URL and get a technical diagnosis: SEO, performance and how your site looks when shared. Free, no signup.",
+      // schema.org WebApplication.name — the product's name, not the SEO
+      // title. The pipe-delimited title above is written for a SERP snippet;
+      // as a schema name it reads as three fragments glued together.
+      appName: "dishape Website Audit",
     },
     hero: {
       eyebrow: "FREE TOOL",
@@ -359,9 +364,21 @@ export const en = {
       disclaimer: "We analyze the page you enter, not the whole site.",
     },
     whatWeCheck: {
-      // {count} comes from the check registry, never from a typed number.
-      eyebrow: "{count} CHECKS",
+      // {count} comes from the check registry, never from a typed number — and
+      // the registry holds SEO and sharing only. Performance is measured by
+      // PageSpeed, not counted, so the eyebrow names it apart instead of
+      // letting the number appear to cover the third card below it.
+      eyebrow: "{count} CHECKS + PERFORMANCE",
       title: "What the audit looks at.",
+      // Deliberately not report.categoryIntro: those say "this page", meaning
+      // the audited page. On the landing nothing has been audited yet, so the
+      // same sentence would point at nothing.
+      cards: {
+        seo: "Title, meta description, canonical, headings, sitemap, hreflang and HTTPS: what Google needs in order to understand a page.",
+        social:
+          "Open Graph, Twitter Card and favicon: what decides how a link looks when someone pastes it into WhatsApp or LinkedIn.",
+        perf: "Load speed measured with Google's PageSpeed Insights API, with lab data plus real-user data when the site has enough traffic.",
+      },
     },
     errors: {
       url_invalid: "That address doesn't look valid. Try something like yoursite.com",

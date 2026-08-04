@@ -1,6 +1,7 @@
 ---
 import Navbar from "../Navbar.astro";
 import Footer from "../Footer.astro";
+import WhatsAppFab from "../WhatsAppFab.astro";
 import ScoreCards from "./ScoreCards.astro";
 import UrgentFindings from "./UrgentFindings.astro";
 import FindingList from "./FindingList.astro";
@@ -87,3 +88,7 @@ const audited = new Date(record.createdAt).toLocaleDateString(
   <ShareButton />
 </main>
 <Footer />
+{/* The lowest-friction exit on a page a stranger reached through a forwarded
+    link: no form, no scroll back to a CTA, and it carries the visitor into the
+    channel this business actually answers on. */}
+<WhatsAppFab />

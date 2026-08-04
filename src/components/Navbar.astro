@@ -9,12 +9,18 @@ const lang = getLang(Astro);
 const t = getDict(lang).nav;
 const home = getRelativeLocaleUrl(lang, "");
 
+// The audit landing is the tool's only organic entry point; unlinked from the
+// site it depends entirely on search. The slug differs per language — there is
+// no /es/ tree, so Spanish sits at the root.
+const auditUrl = getRelativeLocaleUrl(lang, lang === "en" ? "audit" : "auditoria");
+
 const links = [
   { label: t.services, href: `${home}#servicios` },
   { label: t.ai, href: `${home}#ia` },
   { label: t.process, href: `${home}#proceso` },
   { label: t.stack, href: `${home}#stack` },
   { label: t.blog, href: getRelativeLocaleUrl(lang, "blog") },
+  { label: t.audit, href: auditUrl },
   { label: t.contact, href: `${home}#contacto` },
 ];
 
@@ -29,7 +35,12 @@ const otherUrl = getRelativeLocaleUrl(other, "");
       <Wordmark class="text-xl" />
     </a>
 
-    <ul class="hidden items-center gap-8 md:flex">
+    {/* lg, not md: at 768 the seven labels collide with the wordmark on one
+      side and the language toggle on the other, and the booking CTA is pushed
+      off the edge — measured, and already true of the six that were here
+      before. Below lg the nav keeps the logo, the toggle and the CTA; the
+      footer carries the full link set. */}
+    <ul class="hidden items-center gap-8 lg:flex">
       {
         links.map((link) => (
           <li>

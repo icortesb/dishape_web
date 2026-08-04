@@ -22,8 +22,26 @@ if (form) {
   const original = button.textContent ?? "";
 
   const showError = (code: string) => {
-    errorEl.textContent = errors[code] ?? errors.server ?? code;
+    const message = errors[code] ?? errors.server ?? code;
+    // Order matters, and so does the frame between the two steps. The node
+    // carries role="alert" but ships display:none, and a screen reader does
+    // not announce an alert whose text arrived while it was hidden — the
+    // region has to be in the accessibility tree first. Revealing it and
+    // filling it in the same task is the same thing to the AT as never
+    // revealing it, so the text lands on the next rendered frame.
     errorEl.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      errorEl.textContent = message;
+    });
+
+    // audit_started (below) fires on intent, before anything is known — so
+    // every intent that did not become an audit has to be subtractable, or the
+    // top of the funnel silently absorbs rejected URLs and rate limits and the
+    // conversion rate reads low for a reason nobody can see. The error code
+    // rides along: "half the drop-off is url_invalid" is a copy problem, and
+    // that is only visible if the reason is recorded.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "audit_failed", audit_error: code });
   };
 
   form.addEventListener("submit", async (e) => {
@@ -32,6 +50,10 @@ if (form) {
     button.disabled = true;
     button.textContent = form.dataset.analyzing ?? original;
 
+    // Deliberately before the request: this counts the click, not the outcome.
+    // Moving it after data.ok would make the funnel start at "audit created",
+    // which is the one number that cannot show how many people tried and were
+    // turned away. audit_failed in showError closes the gap the other way.
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: "audit_started" });
 
