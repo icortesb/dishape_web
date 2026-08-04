@@ -469,7 +469,7 @@ test.describe("landing page", () => {
     await page.click("[data-audit-form] button[type='submit']");
     await expect(page.locator("[data-audit-error]")).toBeVisible();
     await expect(page.locator("[data-audit-error]")).toHaveText(
-      "Esa dirección no parece válida. Probá con algo como tusitio.com",
+      "Esa dirección no parece válida. El formato esperado es algo como tusitio.com",
     );
     expect(page.url()).toContain("/auditoria");
   });
@@ -518,7 +518,7 @@ test.describe("landing page", () => {
     await page.fill("[data-audit-form] input[name='url']", "no es una url");
     await page.click("[data-audit-form] button[type='submit']");
     await expect(page.locator("[data-audit-error]")).toHaveText(
-      "Esa dirección no parece válida. Probá con algo como tusitio.com",
+      "Esa dirección no parece válida. El formato esperado es algo como tusitio.com",
     );
 
     const records = await page.evaluate(

@@ -344,9 +344,9 @@ export const es = {
   },
   audit: {
     meta: {
-      title: "Auditoría web gratis | Analizá tu sitio en segundos | dishape",
+      title: "Auditoría web gratis | Diagnóstico de tu sitio en segundos | dishape",
       description:
-        "Pegá la URL de tu sitio y obtené un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
+        "Basta con la URL de tu sitio para obtener un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
       // schema.org WebApplication.name — the product's name, not the SEO
       // title. The pipe-delimited title above is written for a SERP snippet;
       // as a schema name it reads as three fragments glued together.
@@ -354,7 +354,7 @@ export const es = {
     },
     hero: {
       eyebrow: "HERRAMIENTA GRATUITA",
-      title: "Averiguá qué está frenando a tu sitio.",
+      title: "¿Qué está frenando a tu sitio?",
       subtitle:
         "Un diagnóstico técnico de tu web en menos de un minuto: qué ve Google, qué tan rápido carga y cómo se ve cuando alguien comparte el link. Sin registro y sin costo.",
       // Accessible name for the URL field; the design shows only a placeholder.
@@ -382,13 +382,13 @@ export const es = {
       },
     },
     errors: {
-      url_invalid: "Esa dirección no parece válida. Probá con algo como tusitio.com",
+      url_invalid: "Esa dirección no parece válida. El formato esperado es algo como tusitio.com",
       url_blocked: "No podemos analizar direcciones internas o privadas.",
       url_unreachable: "No pudimos acceder a esa página. ¿Está en línea?",
       not_html: "Esa dirección no devuelve una página web.",
       too_large: "La página es demasiado pesada para analizarla.",
-      rate_limited: "Alcanzaste el límite de análisis. Probá de nuevo en un rato.",
-      server: "Algo falló de nuestro lado. Probá de nuevo.",
+      rate_limited: "Alcanzaste el límite de análisis. En un rato vuelve a estar disponible.",
+      server: "Algo falló de nuestro lado. Conviene volver a intentar.",
     },
     report: {
       auditedOn: "Analizado el",
@@ -443,9 +443,9 @@ export const es = {
       title: "Encontramos {count} cosas para resolver en esta página.",
       titleClean: "Esta página está bien resuelta.",
       body:
-        "Cada uno de estos puntos tiene una solución concreta. Si querés que los resolvamos, contanos y te decimos qué implica.",
+        "Cada uno de estos puntos tiene una solución concreta. Si te interesa que los resolvamos, hablemos y te contamos qué implica.",
       bodyClean:
-        "Si estás por encarar un proyecto nuevo o querés llevar esto más lejos, hablemos.",
+        "Si estás por encarar un proyecto nuevo o te interesa llevar esto más lejos, hablemos.",
       button: "Quiero resolver esto",
     },
     faq: {
@@ -464,11 +464,11 @@ export const es = {
         ],
         [
           "¿Analiza todo mi sitio?",
-          "No. Analiza la URL exacta que ingreses. Si querés revisar varias páginas, corré el análisis una vez por cada una.",
+          "No. Analiza la URL exacta que se indique. Para revisar varias páginas, el análisis se corre una vez por cada una.",
         ],
         [
           "¿Los datos de rendimiento son confiables?",
-          "Vienen directo de la API de PageSpeed Insights de Google, la misma que usa PageSpeed. Podés verificar cualquier número corriendo la herramienta oficial.",
+          "Vienen directo de la API de PageSpeed Insights de Google, la misma que usa PageSpeed. Cualquier número se puede verificar corriendo la herramienta oficial.",
         ],
         [
           "¿Guardan mi sitio o mis datos?",
@@ -481,65 +481,65 @@ export const es = {
         name: "Título de la página",
         why: "Es el texto que Google muestra como titular en los resultados de búsqueda. Sin título, el buscador inventa uno con lo que encuentra en la página.",
         found: "La página no tiene etiqueta <title>.",
-        fix: "Agregá un <title> descriptivo y único en el <head>, que incluya el término por el que querés que te encuentren.",
+        fix: "Falta un <title> descriptivo y único en el <head>, con el término por el que interesa que Google encuentre la página.",
       },
       "seo.title.length": {
         name: "Largo del título",
         why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
         found: "El título tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
-        fix: "Ajustá el título a un rango de 30 a 60 caracteres, poniendo lo más importante al principio.",
+        fix: "Conviene ajustar el título a un rango de 30 a 60 caracteres, con lo más importante al principio.",
       },
       "seo.description.present": {
         name: "Meta descripción",
         why: "Es el resumen que aparece debajo del título en los resultados. No afecta el posicionamiento, pero sí cuánta gente hace clic.",
         found: "La página no tiene meta descripción.",
-        fix: "Agregá <meta name=\"description\" content=\"…\"> con un resumen concreto de lo que ofrece la página.",
+        fix: "Falta <meta name=\"description\" content=\"…\"> con un resumen concreto de lo que ofrece la página.",
       },
       "seo.description.length": {
         name: "Largo de la meta descripción",
         why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
         found: "La meta descripción tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
-        fix: "Reescribí la descripción para que entre en 70 a 160 caracteres.",
+        fix: "Conviene reescribir la descripción para que entre en 70 a 160 caracteres.",
       },
       "seo.h1.unique": {
         name: "Encabezado principal único",
         why: "El H1 le dice al buscador de qué trata la página. Si hay varios o ninguno, esa señal se diluye.",
         found: "La página tiene {actual} encabezados H1.",
-        fix: "Dejá exactamente un H1 por página, con el tema principal. El resto de los títulos van como H2 o H3.",
+        fix: "Cada página lleva exactamente un H1, con el tema principal. El resto de los títulos van como H2 o H3.",
       },
       "seo.headings.hierarchy": {
         name: "Jerarquía de encabezados",
         why: "Los encabezados forman el índice de la página. Saltear niveles rompe esa estructura para buscadores y lectores de pantalla.",
         found: "Hay un salto de {from} a {to} sin pasar por el nivel intermedio.",
         foundEmpty: "Esta página no tiene encabezados que evaluar.",
-        fix: "Usá los encabezados en orden, sin saltear niveles. Si el salto es por estética, cambiá el tamaño con CSS, no el nivel.",
+        fix: "Conviene usar los encabezados en orden, sin saltear niveles. Si el salto es por estética, el tamaño se cambia con CSS, no el nivel.",
       },
       "seo.canonical": {
         name: "URL canónica",
         why: "Le dice a Google cuál es la versión oficial de la página. Sin ella, las variantes con parámetros compiten entre sí y reparten la señal.",
         found: "La canónica declarada es {found}.",
         foundEmpty: "Esta página no declara una URL canónica propia.",
-        fix: "Agregá <link rel=\"canonical\"> apuntando a la URL absoluta y definitiva de esta misma página.",
+        fix: "El <link rel=\"canonical\"> debe apuntar a la URL absoluta y definitiva de esta misma página.",
       },
       "seo.html.lang": {
         name: "Idioma declarado",
         why: "Sin el atributo lang, los buscadores adivinan el idioma y los lectores de pantalla lo pronuncian mal.",
         found: "La etiqueta <html> no declara el atributo lang.",
-        fix: "Agregá el atributo lang a la etiqueta <html>, por ejemplo <html lang=\"es\">.",
+        fix: "El atributo lang va en la etiqueta <html>, por ejemplo <html lang=\"es\">.",
       },
       "seo.robots.txt": {
         name: "Archivo robots.txt",
         why: "Es lo primero que consulta un buscador al llegar. Sin él no hay bloqueo, pero tampoco forma de indicar dónde está el sitemap.",
         found: "No pudimos acceder a /robots.txt.",
-        fix: "Publicá un robots.txt en la raíz del dominio, aunque sea mínimo, y declará ahí la ubicación del sitemap.",
+        fix: "Con un robots.txt mínimo en la raíz del dominio basta, y es donde se declara la ubicación del sitemap.",
       },
       "seo.sitemap": {
         name: "Sitemap",
         why: "Le da a Google la lista completa de páginas a indexar, en vez de dejar que las descubra siguiendo links.",
         found: "No encontramos un sitemap accesible.",
-        fix: "Generá un sitemap.xml y declaralo en robots.txt con la línea Sitemap: https://tudominio.com/sitemap.xml",
+        fix: "El sitemap.xml se genera y se declara en robots.txt con la línea Sitemap: https://tudominio.com/sitemap.xml",
       },
       "seo.noindex": {
         name: "Página indexable",
@@ -549,7 +549,7 @@ export const es = {
           meta: "por la etiqueta robots del <head>",
           header: "por el encabezado HTTP X-Robots-Tag",
         },
-        fix: "Quitá la directiva noindex del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
+        fix: "La directiva noindex se quita del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
       },
       "seo.hreflang": {
         name: "Etiquetas hreflang",
@@ -562,25 +562,25 @@ export const es = {
         name: "Conexión segura",
         why: "Los navegadores marcan como \"no seguro\" cualquier sitio sin HTTPS, y Google lo usa como señal de posicionamiento.",
         found: "La página se sirve por HTTP, sin cifrar.",
-        fix: "Instalá un certificado TLS. Con Let's Encrypt es gratis y se renueva solo.",
+        fix: "El sitio debe servirse por HTTPS, con un certificado TLS. Con Let's Encrypt es gratis y se renueva solo.",
       },
       "seo.http.redirect": {
         name: "Redirección a HTTPS",
         why: "Si la versión HTTP sigue respondiendo, existen dos copias de cada página y el tráfico se reparte entre ambas.",
         found: "http:// no redirige a https://",
-        fix: "Configurá una redirección 301 permanente de todo el tráfico HTTP a HTTPS.",
+        fix: "Todo el tráfico HTTP debe redirigirse a HTTPS con una redirección 301 permanente.",
       },
       "social.og.title": {
         name: "Título al compartir",
         why: "Es el titular que aparece cuando alguien pega el link en WhatsApp, LinkedIn o Slack. Sin él, cada plataforma improvisa.",
         found: "No hay etiqueta og:title.",
-        fix: "Agregá <meta property=\"og:title\" content=\"…\"> con el título que querés que se vea al compartir.",
+        fix: "Falta <meta property=\"og:title\" content=\"…\"> con el título que debe verse al compartir.",
       },
       "social.og.description": {
         name: "Descripción al compartir",
         why: "Es el texto debajo del titular en la tarjeta del link. Es lo que decide si alguien hace clic o sigue de largo.",
         found: "No hay etiqueta og:description.",
-        fix: "Agregá <meta property=\"og:description\"> con un resumen breve y concreto.",
+        fix: "Falta <meta property=\"og:description\"> con un resumen breve y concreto.",
       },
       "social.og.image": {
         name: "Imagen al compartir",
@@ -595,13 +595,13 @@ export const es = {
           relative: "La imagen declarada usa una URL relativa, no una absoluta.",
           unverified: "No pudimos confirmar que la imagen declarada responda.",
         },
-        fix: "Publicá una imagen de 1200×630 px y declarala en og:image con la URL absoluta completa, incluido https://",
+        fix: "La imagen para compartir debe medir 1200×630 px y declararse en og:image con la URL absoluta completa, incluido https://",
       },
       "social.twitter.card": {
         name: "Tarjeta de X/Twitter",
         why: "Define el formato de la vista previa en X. Sin ella el link se muestra en el formato más chico disponible.",
         found: "No hay etiqueta twitter:card.",
-        fix: "Agregá <meta name=\"twitter:card\" content=\"summary_large_image\">",
+        fix: "Se declara con <meta name=\"twitter:card\" content=\"summary_large_image\">",
       },
       "social.jsonld": {
         name: "Datos estructurados",
@@ -612,13 +612,13 @@ export const es = {
           unparseable: "El bloque JSON-LD declarado no es JSON válido.",
           "no-type": "El bloque JSON-LD declarado no indica un @type.",
         },
-        fix: "Agregá un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
+        fix: "Conviene incluir un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
       },
       "social.favicon": {
         name: "Favicon",
         why: "Es el ícono de la pestaña. Sin él, el sitio se vuelve difícil de encontrar entre veinte pestañas abiertas.",
         found: "No hay ícono declarado.",
-        fix: "Agregá <link rel=\"icon\" href=\"/favicon.svg\"> en el <head>.",
+        fix: "Se declara con <link rel=\"icon\" href=\"/favicon.svg\"> en el <head>.",
       },
     },
   },
