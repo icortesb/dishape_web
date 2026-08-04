@@ -278,13 +278,16 @@ link al reporte. El lead llega diagnosticado: sabés qué le pasa al sitio antes
 responder.
 
 Tracking GA4, consistente con la convención existente (`cta_location`, `cta_label`):
-`audit_started`, `audit_completed`, `audit_cta_click`, `audit_failed`.
+`audit_started`, `audit_completed`, `audit_failed`. Los clics de CTA no tienen
+evento propio: `src/scripts/cta.ts` empuja `cta_click` con `cta_location`, igual
+que en el resto del sitio.
 
 ### Cómo leer el embudo (implementado)
 
 `audit_started` se empuja al hacer clic en Analizar, antes de saber nada;
 `audit_failed` (con `audit_error`) se empuja desde `showError`, en todas las ramas
-de error. Así `started − failed` = auditorías creadas.
+de error. Así `started − failed` = auditorías **entregadas**, no creadas: un hit de
+caché devuelve `ok` con el id existente sin crear ningún registro, y cuenta igual.
 
 **Advertencia: no hay evento `audit_created`.** La señal de éxito más cercana es
 `audit_completed`, y **no** es equivalente:
@@ -297,11 +300,12 @@ de error. Así `started − failed` = auditorías creadas.
   tampoco se emite.
 
 Consecuencia práctica: `started − failed` reconcilia contra los **pageviews de
-`/auditoria/r/<id>/`**, no contra `audit_completed`. Cualquier informe que
-compare arranques con `audit_completed` va a leer menos conversiones de las
-reales. Si en algún momento hace falta un número exacto de auditorías creadas,
-el lugar correcto es un push en la rama `data.ok` de `src/scripts/audit.ts`,
-antes de la navegación.
+`/auditoria/r/<id>/` más `/en/audit/r/<id>/`** (el embudo en inglés termina en la
+segunda), no contra `audit_completed`. Cualquier informe que compare arranques con
+`audit_completed` va a leer menos conversiones de las reales. Si en algún momento
+hace falta un número exacto, el lugar correcto es un push en la rama `data.ok` de
+`src/scripts/audit.ts`, antes de la navegación — con la misma salvedad de la
+caché: mide entregas, no creaciones.
 
 ## i18n
 
