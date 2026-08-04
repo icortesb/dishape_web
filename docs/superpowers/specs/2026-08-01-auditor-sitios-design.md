@@ -278,7 +278,30 @@ link al reporte. El lead llega diagnosticado: sabés qué le pasa al sitio antes
 responder.
 
 Tracking GA4, consistente con la convención existente (`cta_location`, `cta_label`):
-`audit_started`, `audit_completed`, `audit_cta_click`.
+`audit_started`, `audit_completed`, `audit_cta_click`, `audit_failed`.
+
+### Cómo leer el embudo (implementado)
+
+`audit_started` se empuja al hacer clic en Analizar, antes de saber nada;
+`audit_failed` (con `audit_error`) se empuja desde `showError`, en todas las ramas
+de error. Así `started − failed` = auditorías creadas.
+
+**Advertencia: no hay evento `audit_created`.** La señal de éxito más cercana es
+`audit_completed`, y **no** es equivalente:
+
+- `audit_completed` sólo se empuja desde el bloque del reporte que existe cuando
+  el panel de vitals está pendiente (`[data-vitals-pending]`). Un reporte servido
+  desde la caché ya trae la medición, no renderiza ese panel, y por lo tanto nunca
+  emite el evento.
+- En el camino `giveUp()` (PageSpeed no responde, o responde sin score) el evento
+  tampoco se emite.
+
+Consecuencia práctica: `started − failed` reconcilia contra los **pageviews de
+`/auditoria/r/<id>/`**, no contra `audit_completed`. Cualquier informe que
+compare arranques con `audit_completed` va a leer menos conversiones de las
+reales. Si en algún momento hace falta un número exacto de auditorías creadas,
+el lugar correcto es un push en la rama `data.ok` de `src/scripts/audit.ts`,
+antes de la navegación.
 
 ## i18n
 

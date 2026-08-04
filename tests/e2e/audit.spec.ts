@@ -406,6 +406,10 @@ test.describe("report page", () => {
     await expect(page.locator("main h1")).toHaveText(
       "Este reporte ya no está disponible.",
     );
+    // The live report has the fab; the expired one is where a stranger holding
+    // a dead link most needs an exit that is not "run an audit you did not ask
+    // for". Losing it here would be silent — the page still looks complete.
+    await expect(page.locator("a[data-cta='whatsapp_fab']")).toBeVisible();
   });
 });
 
@@ -471,21 +475,33 @@ test.describe("landing page", () => {
   });
 
   // role="alert" on a display:none node announces nothing: the live region has
-  // to be in the accessibility tree before its text arrives. Order is what is
-  // observable here, and it is exactly what was wrong.
-  test("reveals the inline error before it writes the text into it", async ({
+  // to be in the accessibility tree before its text arrives. Statement order
+  // alone does NOT buy that — reveal-then-fill inside one task is, to an
+  // assistive technology, the same as never revealing it, because it never
+  // observes the node empty. The rAF in showError is what puts the reveal in
+  // its own task, so the test has to observe the *state at reveal time*, not
+  // the sequence of mutations.
+  type AlertMutation = { kind: "class" | "text"; text: string };
+  test("reveals the inline error in its own frame, before the text exists", async ({
     page,
   }) => {
     await page.addInitScript(() => {
-      (window as unknown as { __alertMutations: string[] }).__alertMutations = [];
+      type Rec = { kind: "class" | "text"; text: string };
+      (window as unknown as { __alertMutations: Rec[] }).__alertMutations = [];
       const attach = () => {
         const el = document.querySelector("[data-audit-error]");
         if (!el) return;
         new MutationObserver((records) => {
           for (const r of records) {
-            (window as unknown as { __alertMutations: string[] }).__alertMutations.push(
-              r.type === "attributes" ? "class" : "text",
-            );
+            (window as unknown as { __alertMutations: Rec[] }).__alertMutations.push({
+              kind: r.type === "attributes" ? "class" : "text",
+              // Read at NOTIFICATION time, not at mutation time: an observer
+              // callback is a microtask, so it runs once the task that mutated
+              // the node has finished. If the reveal and the fill share a task,
+              // the node is already full by the time this runs — which is
+              // precisely what the accessibility tree gets to see.
+              text: el.textContent ?? "",
+            });
           }
         }).observe(el, {
           attributes: true,
@@ -505,16 +521,26 @@ test.describe("landing page", () => {
       "Esa dirección no parece válida. Probá con algo como tusitio.com",
     );
 
-    const kinds = await page.evaluate(
-      () => (window as unknown as { __alertMutations: string[] }).__alertMutations,
+    const records = await page.evaluate(
+      () => (window as unknown as { __alertMutations: AlertMutation[] }).__alertMutations,
     );
+    const kinds = records.map((r) => r.kind);
     // The handler hides the node on submit, so there are two class mutations:
-    // the hide, then the reveal. The reveal must precede the text.
+    // the hide, then the reveal. The reveal must precede the text…
     expect(kinds, "the alert text never landed").toContain("text");
+    const reveal = kinds.lastIndexOf("class");
     expect(
-      kinds.lastIndexOf("class"),
+      reveal,
       "the alert was populated while still display:none — a screen reader announces nothing",
     ).toBeLessThan(kinds.indexOf("text"));
+    // …and it must still be empty when the reveal is notified. Without the
+    // rAF this reads back the whole message: the node went from hidden-and-
+    // empty to visible-and-full without ever being observably an empty live
+    // region, so nothing is announced.
+    expect(
+      records[reveal].text,
+      "the alert was revealed and filled in the same task — the live region was never empty, so there is no change for a screen reader to announce",
+    ).toBe("");
   });
 
   // audit_started fires on the click, so a rejected URL leaves the funnel with

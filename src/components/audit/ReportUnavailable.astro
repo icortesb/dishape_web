@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import Navbar from "../Navbar.astro";
 import Footer from "../Footer.astro";
+import WhatsAppFab from "../WhatsAppFab.astro";
 import { getLang, getDict } from "../../i18n";
 
 // Records are swept 30 days after the audit, so a shared report link outlives
@@ -27,3 +28,7 @@ const auditPath = lang === "en" ? "audit" : "auditoria";
   </a>
 </main>
 <Footer />
+{/* The live report carries the fab; the expired one needs it more. Whoever
+    lands here was forwarded a link that no longer resolves, and the only other
+    way out is a button that asks them to run an audit they did not ask for. */}
+<WhatsAppFab />

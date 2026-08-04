@@ -456,7 +456,10 @@ export const en = {
         ],
         [
           "What exactly does it check?",
-          "About twenty technical checks on the page you enter: technical SEO (what Google understands), how the link looks when shared, and performance measured with Google's PageSpeed Insights API.",
+          // The number has to cover exactly what the check registry covers: SEO
+          // and sharing. Performance is measured with PageSpeed and is not
+          // counted, which is what the whatWeCheck eyebrow says too.
+          "About twenty technical checks on the page you enter: technical SEO (what Google understands) and how the link looks when shared. Performance is measured separately, with Google's PageSpeed Insights API, and is not part of that count.",
         ],
         [
           "Does it check my whole site?",

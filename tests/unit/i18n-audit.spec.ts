@@ -34,6 +34,41 @@ test.describe("audit copy", () => {
     );
   });
 
+  /**
+   * Every leaf path in the dictionary, e.g. `audit.hero.submit` or
+   * `audit.faq.items[1][0]`. Arrays are walked by index so a translated list
+   * that gained or lost an entry shows up too — the FAQ array is mirrored
+   * one-for-one into FAQPage schema, so a length drift is a real defect.
+   */
+  function leafPaths(value: unknown, prefix = ""): string[] {
+    if (Array.isArray(value)) {
+      return value.flatMap((v, i) => leafPaths(v, `${prefix}[${i}]`));
+    }
+    if (value && typeof value === "object") {
+      return Object.entries(value).flatMap(([k, v]) =>
+        leafPaths(v, prefix ? `${prefix}.${k}` : k),
+      );
+    }
+    return [prefix];
+  }
+
+  // The check-id comparison above only sees `audit.checks`. Everything else —
+  // nav labels, the landing hero, whatWeCheck.cards, the FAQ — had no
+  // structural guard at all, and `astro check` is not installed, so TypeScript
+  // never runs over these files either. A key added to one language and
+  // forgotten in the other renders as `undefined` for half the visitors.
+  test("es and en declare the same keys, everywhere, not just under audit.checks", () => {
+    const esPaths = new Set(leafPaths(es));
+    const enPaths = new Set(leafPaths(en));
+    const missingInEn = [...esPaths].filter((p) => !enPaths.has(p)).sort();
+    const missingInEs = [...enPaths].filter((p) => !esPaths.has(p)).sort();
+    // Guard the guard: a walker that silently returned nothing would make the
+    // two assertions below pass against any pair of dictionaries.
+    expect(esPaths.size, "the dictionary walker found nothing").toBeGreaterThan(200);
+    expect(missingInEn, "declared in es, missing from en").toEqual([]);
+    expect(missingInEs, "declared in en, missing from es").toEqual([]);
+  });
+
   test("every check entry has all four fields in both languages", () => {
     for (const dict of [es, en]) {
       for (const [id, copy] of Object.entries(dict.audit.checks)) {
@@ -56,6 +91,59 @@ test.describe("audit copy", () => {
     );
     expect(mismatched).toEqual([]);
   });
+});
+
+/**
+ * The landing states the same fact twice: `whatWeCheck.eyebrow` renders
+ * "{count} CHEQUEOS + RENDIMIENTO" from the registry length, and the FAQ says
+ * what those checks are. The registry holds SEO and sharing only — performance
+ * comes from PageSpeed and is not one of the counted checks — so an FAQ answer
+ * that folds performance into the number contradicts the eyebrow two sections
+ * above it. On a tool whose whole pitch is that it reports accurately, a
+ * numeric self-contradiction on its own landing page is a credibility defect.
+ */
+test.describe("the landing's check count means the same thing in both places", () => {
+  const answers = {
+    es: {
+      question: "¿Qué analiza exactamente?",
+      answer:
+        "Alrededor de veinte chequeos técnicos sobre la página que se indique: SEO técnico (qué entiende Google) y cómo se ve el link al compartirlo. El rendimiento se mide aparte, con la API de PageSpeed Insights de Google, y no entra en esa cuenta.",
+    },
+    en: {
+      question: "What exactly does it check?",
+      answer:
+        "About twenty technical checks on the page you enter: technical SEO (what Google understands) and how the link looks when shared. Performance is measured separately, with Google's PageSpeed Insights API, and is not part of that count.",
+    },
+  } as const;
+
+  test("the eyebrow's premise holds: no counted check is a performance check", () => {
+    // If this ever stops being true the eyebrow and both FAQ answers below
+    // become wrong at once, and the fix is copy, not this assertion.
+    expect(registry.filter((c) => c.category !== "seo" && c.category !== "social")).toEqual(
+      [],
+    );
+  });
+
+  for (const [lang, dict] of [
+    ["es", es],
+    ["en", en],
+  ] as const) {
+    test(`${lang}: the FAQ keeps performance out of the counted checks`, () => {
+      const item = dict.audit.faq.items.find(([q]) => q === answers[lang].question);
+      expect(item, `no "what does it check" question in ${lang}`).toBeTruthy();
+      expect(item![1]).toBe(answers[lang].answer);
+
+      // Phrasing-independent restatement of the same rule, so a future rewrite
+      // that drifts back is caught even if someone updates the string above:
+      // the sentence carrying the number must not also carry performance.
+      const counted = item![1].split(". ")[0];
+      expect(
+        counted.toLowerCase(),
+        "the sentence that states the number also claims to cover performance",
+      ).not.toMatch(/rendimiento|performance|pagespeed/);
+      expect(item![1].toLowerCase()).toContain("pagespeed");
+    });
+  }
 });
 
 test.describe("interpolate", () => {

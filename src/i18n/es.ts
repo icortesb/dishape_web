@@ -457,7 +457,10 @@ export const es = {
         ],
         [
           "¿Qué analiza exactamente?",
-          "Alrededor de veinte chequeos técnicos sobre la página que indiques: SEO técnico (qué entiende Google), cómo se ve el link al compartirlo, y rendimiento medido con la API de PageSpeed Insights de Google.",
+          // El número tiene que cubrir exactamente lo que cubre el registro de
+          // chequeos: SEO y compartir. El rendimiento se mide con PageSpeed y
+          // no se cuenta, igual que dice el eyebrow de whatWeCheck.
+          "Alrededor de veinte chequeos técnicos sobre la página que se indique: SEO técnico (qué entiende Google) y cómo se ve el link al compartirlo. El rendimiento se mide aparte, con la API de PageSpeed Insights de Google, y no entra en esa cuenta.",
         ],
         [
           "¿Analiza todo mi sitio?",
