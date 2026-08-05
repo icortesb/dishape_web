@@ -16,13 +16,23 @@ const t = getDict(lang).audit.cta;
 const params = new URLSearchParams({ ref: "audit", id: auditId, url: auditedUrl });
 const href = `${getRelativeLocaleUrl(lang, "")}?${params}#contacto`;
 const clean = problemCount === 0;
+// The count is stated in the heading, so the sentence has to agree with it.
+const single = problemCount === 1;
 ---
 
 <aside class="rounded-2xl border border-accent/25 bg-accent/[0.06] p-8">
   <h2 class="text-2xl font-semibold text-ink">
-    {clean ? t.titleClean : t.title.replace("{count}", String(problemCount))}
+    {
+      clean
+        ? t.titleClean
+        : single
+          ? t.titleOne
+          : t.title.replace("{count}", String(problemCount))
+    }
   </h2>
-  <p class="mt-3 max-w-2xl text-muted">{clean ? t.bodyClean : t.body}</p>
+  <p class="mt-3 max-w-2xl text-muted">
+    {clean ? t.bodyClean : single ? t.bodyOne : t.body}
+  </p>
   <a
     href={href}
     data-cta={location}

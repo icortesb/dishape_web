@@ -199,6 +199,58 @@ test.describe("report page", () => {
     expect(text).toContain("1 de 2 chequeos");
   });
 
+  /**
+   * The CTA heading is the conversion surface of the whole tool, and it states
+   * a count it also has to agree with grammatically. A report with exactly one
+   * problem is the almost-clean site a prospect is most likely to be looking
+   * at, so "1 things to fix" lands on the best-qualified visitor there is.
+   */
+  test.describe("the CTA agrees with the number it reports", () => {
+    const problems = (n: number) => [
+      { id: "seo.title.present", status: "pass" },
+      ...[
+        { id: "seo.h1.unique", status: "fail", evidence: { actual: 0 } },
+        { id: "social.twitter.card", status: "warn" },
+      ].slice(0, n),
+    ];
+
+    test("one problem reads as one thing, in Spanish", async ({ page }) => {
+      const id = "seedes13";
+      await seedRecord(id, { checks: problems(1) });
+      await page.goto(`/auditoria/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Encontramos una cosa para resolver en esta página.");
+      expect(text).toContain("Este punto tiene una solución concreta.");
+      // The defect itself, pinned independently of the replacement wording.
+      expect(text).not.toMatch(/\b1 cosas\b/);
+      expect(text).not.toContain("Cada uno de estos puntos");
+    });
+
+    test("one problem reads as one thing, in English", async ({ page }) => {
+      const id = "seeden03";
+      await seedRecord(id, { checks: problems(1) });
+      await page.goto(`/en/audit/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("We found one thing to fix on this page.");
+      expect(text).toContain("This point has a concrete fix.");
+      expect(text).not.toMatch(/\b1 things\b/);
+      expect(text).not.toContain("Each of these points");
+    });
+
+    // The other direction: a blanket singular would be the same bug mirrored.
+    test("more than one problem still reads as plural", async ({ page }) => {
+      const id = "seedes14";
+      await seedRecord(id, { checks: problems(2) });
+      await page.goto(`/auditoria/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Encontramos 2 cosas para resolver en esta página.");
+      expect(text).toContain("Cada uno de estos puntos tiene una solución concreta.");
+    });
+  });
+
   test.describe("share button", () => {
     // Chromium only resolves clipboard.writeText with the permission granted;
     // a real visitor on HTTPS has it by default for a click-initiated write.

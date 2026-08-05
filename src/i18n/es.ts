@@ -444,9 +444,14 @@ export const es = {
     },
     cta: {
       title: "Encontramos {count} cosas para resolver en esta página.",
+      // Un solo problema es el reporte de un sitio casi limpio, justamente el
+      // que más mira un prospecto: "1 cosas" ahí se lee como una plantilla rota.
+      titleOne: "Encontramos una cosa para resolver en esta página.",
       titleClean: "Esta página está bien resuelta.",
       body:
         "Cada uno de estos puntos tiene una solución concreta. Si te interesa que los resolvamos, hablemos y te contamos qué implica.",
+      bodyOne:
+        "Este punto tiene una solución concreta. Si te interesa que lo resolvamos, hablemos y te contamos qué implica.",
       bodyClean:
         "Si estás por encarar un proyecto nuevo o te interesa llevar esto más lejos, hablemos.",
       button: "Quiero resolver esto",
@@ -491,9 +496,13 @@ export const es = {
         why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
         found: "El título tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
-        // Also renders on the "na" branch, where the page has no title at all:
-        // "ajustar el título" pointed at something we had determined does not
-        // exist. A requirement holds on both branches.
+        // "ajustar el título" apuntaba a algo que el chequeo había determinado
+        // que no existe: su rama "na", donde no hay título. "na" se descarta
+        // aguas arriba y nunca se renderiza (score.ts:55 lo saca de los
+        // hallazgos ordenados y FindingList.astro:17 vuelve a filtrar a
+        // fail|warn), así que solo llega la rama warn. Aun así un `fix` se
+        // exige verdadero en toda rama que no sea pass: la regla es más
+        // estricta que lo que se muestra, a propósito.
         fix: "El título debe tener entre 30 y 60 caracteres, con lo más importante al principio.",
       },
       "seo.description.present": {
@@ -507,8 +516,9 @@ export const es = {
         why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
         found: "La meta descripción tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
-        // Same as seo.title.length: renders on the "na" branch too, where there
-        // is no description to rewrite.
+        // Igual que seo.title.length: en la rama "na" no hay descripción que
+        // reescribir, y "na" nunca se renderiza (score.ts:55,
+        // FindingList.astro:17). El requisito es verdadero ahí de todos modos.
         fix: "La meta descripción debe tener entre 70 y 160 caracteres.",
       },
       "seo.h1.unique": {
@@ -620,7 +630,13 @@ export const es = {
           unparseable: "El bloque JSON-LD declarado no es JSON válido.",
           "no-type": "El bloque JSON-LD declarado no indica un @type.",
         },
-        fix: "Conviene incluir un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
+        // "Conviene incluir un bloque JSON-LD" era falso en las dos ramas warn:
+        // social.ts:84 filtra por hasBlocks antes de los casos unparseable y
+        // no-type, así que ahí el <script type="application/ld+json"> existe.
+        // Mismo razonamiento que seo.canonical: lo que está mal es el contenido
+        // del bloque, no su ausencia. El requisito nombra las dos propiedades
+        // que el chequeo mira: JSON válido y un @type declarado.
+        fix: "La página necesita un bloque JSON-LD válido, con el @type que corresponda (Organization, Product, Article, LocalBusiness…).",
       },
       "social.favicon": {
         name: "Favicon",

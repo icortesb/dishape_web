@@ -443,9 +443,15 @@ export const en = {
     },
     cta: {
       title: "We found {count} things to fix on this page.",
+      // A single problem is the report of an almost-clean site, which is the
+      // one a prospect is most likely to be reading: "1 things" there reads as
+      // a broken template.
+      titleOne: "We found one thing to fix on this page.",
       titleClean: "This page is in good shape.",
       body:
         "Each of these points has a concrete fix. If you want us to handle them, get in touch and we'll tell you what's involved.",
+      bodyOne:
+        "This point has a concrete fix. If you want us to handle it, get in touch and we'll tell you what's involved.",
       bodyClean:
         "If you're starting a new project or want to take this further, let's talk.",
       button: "I want this fixed",
@@ -490,9 +496,13 @@ export const en = {
         why: "Google truncates long titles and discounts very short ones as uninformative. Between 30 and 60 characters shows in full.",
         found: "The title is {actual} characters long.",
         foundEmpty: "This page has no title, so there's no length to measure.",
-        // Also renders on the "na" branch, where the page has no title at all:
-        // "adjust the title" pointed at something we had determined does not
-        // exist. A requirement holds on both branches.
+        // "adjust the title" pointed at something the check had determined does
+        // not exist — its "na" branch, where there is no title. "na" is dropped
+        // upstream and never renders (score.ts:55 filters it out of the ranked
+        // findings, FindingList.astro:17 refilters to fail|warn), so only the
+        // warn branch reaches a visitor. A `fix` is still held to being true on
+        // every non-pass branch: the rule is stricter than what renders, on
+        // purpose, and the requirement form satisfies it.
         fix: "The title needs to be 30–60 characters, with the most important part first.",
       },
       "seo.description.present": {
@@ -506,8 +516,9 @@ export const en = {
         why: "Google cuts long descriptions off mid-sentence. Between 70 and 160 characters shows in full.",
         found: "The meta description is {actual} characters long.",
         foundEmpty: "This page has no meta description, so there's no length to measure.",
-        // Same as seo.title.length: renders on the "na" branch too, where there
-        // is no description to rewrite.
+        // Same as seo.title.length: the "na" branch has no description to
+        // rewrite, and "na" never renders (score.ts:55, FindingList.astro:17).
+        // The requirement form holds on it anyway, which is the rule.
         fix: "The meta description needs to be 70 to 160 characters.",
       },
       "seo.h1.unique": {
@@ -546,16 +557,17 @@ export const en = {
         // The only displayed branch is robotsTxt === null, which parse.ts sets
         // for a transport failure and for a non-2xx alike — so "publish a
         // robots.txt" asserts an absence we never observed. Matches the Spanish.
-        fix: "A minimal robots.txt at the domain root is enough, and it is where the sitemap location is declared.",
+        fix: "The domain root must serve a robots.txt; a minimal one is enough, and it is where the sitemap location is declared.",
       },
       "seo.sitemap": {
         name: "Sitemap",
         why: "It gives Google the full list of pages to index, instead of leaving it to discover them by following links.",
         found: "We couldn't find an accessible sitemap.",
-        // Renders on the "na" probe-failure branch too, where nothing was
-        // determined about the sitemap: "generate a sitemap.xml" would assert
-        // it is missing.
-        fix: "A sitemap.xml is generated and declared in robots.txt with the line Sitemap: https://yourdomain.com/sitemap.xml",
+        // On the "na" probe-failure branch nothing was determined about the
+        // sitemap, so "generate a sitemap.xml" would assert it is missing.
+        // "na" never renders (score.ts:55, FindingList.astro:17); the
+        // requirement is written to be true there regardless.
+        fix: "The sitemap.xml must be generated and declared in robots.txt, with the line Sitemap: https://yourdomain.com/sitemap.xml",
       },
       "seo.noindex": {
         name: "Indexable page",
@@ -586,8 +598,9 @@ export const en = {
         name: "Redirect to HTTPS",
         why: "If the HTTP version still responds, there are two copies of every page and traffic splits between them.",
         found: "http:// does not redirect to https://",
-        // Renders on the "na" branch too, where the probe never resolved and no
-        // redirect was observed either way.
+        // On the "na" branch the probe never resolved and no redirect was
+        // observed either way. "na" never renders (score.ts:55,
+        // FindingList.astro:17); the requirement is true on it regardless.
         fix: "All HTTP traffic must redirect to HTTPS with a permanent 301.",
       },
       "social.og.title": {
@@ -634,7 +647,13 @@ export const en = {
           unparseable: "The declared JSON-LD block is not valid JSON.",
           "no-type": "The declared JSON-LD block states no @type.",
         },
-        fix: "Add a JSON-LD block with the type that applies (Organization, Product, Article, LocalBusiness…).",
+        // "Add a JSON-LD block" was false on both warn branches: social.ts:84
+        // gates on hasBlocks before the unparseable and no-type cases, so a
+        // <script type="application/ld+json"> demonstrably exists there. Same
+        // reasoning as seo.canonical above — what is wrong is the block's
+        // content, not its absence — so the requirement names both properties
+        // the check actually tests: valid JSON, and a declared @type.
+        fix: "The page needs a valid JSON-LD block with the @type that applies (Organization, Product, Article, LocalBusiness…).",
       },
       "social.favicon": {
         name: "Favicon",

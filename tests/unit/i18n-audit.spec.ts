@@ -190,11 +190,13 @@ const dicts = [
 ];
 
 test.describe("audit copy resolves against real check output", () => {
-  // The report renders the found/why/fix block for every result except
-  // "pass" — FindingList puts "pass" in the collapsed section (never calls
-  // interpolate), but "fail", "warn" AND "na" all reach it. A placeholder
-  // that only resolves on the pass branch — like seo.html.lang's old
-  // {found}, which was only ever populated when lang WAS present — is
+  // The report renders the found/why/fix block for "fail" and "warn" only:
+  // FindingItem.astro:43 hides it for "pass", and "na" is dropped before it
+  // ever gets there (score.ts:55, FindingList.astro:17). This sweeps every
+  // non-pass result anyway, "na" included, for the same reason the copy rule
+  // is written that way — the strings must survive a change in the filtering.
+  // A placeholder that only resolves on the pass branch — like seo.html.lang's
+  // old {found}, which was only ever populated when lang WAS present — is
   // invisible to a naive check and still renders literally to every visitor
   // whose page fails the check.
   test("found/why/fix never leave a stray {placeholder} for any displayed (non-pass) result", () => {
@@ -498,34 +500,119 @@ const ES_FIX_SNAPSHOT: Record<string, string> = {
     "La imagen para compartir debe medir 1200×630 px y declararse en og:image con la URL absoluta completa, incluido https://",
   "social.twitter.card":
     "El <meta name=\"twitter:card\" content=\"summary_large_image\"> debe ir en el <head>.",
+  // Updated deliberately: the previous sentence ("Conviene incluir un bloque
+  // JSON-LD…") was false on both warn branches, where social.ts:84 has already
+  // established that a block exists.
   "social.jsonld":
-    "Conviene incluir un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
+    "La página necesita un bloque JSON-LD válido, con el @type que corresponda (Organization, Product, Article, LocalBusiness…).",
   "social.favicon":
     "El <link rel=\"icon\" href=\"/favicon.svg\"> debe ir en el <head>.",
 };
 
-const WHY_PINNED = [
-  "The Spanish `fix` strings are pinned exactly, on purpose, and this test is",
-  "the only thing that reads their text at all.",
+/**
+ * The same, for English — which until now had no pin of any kind.
+ *
+ * The Spanish snapshot closes register *and* phrasing; this one is here for the
+ * other rule, truthfulness, because English is where that rule kept breaking:
+ * ten of the fourteen strings found asserting a state the checker never
+ * observed were English, including the three fixed in the commit that added the
+ * Spanish snapshot, and one more (social.jsonld) that the same commit left
+ * behind in both languages.
+ */
+const EN_FIX_SNAPSHOT: Record<string, string> = {
+  "seo.title.present":
+    "Add a descriptive, unique <title> in the <head>, including the term you want to be found for.",
+  "seo.title.length":
+    "The title needs to be 30–60 characters, with the most important part first.",
+  "seo.description.present":
+    "Add <meta name=\"description\" content=\"…\"> with a concrete summary of what the page offers.",
+  "seo.description.length":
+    "The meta description needs to be 70 to 160 characters.",
+  "seo.h1.unique":
+    "Keep exactly one H1 per page, with the main topic. Everything else goes as H2 or H3.",
+  "seo.headings.hierarchy":
+    "Use headings in order, without skipping levels. If the jump is for visual reasons, change the size with CSS, not the level.",
+  "seo.canonical":
+    "The <link rel=\"canonical\"> must point to the absolute, definitive URL of this same page.",
+  "seo.html.lang":
+    "Add the lang attribute to the <html> tag, for example <html lang=\"en\">.",
+  "seo.robots.txt":
+    "The domain root must serve a robots.txt; a minimal one is enough, and it is where the sitemap location is declared.",
+  "seo.sitemap":
+    "The sitemap.xml must be generated and declared in robots.txt, with the line Sitemap: https://yourdomain.com/sitemap.xml",
+  "seo.noindex":
+    "Remove the noindex directive from the meta robots tag or the X-Robots-Tag header. It's usually left over from a staging environment.",
+  "seo.hreflang":
+    "Each version must list all alternatives, including itself, with valid language codes.",
+  "seo.https":
+    "The site must be served over HTTPS, with a TLS certificate. With Let's Encrypt it's free and renews itself.",
+  "seo.http.redirect":
+    "All HTTP traffic must redirect to HTTPS with a permanent 301.",
+  "social.og.title":
+    "Add <meta property=\"og:title\" content=\"…\"> with the title you want to show when shared.",
+  "social.og.description":
+    "Add <meta property=\"og:description\"> with a short, concrete summary.",
+  "social.og.image":
+    "The share image must be 1200×630 px and declared in og:image with the full absolute URL, including https://",
+  "social.twitter.card":
+    "Add <meta name=\"twitter:card\" content=\"summary_large_image\"> in the <head>.",
+  "social.jsonld":
+    "The page needs a valid JSON-LD block with the @type that applies (Organization, Product, Article, LocalBusiness…).",
+  "social.favicon":
+    "Add <link rel=\"icon\" href=\"/favicon.svg\"> in the <head>.",
+};
+
+/**
+ * The truthfulness rule both snapshots protect, stated once so the two failure
+ * messages cannot drift apart.
+ */
+const RENDER_RULE = [
+  "A `fix` renders on `fail` and `warn`, and on nothing else.",
+  "FindingItem.astro:43 hides it for `pass`, and an `na` result never gets that",
+  "far: score.ts:55 rankFindings drops `na` before the report is assembled and",
+  "FindingList.astro:17 refilters to fail|warn. The rule these strings are held",
+  "to is deliberately stricter than that — a `fix` must be true on EVERY",
+  "non-pass branch of its check, `na` included — so a string stays correct if",
+  "the filtering ever changes. It may prescribe, but it may not assert a state",
+  "the checker never observed: \"add a canonical\" is false on the branch where a",
+  "canonical exists and points at another host.",
+].join(" ");
+
+const WHY_PINNED_ES = [
+  "The Spanish `fix` strings are pinned exactly, on purpose, and this test and",
+  "its English twin are the only things that read their text at all.",
   "If you are here because you changed one: that is fine, but the snapshot in",
   "tests/unit/i18n-audit.spec.ts must be updated deliberately, not to get green.",
   "Two rules to re-read first. (1) docs/voice.md: español neutro, SIN VOSEO —",
   "no \"agregá\", \"olvidate\", \"necesitás\", \"tenés\"; write impersonal or in the",
-  "third person. (2) FindingItem.astro hides `fix` only for `pass`, so the",
-  "sentence renders on fail, warn AND na and must be true on every non-pass",
-  "branch of its check — it may prescribe, but it may not assert a state the",
-  "checker never observed.",
+  "third person. (2)",
+  RENDER_RULE,
 ].join(" ");
 
-test.describe("Spanish register guard", () => {
-  test("every Spanish check fix string matches its snapshot exactly", () => {
-    const actual = Object.fromEntries(
-      Object.entries(es.audit.checks).map(([id, copy]) => [
-        id,
-        (copy as { fix: string }).fix,
-      ]),
+const WHY_PINNED_EN = [
+  "The English `fix` strings are pinned exactly, on purpose. English carries no",
+  "voseo constraint, so unlike its Spanish twin this snapshot exists for one",
+  "rule only: truthfulness. English is where that rule kept breaking — ten of",
+  "the fourteen strings caught asserting a state the checker never observed",
+  "were English, and they reached half the tool's visitors for four tasks",
+  "because nothing read them.",
+  "If you are here because you changed one: update the snapshot deliberately,",
+  "not to get green, and re-read the rule first.",
+  RENDER_RULE,
+].join(" ");
+
+test.describe("check fix strings are pinned", () => {
+  const fixes = (checks: Record<string, unknown>) =>
+    Object.fromEntries(
+      Object.entries(checks).map(([id, copy]) => [id, (copy as { fix: string }).fix]),
     );
-    expect(actual, WHY_PINNED).toEqual(ES_FIX_SNAPSHOT);
+
+  test("every Spanish check fix string matches its snapshot exactly", () => {
+    expect(fixes(es.audit.checks), WHY_PINNED_ES).toEqual(ES_FIX_SNAPSHOT);
+  });
+
+  test("every English check fix string matches its snapshot exactly", () => {
+    expect(fixes(en.audit.checks), WHY_PINNED_EN).toEqual(EN_FIX_SNAPSHOT);
   });
 });
 
