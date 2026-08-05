@@ -68,9 +68,12 @@ function placeholdersOf(template: string): string[] {
  * The same problem in its other shape: a `found` that counts something reads
  * "1 chequeos" / "1 checks" the moment the count is 1, and Spanish gets the
  * article wrong on top of the noun. `foundOne` is the sentence for exactly
- * that case, picked when the template names a single placeholder and the
- * evidence hands it the number 1. It is deliberately narrow — a template with
- * two placeholders has no obvious "the count", and no check needs one today.
+ * that case, picked when the template holds exactly one placeholder
+ * occurrence and the evidence hands it the number 1. It is deliberately
+ * narrow — a template with two placeholders has no obvious "the count", and
+ * no check needs one today. Occurrences, not distinct names: `"{n} de {n}"`
+ * is refused too, which is stricter than it needs to be and costs nothing
+ * while no template repeats a placeholder.
  *
  * If neither `foundEmpty` nor `foundOne` is defined, this behaves exactly like
  * `interpolate`: most checks have exactly one shape of evidence on every

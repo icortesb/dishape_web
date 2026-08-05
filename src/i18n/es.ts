@@ -413,7 +413,6 @@ export const es = {
       // borde: el <details> aparece apenas hay uno (FindingList.astro:32). El
       // singular no lleva {count} — "el chequeo" antes que "1 chequeo".
       showPassedOne: "Ver el chequeo que pasó",
-      hidePassed: "Ocultar los que pasaron",
       status: {
         pass: "Bien",
         warn: "A mejorar",

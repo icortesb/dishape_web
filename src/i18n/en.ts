@@ -412,7 +412,6 @@ export const en = {
       // edge: the <details> renders as soon as there is one
       // (FindingList.astro:32). The singular carries no {count}.
       showPassedOne: "Show the check that passed",
-      hidePassed: "Hide the ones that passed",
       status: {
         pass: "Good",
         warn: "Needs work",

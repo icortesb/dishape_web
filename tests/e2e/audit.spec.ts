@@ -298,6 +298,18 @@ test.describe("report page", () => {
 
       expect(text).toContain("Ver los 2 chequeos que pasaron");
     });
+
+    // Both languages share the FindingList branch, so the logic is already
+    // pinned by the Spanish control. This pins the English *string*, which
+    // nothing else asserts.
+    test("two passing checks still read as plural, in English", async ({ page }) => {
+      const id = "seeden16";
+      await seedRecord(id, { checks: passing(2) });
+      await page.goto(`/en/audit/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Show the 2 checks that passed");
+    });
   });
 
   test.describe("share button", () => {
