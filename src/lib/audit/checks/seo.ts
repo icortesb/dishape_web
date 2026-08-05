@@ -1,8 +1,11 @@
 import { extractMeta } from "../parse";
 import type { Check, CheckResult, PageContext } from "../types";
 
-const TITLE_MIN = 30;
-const TITLE_MAX = 60;
+// Exported so copy that has to satisfy the same rule (the audit landing's own
+// <title>) can assert against the number the check enforces, instead of a
+// second copy of it that can drift.
+export const TITLE_MIN = 30;
+export const TITLE_MAX = 60;
 const DESC_MIN = 70;
 const DESC_MAX = 160;
 

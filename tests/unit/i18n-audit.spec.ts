@@ -3,6 +3,7 @@ import { parse } from "node-html-parser";
 import { es } from "../../src/i18n/es";
 import { en } from "../../src/i18n/en";
 import { registry, runChecks } from "../../src/lib/audit/registry";
+import { TITLE_MAX, TITLE_MIN } from "../../src/lib/audit/checks/seo";
 import {
   checkCopy,
   checkText,
@@ -414,6 +415,117 @@ test.describe("evidence enum tokens are localized", () => {
     expect(emitted.size).toBeGreaterThanOrEqual(8);
     expect(seen.size).toBeGreaterThanOrEqual(6);
     expect([...new Set(unlabeled)]).toEqual([]);
+  });
+});
+
+/**
+ * The audit landing feeds `audit.meta.title` straight into <title>
+ * (src/pages/auditoria/index.astro), and it is the one page of the tool that
+ * has to rank. A visitor who audits that page gets seo.title.length back — so
+ * if the string runs past TITLE_MAX the tool warns about its own pitch page,
+ * and Google truncates "| dishape", the brand, off the end.
+ *
+ * The bound is imported from the check, never retyped: a second copy of 60
+ * would let the two drift apart silently, which is the defect this guards.
+ */
+test.describe("the audit landing passes the title check the tool runs on visitors", () => {
+  for (const [lang, dict] of [
+    ["es", es],
+    ["en", en],
+  ] as const) {
+    test(`${lang}: audit.meta.title stays inside seo.title.length's bounds`, () => {
+      const title = dict.audit.meta.title;
+      const detail = `${lang} audit.meta.title is ${title.length} characters; seo.title.length accepts ${TITLE_MIN}-${TITLE_MAX}: "${title}"`;
+
+      // Both bounds, because the check warns on either side of the range.
+      expect(title.length, detail).toBeLessThanOrEqual(TITLE_MAX);
+      expect(title.length, detail).toBeGreaterThanOrEqual(TITLE_MIN);
+
+      // …and run the real check over the real string, so this cannot pass by
+      // reimplementing the predicate slightly wrong.
+      const result = runChecks(pageCtx(`<title>${title}</title>`)).find(
+        (r) => r.id === "seo.title.length",
+      )!;
+      expect(result.status, detail).toBe("pass");
+    });
+  }
+});
+
+/**
+ * An exact snapshot of every Spanish check `fix` string.
+ *
+ * It exists because nothing else in either suite reads their text: a reviewer
+ * rewrote one of these with two blatant voseo tokens and both suites stayed
+ * fully green, and an entire dictionary had already shipped in violation of
+ * docs/voice.md once. A regex voice-lint would need a hand-kept accent
+ * exclusion list (está, más, después, así…) that a future author could weaken
+ * to get green; a snapshot has no such knob.
+ */
+const ES_FIX_SNAPSHOT: Record<string, string> = {
+  "seo.title.present":
+    "Falta un <title> descriptivo y único en el <head>, con el término por el que interesa que Google encuentre la página.",
+  "seo.title.length":
+    "El título debe tener entre 30 y 60 caracteres, con lo más importante al principio.",
+  "seo.description.present":
+    "Falta <meta name=\"description\" content=\"…\"> con un resumen concreto de lo que ofrece la página.",
+  "seo.description.length":
+    "La meta descripción debe tener entre 70 y 160 caracteres.",
+  "seo.h1.unique":
+    "Cada página lleva exactamente un H1, con el tema principal. El resto de los títulos van como H2 o H3.",
+  "seo.headings.hierarchy":
+    "Conviene usar los encabezados en orden, sin saltear niveles. Si el salto es por estética, el tamaño se cambia con CSS, no el nivel.",
+  "seo.canonical":
+    "El <link rel=\"canonical\"> debe apuntar a la URL absoluta y definitiva de esta misma página.",
+  "seo.html.lang":
+    "El atributo lang va en la etiqueta <html>, por ejemplo <html lang=\"es\">.",
+  "seo.robots.txt":
+    "Con un robots.txt mínimo en la raíz del dominio basta, y es donde se declara la ubicación del sitemap.",
+  "seo.sitemap":
+    "El sitemap.xml se genera y se declara en robots.txt con la línea Sitemap: https://tudominio.com/sitemap.xml",
+  "seo.noindex":
+    "La directiva noindex se quita del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
+  "seo.hreflang":
+    "Cada versión debe listar todas las alternativas, incluida ella misma, con códigos de idioma válidos.",
+  "seo.https":
+    "El sitio debe servirse por HTTPS, con un certificado TLS. Con Let's Encrypt es gratis y se renueva solo.",
+  "seo.http.redirect":
+    "Todo el tráfico HTTP debe redirigirse a HTTPS con una redirección 301 permanente.",
+  "social.og.title":
+    "Falta <meta property=\"og:title\" content=\"…\"> con el título que debe verse al compartir.",
+  "social.og.description":
+    "Falta <meta property=\"og:description\"> con un resumen breve y concreto.",
+  "social.og.image":
+    "La imagen para compartir debe medir 1200×630 px y declararse en og:image con la URL absoluta completa, incluido https://",
+  "social.twitter.card":
+    "El <meta name=\"twitter:card\" content=\"summary_large_image\"> debe ir en el <head>.",
+  "social.jsonld":
+    "Conviene incluir un bloque JSON-LD con el tipo que corresponda (Organization, Product, Article, LocalBusiness…).",
+  "social.favicon":
+    "El <link rel=\"icon\" href=\"/favicon.svg\"> debe ir en el <head>.",
+};
+
+const WHY_PINNED = [
+  "The Spanish `fix` strings are pinned exactly, on purpose, and this test is",
+  "the only thing that reads their text at all.",
+  "If you are here because you changed one: that is fine, but the snapshot in",
+  "tests/unit/i18n-audit.spec.ts must be updated deliberately, not to get green.",
+  "Two rules to re-read first. (1) docs/voice.md: español neutro, SIN VOSEO —",
+  "no \"agregá\", \"olvidate\", \"necesitás\", \"tenés\"; write impersonal or in the",
+  "third person. (2) FindingItem.astro hides `fix` only for `pass`, so the",
+  "sentence renders on fail, warn AND na and must be true on every non-pass",
+  "branch of its check — it may prescribe, but it may not assert a state the",
+  "checker never observed.",
+].join(" ");
+
+test.describe("Spanish register guard", () => {
+  test("every Spanish check fix string matches its snapshot exactly", () => {
+    const actual = Object.fromEntries(
+      Object.entries(es.audit.checks).map(([id, copy]) => [
+        id,
+        (copy as { fix: string }).fix,
+      ]),
+    );
+    expect(actual, WHY_PINNED).toEqual(ES_FIX_SNAPSHOT);
   });
 });
 

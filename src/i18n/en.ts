@@ -343,7 +343,10 @@ export const en = {
   },
   audit: {
     meta: {
-      title: "Free website audit | Check your site's SEO in seconds | dishape",
+      // 57 characters: this string is the landing's <title>, and the tool warns
+      // any visitor whose title runs past TITLE_MAX (60). Pinned by
+      // tests/unit/i18n-audit.spec.ts against the constant itself.
+      title: "Free website audit | Your site's SEO in seconds | dishape",
       description:
         "Paste your site's URL and get a technical diagnosis: SEO, performance and how your site looks when shared. Free, no signup.",
       // schema.org WebApplication.name — the product's name, not the SEO
@@ -487,7 +490,10 @@ export const en = {
         why: "Google truncates long titles and discounts very short ones as uninformative. Between 30 and 60 characters shows in full.",
         found: "The title is {actual} characters long.",
         foundEmpty: "This page has no title, so there's no length to measure.",
-        fix: "Adjust the title to 30–60 characters, with the most important part first.",
+        // Also renders on the "na" branch, where the page has no title at all:
+        // "adjust the title" pointed at something we had determined does not
+        // exist. A requirement holds on both branches.
+        fix: "The title needs to be 30–60 characters, with the most important part first.",
       },
       "seo.description.present": {
         name: "Meta description",
@@ -500,7 +506,9 @@ export const en = {
         why: "Google cuts long descriptions off mid-sentence. Between 70 and 160 characters shows in full.",
         found: "The meta description is {actual} characters long.",
         foundEmpty: "This page has no meta description, so there's no length to measure.",
-        fix: "Rewrite the description to fit within 70 to 160 characters.",
+        // Same as seo.title.length: renders on the "na" branch too, where there
+        // is no description to rewrite.
+        fix: "The meta description needs to be 70 to 160 characters.",
       },
       "seo.h1.unique": {
         name: "Single main heading",
@@ -520,7 +528,10 @@ export const en = {
         why: "It tells Google which version of the page is the official one. Without it, variants with parameters compete against each other and split the signal.",
         found: "The declared canonical is {found}.",
         foundEmpty: "This page does not declare a canonical URL of its own.",
-        fix: "Add <link rel=\"canonical\"> pointing to the absolute, definitive URL of this same page.",
+        // "Add <link rel=canonical>" was false on two of the three displayed
+        // branches: the cross-host warn and the unparseable-href fail both have
+        // the tag. What is wrong there is where it points, not that it is absent.
+        fix: "The <link rel=\"canonical\"> must point to the absolute, definitive URL of this same page.",
       },
       "seo.html.lang": {
         name: "Declared language",
@@ -532,13 +543,19 @@ export const en = {
         name: "robots.txt file",
         why: "It's the first thing a search engine checks on arrival. Without it there's no blocking, but also no way to point to the sitemap.",
         found: "We couldn't reach /robots.txt.",
-        fix: "Publish a robots.txt at the domain root, even a minimal one, and declare the sitemap location there.",
+        // The only displayed branch is robotsTxt === null, which parse.ts sets
+        // for a transport failure and for a non-2xx alike — so "publish a
+        // robots.txt" asserts an absence we never observed. Matches the Spanish.
+        fix: "A minimal robots.txt at the domain root is enough, and it is where the sitemap location is declared.",
       },
       "seo.sitemap": {
         name: "Sitemap",
         why: "It gives Google the full list of pages to index, instead of leaving it to discover them by following links.",
         found: "We couldn't find an accessible sitemap.",
-        fix: "Generate a sitemap.xml and declare it in robots.txt with the line Sitemap: https://yourdomain.com/sitemap.xml",
+        // Renders on the "na" probe-failure branch too, where nothing was
+        // determined about the sitemap: "generate a sitemap.xml" would assert
+        // it is missing.
+        fix: "A sitemap.xml is generated and declared in robots.txt with the line Sitemap: https://yourdomain.com/sitemap.xml",
       },
       "seo.noindex": {
         name: "Indexable page",
@@ -561,13 +578,17 @@ export const en = {
         name: "Secure connection",
         why: "Browsers flag any site without HTTPS as \"not secure\", and Google uses it as a ranking signal.",
         found: "The page is served over HTTP, unencrypted.",
-        fix: "Install a TLS certificate. With Let's Encrypt it's free and renews itself.",
+        // The check only observes that this URL came over HTTP; whether the
+        // site has a certificate at all was never determined.
+        fix: "The site must be served over HTTPS, with a TLS certificate. With Let's Encrypt it's free and renews itself.",
       },
       "seo.http.redirect": {
         name: "Redirect to HTTPS",
         why: "If the HTTP version still responds, there are two copies of every page and traffic splits between them.",
         found: "http:// does not redirect to https://",
-        fix: "Set up a permanent 301 redirect from all HTTP traffic to HTTPS.",
+        // Renders on the "na" branch too, where the probe never resolved and no
+        // redirect was observed either way.
+        fix: "All HTTP traffic must redirect to HTTPS with a permanent 301.",
       },
       "social.og.title": {
         name: "Share title",
@@ -594,13 +615,15 @@ export const en = {
           relative: "The declared image URL is not absolute.",
           unverified: "We could not confirm the declared image responds.",
         },
-        fix: "Publish a 1200×630 px image and declare it in og:image with the full absolute URL, including https://",
+        // On the "relative" and "unverified" branches an og:image IS declared,
+        // so "publish an image and declare it" contradicts what we found.
+        fix: "The share image must be 1200×630 px and declared in og:image with the full absolute URL, including https://",
       },
       "social.twitter.card": {
         name: "X/Twitter card",
         why: "It defines the preview format on X. Without it the link shows in the smallest format available.",
         found: "No twitter:card tag.",
-        fix: "Add <meta name=\"twitter:card\" content=\"summary_large_image\">",
+        fix: "Add <meta name=\"twitter:card\" content=\"summary_large_image\"> in the <head>.",
       },
       "social.jsonld": {
         name: "Structured data",

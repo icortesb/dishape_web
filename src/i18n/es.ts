@@ -344,7 +344,10 @@ export const es = {
   },
   audit: {
     meta: {
-      title: "Auditoría web gratis | Diagnóstico de tu sitio en segundos | dishape",
+      // 56 characters: this string is the landing's <title>, and the tool warns
+      // any visitor whose title runs past TITLE_MAX (60). Pinned by
+      // tests/unit/i18n-audit.spec.ts against the constant itself.
+      title: "Auditoría web gratis | Diagnóstico de tu sitio | dishape",
       description:
         "Basta con la URL de tu sitio para obtener un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
       // schema.org WebApplication.name — the product's name, not the SEO
@@ -388,7 +391,7 @@ export const es = {
       not_html: "Esa dirección no devuelve una página web.",
       too_large: "La página es demasiado pesada para analizarla.",
       rate_limited: "Alcanzaste el límite de análisis. En un rato vuelve a estar disponible.",
-      server: "Algo falló de nuestro lado. Conviene volver a intentar.",
+      server: "Algo falló de nuestro lado. Intenta de nuevo.",
     },
     report: {
       auditedOn: "Analizado el",
@@ -488,7 +491,10 @@ export const es = {
         why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
         found: "El título tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
-        fix: "Conviene ajustar el título a un rango de 30 a 60 caracteres, con lo más importante al principio.",
+        // Also renders on the "na" branch, where the page has no title at all:
+        // "ajustar el título" pointed at something we had determined does not
+        // exist. A requirement holds on both branches.
+        fix: "El título debe tener entre 30 y 60 caracteres, con lo más importante al principio.",
       },
       "seo.description.present": {
         name: "Meta descripción",
@@ -501,7 +507,9 @@ export const es = {
         why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
         found: "La meta descripción tiene {actual} caracteres.",
         foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
-        fix: "Conviene reescribir la descripción para que entre en 70 a 160 caracteres.",
+        // Same as seo.title.length: renders on the "na" branch too, where there
+        // is no description to rewrite.
+        fix: "La meta descripción debe tener entre 70 y 160 caracteres.",
       },
       "seo.h1.unique": {
         name: "Encabezado principal único",
@@ -601,7 +609,7 @@ export const es = {
         name: "Tarjeta de X/Twitter",
         why: "Define el formato de la vista previa en X. Sin ella el link se muestra en el formato más chico disponible.",
         found: "No hay etiqueta twitter:card.",
-        fix: "Se declara con <meta name=\"twitter:card\" content=\"summary_large_image\">",
+        fix: "El <meta name=\"twitter:card\" content=\"summary_large_image\"> debe ir en el <head>.",
       },
       "social.jsonld": {
         name: "Datos estructurados",
@@ -618,7 +626,7 @@ export const es = {
         name: "Favicon",
         why: "Es el ícono de la pestaña. Sin él, el sitio se vuelve difícil de encontrar entre veinte pestañas abiertas.",
         found: "No hay ícono declarado.",
-        fix: "Se declara con <link rel=\"icon\" href=\"/favicon.svg\"> en el <head>.",
+        fix: "El <link rel=\"icon\" href=\"/favicon.svg\"> debe ir en el <head>.",
       },
     },
   },
