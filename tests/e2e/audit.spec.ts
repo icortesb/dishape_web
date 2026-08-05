@@ -251,6 +251,55 @@ test.describe("report page", () => {
     });
   });
 
+  /**
+   * The passed-checks disclosure states a per-category count and has to agree
+   * with it. It opens as soon as there is one passing check
+   * (FindingList.astro:32), so one is the boundary case, not an edge — the
+   * suite's own default fixture already lands on it. Spanish is wrong twice
+   * there: the article ("los") and the noun ("chequeos").
+   */
+  test.describe("the passed-checks summary agrees with the number it reports", () => {
+    // All three are seo checks, so the count below is one category's.
+    const passing = (n: number) => [
+      { id: "seo.h1.unique", status: "fail", evidence: { actual: 0 } },
+      ...[
+        { id: "seo.title.present", status: "pass" },
+        { id: "seo.description.present", status: "pass" },
+      ].slice(0, n),
+    ];
+
+    test("one passing check reads as one check, in Spanish", async ({ page }) => {
+      const id = "seedes15";
+      await seedRecord(id, { checks: passing(1) });
+      await page.goto(`/auditoria/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Ver el chequeo que pasó");
+      // The defect itself, pinned independently of the replacement wording.
+      expect(text).not.toMatch(/\b1 chequeos\b/);
+    });
+
+    test("one passing check reads as one check, in English", async ({ page }) => {
+      const id = "seeden04";
+      await seedRecord(id, { checks: passing(1) });
+      await page.goto(`/en/audit/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Show the check that passed");
+      expect(text).not.toMatch(/\b1 checks\b/);
+    });
+
+    // The other direction: a blanket singular would be the same bug mirrored.
+    test("two passing checks still read as plural", async ({ page }) => {
+      const id = "seedes16";
+      await seedRecord(id, { checks: passing(2) });
+      await page.goto(`/auditoria/r/${id}/`);
+      const text = (await page.locator("main").textContent()) ?? "";
+
+      expect(text).toContain("Ver los 2 chequeos que pasaron");
+    });
+  });
+
   test.describe("share button", () => {
     // Chromium only resolves clipboard.writeText with the permission granted;
     // a real visitor on HTTPS has it by default for a click-initiated write.

@@ -408,6 +408,10 @@ export const en = {
       },
       passedCount: "{passed} of {total} checks",
       showPassed: "Show the {count} checks that passed",
+      // A category with a single passing check is the boundary case, not an
+      // edge: the <details> renders as soon as there is one
+      // (FindingList.astro:32). The singular carries no {count}.
+      showPassedOne: "Show the check that passed",
       hidePassed: "Hide the ones that passed",
       status: {
         pass: "Good",
@@ -495,6 +499,9 @@ export const en = {
         name: "Title length",
         why: "Google truncates long titles and discounts very short ones as uninformative. Between 30 and 60 characters shows in full.",
         found: "The title is {actual} characters long.",
+        // warn fires below TITLE_MIN, so a one-character title lands here:
+        // "1 characters" is reachable.
+        foundOne: "The title is a single character long.",
         foundEmpty: "This page has no title, so there's no length to measure.",
         // "adjust the title" pointed at something the check had determined does
         // not exist — its "na" branch, where there is no title. "na" is dropped
@@ -515,6 +522,9 @@ export const en = {
         name: "Meta description length",
         why: "Google cuts long descriptions off mid-sentence. Between 70 and 160 characters shows in full.",
         found: "The meta description is {actual} characters long.",
+        // Same as seo.title.length: warn covers everything below DESC_MIN,
+        // a single character included.
+        foundOne: "The meta description is a single character long.",
         foundEmpty: "This page has no meta description, so there's no length to measure.",
         // Same as seo.title.length: the "na" branch has no description to
         // rewrite, and "na" never renders (score.ts:55, FindingList.astro:17).
@@ -583,6 +593,11 @@ export const en = {
         name: "Hreflang tags",
         why: "On a site with multiple languages, they indicate which version to show each user. An incomplete set makes Google ignore them entirely.",
         found: "We found {count} hreflang tags with a configuration problem.",
+        // Both warn branches reach 1: "no-self" counts every entry, and one
+        // alternate with no self-reference is the ordinary shape of a
+        // half-configured bilingual site; "invalid-code" counts the invalid
+        // ones, at least one by its own guard.
+        foundOne: "We found one hreflang tag with a configuration problem.",
         foundEmpty: "This page does not declare hreflang tags.",
         fix: "Each version must list all alternatives, including itself, with valid language codes.",
       },

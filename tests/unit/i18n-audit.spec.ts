@@ -81,17 +81,19 @@ test.describe("audit copy", () => {
     }
   });
 
-  // foundEmpty is optional, so the plain key-set comparison above can't see
-  // it — a check could gain foundEmpty in one language and not the other
-  // without failing anything else.
-  test("foundEmpty is present in both languages wherever it appears", () => {
-    const esChecks = es.audit.checks as Record<string, { foundEmpty?: string }>;
-    const enChecks = en.audit.checks as Record<string, { foundEmpty?: string }>;
-    const mismatched = Object.keys(esChecks).filter(
-      (id) => Boolean(esChecks[id].foundEmpty) !== Boolean(enChecks[id]?.foundEmpty),
-    );
-    expect(mismatched).toEqual([]);
-  });
+  // foundEmpty and foundOne are optional, so a check could gain one in a
+  // single language and still satisfy every other structural guard here —
+  // and the language without it silently keeps rendering the wrong sentence.
+  for (const field of ["foundEmpty", "foundOne"] as const) {
+    test(`${field} is present in both languages wherever it appears`, () => {
+      const esChecks = es.audit.checks as Record<string, CheckCopy>;
+      const enChecks = en.audit.checks as Record<string, CheckCopy>;
+      const mismatched = Object.keys(esChecks).filter(
+        (id) => Boolean(esChecks[id][field]) !== Boolean(enChecks[id]?.[field]),
+      );
+      expect(mismatched).toEqual([]);
+    });
+  }
 });
 
 /**
@@ -232,6 +234,15 @@ test.describe("audit copy resolves against real check output", () => {
       `,
         { ogImageOk: false },
       ),
+      // Counts of exactly 1 — a one-character title and description, a single
+      // alternate with no self-reference. This is the branch a `foundOne`
+      // sentence is selected on, and no fixture above reaches it, so without
+      // this one a stray placeholder in a singular string ships unseen.
+      pageCtx(`
+        <title>a</title>
+        <meta name="description" content="b">
+        <link rel="alternate" hreflang="en" href="https://otro.com/en/p">
+      `),
       // Plain HTTP: the one branch that needs a non-https URL to reach.
       pageCtx("<html></html>", { url: new URL("http://example.com/pagina") }),
     ];
@@ -303,6 +314,163 @@ test.describe("audit copy resolves against real check output", () => {
         const found = resolveFound(checks["seo.canonical"], result.evidence);
         expect(found, lang).toBe(checks["seo.canonical"].foundEmpty);
       }
+    });
+  });
+});
+
+/**
+ * A `found` that states a count has to agree with it grammatically. Every
+ * branch below is reachable at exactly 1 — a half-configured bilingual site
+ * with a single alternate, a one-character title — so the singular is the
+ * boundary case, not an edge. Spanish gets it wrong twice: the noun and, on
+ * the report's own disclosure, the article.
+ *
+ * Each case drives the real registry so the assertion pins what a visitor
+ * reads, not a dictionary string that could be changed in two places at once.
+ * Every singular is paired with a plural control, so a blanket-singular
+ * "fix" fails here instead of shipping the mirrored bug.
+ */
+test.describe("a counted finding agrees with the number it reports", () => {
+  /** Resolve one check's `found` in both languages, from a real check run. */
+  const render = (id: string, html: string, over: Partial<PageContext> = {}) => {
+    const result = runChecks(pageCtx(html, over)).find((r) => r.id === id)!;
+    const text = Object.fromEntries(
+      dicts.map(({ lang, checks }) => [lang, resolveFound(checks[id], result.evidence)]),
+    ) as Record<"es" | "en", string>;
+    return { result, text };
+  };
+
+  test.describe("seo.hreflang", () => {
+    // links.length === 0 already returns "na", so a page declaring exactly one
+    // alternate that does not point back at itself yields count 1 — the
+    // ordinary shape of a bilingual site someone half-configured.
+    test("a single non-self-referencing alternate reads as one tag", () => {
+      const { result, text } = render(
+        "seo.hreflang",
+        '<link rel="alternate" hreflang="en" href="https://otro.com/en/p">',
+      );
+      expect(result.status).toBe("warn");
+      expect(result.evidence).toMatchObject({ count: 1, reason: "no-self" });
+
+      expect(text.es).not.toMatch(/\b1 etiquetas\b/);
+      expect(text.es).toBe(
+        "Encontramos una etiqueta hreflang con un problema de configuración.",
+      );
+      expect(text.en).not.toMatch(/\b1 hreflang tags\b/);
+      expect(text.en).toBe("We found one hreflang tag with a configuration problem.");
+    });
+
+    // The other warn branch: invalid.length is >= 1 by its own guard.
+    test("a single invalid language code reads as one tag", () => {
+      const { result, text } = render(
+        "seo.hreflang",
+        `
+        <link rel="alternate" hreflang="es" href="https://example.com/pagina">
+        <link rel="alternate" hreflang="not-a-code!!" href="https://example.com/otra">
+      `,
+      );
+      expect(result.status).toBe("warn");
+      expect(result.evidence).toMatchObject({ count: 1, reason: "invalid-code" });
+
+      expect(text.es).not.toMatch(/\b1 etiquetas\b/);
+      expect(text.es).toContain("una etiqueta hreflang");
+      expect(text.en).toContain("one hreflang tag");
+    });
+
+    test("two problem tags still read as plural", () => {
+      const { result, text } = render(
+        "seo.hreflang",
+        `
+        <link rel="alternate" hreflang="es" href="https://example.com/pagina">
+        <link rel="alternate" hreflang="not-a-code!!" href="https://example.com/a">
+        <link rel="alternate" hreflang="tampoco!!" href="https://example.com/b">
+      `,
+      );
+      expect(result.evidence).toMatchObject({ count: 2 });
+      expect(text.es).toBe(
+        "Encontramos 2 etiquetas hreflang con un problema de configuración.",
+      );
+      expect(text.en).toBe("We found 2 hreflang tags with a configuration problem.");
+    });
+  });
+
+  // warn fires on actual < TITLE_MIN / DESC_MIN, so a one-character title or
+  // description lands on the displayed branch with a count of 1.
+  test.describe("seo.title.length and seo.description.length", () => {
+    test("a one-character title reads as one character", () => {
+      const { result, text } = render("seo.title.length", "<title>a</title>");
+      expect(result.status).toBe("warn");
+      expect(result.evidence).toMatchObject({ actual: 1 });
+
+      expect(text.es).not.toMatch(/\b1 caracteres\b/);
+      expect(text.es).toBe("El título tiene un solo carácter.");
+      expect(text.en).not.toMatch(/\b1 characters\b/);
+      expect(text.en).toBe("The title is a single character long.");
+    });
+
+    test("a long title still reads as plural", () => {
+      const { text } = render("seo.title.length", `<title>${"a".repeat(87)}</title>`);
+      expect(text.es).toBe("El título tiene 87 caracteres.");
+      expect(text.en).toBe("The title is 87 characters long.");
+    });
+
+    test("a one-character meta description reads as one character", () => {
+      const { result, text } = render(
+        "seo.description.length",
+        '<meta name="description" content="a">',
+      );
+      expect(result.status).toBe("warn");
+      expect(result.evidence).toMatchObject({ actual: 1 });
+
+      expect(text.es).not.toMatch(/\b1 caracteres\b/);
+      expect(text.es).toBe("La meta descripción tiene un solo carácter.");
+      expect(text.en).not.toMatch(/\b1 characters\b/);
+      expect(text.en).toBe("The meta description is a single character long.");
+    });
+
+    test("a long meta description still reads as plural", () => {
+      const { text } = render(
+        "seo.description.length",
+        `<meta name="description" content="${"a".repeat(175)}">`,
+      );
+      expect(text.es).toBe("La meta descripción tiene 175 caracteres.");
+      expect(text.en).toBe("The meta description is 175 characters long.");
+    });
+  });
+
+  /**
+   * The selection rule itself. `foundOne` is picked only for the number 1 in a
+   * single-placeholder template: every other `found` placeholder carries the
+   * visitor's own content (a title, a URL), and a page whose canonical happens
+   * to be the string "1" must not be handed our singular copy.
+   */
+  test.describe("resolveFound picks the singular narrowly", () => {
+    const copy = {
+      found: "{count} cosas",
+      foundOne: "una cosa",
+      foundEmpty: "ninguna cosa",
+    };
+
+    test("the number 1 selects foundOne", () => {
+      expect(resolveFound(copy, { count: 1 })).toBe("una cosa");
+    });
+
+    test("the string \"1\" does not", () => {
+      expect(resolveFound(copy, { count: "1" })).toBe("1 cosas");
+    });
+
+    test("any other count does not", () => {
+      expect(resolveFound(copy, { count: 2 })).toBe("2 cosas");
+      expect(resolveFound(copy, { count: 0 })).toBe("0 cosas");
+    });
+
+    test("missing evidence still falls back to foundEmpty", () => {
+      expect(resolveFound(copy, undefined)).toBe("ninguna cosa");
+    });
+
+    test("a template naming two placeholders keeps found", () => {
+      const two = { found: "{a} de {b}", foundOne: "una" };
+      expect(resolveFound(two, { a: 1, b: 3 })).toBe("1 de 3");
     });
   });
 });

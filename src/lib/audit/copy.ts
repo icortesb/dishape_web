@@ -9,6 +9,12 @@ export type CheckCopy = {
   /** Sentence used when the evidence cannot fill `found` — see resolveFound. */
   foundEmpty?: string;
   /**
+   * Sentence used when `found`'s single placeholder is the number 1 — see
+   * resolveFound. Only needed by checks whose `found` counts something and
+   * whose count can actually be 1 on a branch the report displays.
+   */
+  foundOne?: string;
+  /**
    * Localized labels for the internal enum tokens this check puts in its
    * evidence ("missing", "no-type", "header"…). Without them the token itself
    * lands in the sentence, in English, in the middle of Spanish prose.
@@ -59,18 +65,30 @@ function placeholdersOf(template: string): string[] {
  * fall back to `foundEmpty`, the sentence that's true precisely when the
  * evidence needed to fill `found` isn't there.
  *
- * If `foundEmpty` isn't defined, this behaves exactly like `interpolate`:
- * most checks have exactly one shape of evidence on every branch that
- * displays them, and never need the fallback.
+ * The same problem in its other shape: a `found` that counts something reads
+ * "1 chequeos" / "1 checks" the moment the count is 1, and Spanish gets the
+ * article wrong on top of the noun. `foundOne` is the sentence for exactly
+ * that case, picked when the template names a single placeholder and the
+ * evidence hands it the number 1. It is deliberately narrow — a template with
+ * two placeholders has no obvious "the count", and no check needs one today.
+ *
+ * If neither `foundEmpty` nor `foundOne` is defined, this behaves exactly like
+ * `interpolate`: most checks have exactly one shape of evidence on every
+ * branch that displays them, and never need a fallback.
  */
 export function resolveFound(
-  copy: { found: string; foundEmpty?: string },
+  copy: { found: string; foundEmpty?: string; foundOne?: string },
   evidence?: Record<string, string | number>,
 ): string {
-  const satisfied = placeholdersOf(copy.found).every(
-    (key) => evidence != null && key in evidence,
-  );
+  const keys = placeholdersOf(copy.found);
+  const satisfied = keys.every((key) => evidence != null && key in evidence);
   if (!satisfied && copy.foundEmpty) return copy.foundEmpty;
+  // Strictly the number 1, never the string "1": every other placeholder in a
+  // `found` template carries the visitor's own content, which must never be
+  // coerced into picking our copy for them.
+  if (copy.foundOne && satisfied && keys.length === 1 && evidence![keys[0]] === 1) {
+    return interpolate(copy.foundOne, evidence);
+  }
   return interpolate(copy.found, evidence);
 }
 

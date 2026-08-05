@@ -409,6 +409,10 @@ export const es = {
       },
       passedCount: "{passed} de {total} chequeos",
       showPassed: "Ver los {count} chequeos que pasaron",
+      // Una categoría con un solo chequeo aprobado es el caso límite, no un
+      // borde: el <details> aparece apenas hay uno (FindingList.astro:32). El
+      // singular no lleva {count} — "el chequeo" antes que "1 chequeo".
+      showPassedOne: "Ver el chequeo que pasó",
       hidePassed: "Ocultar los que pasaron",
       status: {
         pass: "Bien",
@@ -495,6 +499,9 @@ export const es = {
         name: "Largo del título",
         why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
         found: "El título tiene {actual} caracteres.",
+        // warn se dispara por debajo de TITLE_MIN, así que un título de un
+        // solo carácter llega hasta acá: "1 caracteres" es alcanzable.
+        foundOne: "El título tiene un solo carácter.",
         foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
         // "ajustar el título" apuntaba a algo que el chequeo había determinado
         // que no existe: su rama "na", donde no hay título. "na" se descarta
@@ -515,6 +522,9 @@ export const es = {
         name: "Largo de la meta descripción",
         why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
         found: "La meta descripción tiene {actual} caracteres.",
+        // Igual que seo.title.length: warn cubre todo lo que está por debajo
+        // de DESC_MIN, incluido un solo carácter.
+        foundOne: "La meta descripción tiene un solo carácter.",
         foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
         // Igual que seo.title.length: en la rama "na" no hay descripción que
         // reescribir, y "na" nunca se renderiza (score.ts:55,
@@ -573,6 +583,11 @@ export const es = {
         name: "Etiquetas hreflang",
         why: "En un sitio con varios idiomas, indican qué versión mostrar a cada usuario. Un conjunto incompleto hace que Google las ignore por completo.",
         found: "Encontramos {count} etiquetas hreflang con un problema de configuración.",
+        // Las dos ramas warn llegan a 1: "no-self" cuenta todas las entradas y
+        // basta una sola alternativa sin autorreferencia (la forma habitual de
+        // un sitio bilingüe a medio configurar); "invalid-code" cuenta las
+        // inválidas, mínimo una por su propia guarda.
+        foundOne: "Encontramos una etiqueta hreflang con un problema de configuración.",
         foundEmpty: "Esta página no declara etiquetas hreflang.",
         fix: "Cada versión debe listar todas las alternativas, incluida ella misma, con códigos de idioma válidos.",
       },
