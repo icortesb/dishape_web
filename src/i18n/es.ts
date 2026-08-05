@@ -144,6 +144,13 @@ export const es = {
       sending: "Enviando…",
       success: "Mensaje enviado. Respondo en menos de 24 horas.",
       error: "El mensaje no se pudo enviar. Otra opción es escribir por WhatsApp.",
+      // Escrito para quien llega desde un reporte de auditoría: es el mensaje
+      // del visitante, no nuestro, y queda editable. Dice de qué sitio habla y
+      // deja el link del reporte; no enumera hallazgos, que ya están ahí.
+      // Neutro respecto del resultado — un reporte sin problemas también
+      // termina acá. {url} y {report} los completa src/scripts/contact.ts.
+      auditPrefill:
+        "Hice la auditoría de {url} y quiero hablar de lo que salió en el reporte:\n{report}\n\n",
     },
     asideTitle: "¿Hablamos directo?",
     asideBody:

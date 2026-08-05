@@ -38,6 +38,8 @@ const label = "mb-2 block text-sm font-medium text-muted";
         data-sending={t.form.sending}
         data-success={t.form.success}
         data-error={t.form.error}
+        data-audit-prefill={t.form.auditPrefill}
+        data-report-base={lang === "en" ? "/en/audit/r/" : "/auditoria/r/"}
       >
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
@@ -57,6 +59,10 @@ const label = "mb-2 block text-sm font-medium text-muted";
           <label class={label} for="message">{t.form.message}</label>
           <textarea class={`${field} min-h-36 resize-y`} id="message" name="message" placeholder={t.form.messagePh} required></textarea>
         </div>
+
+        {/* Filled in by contact.ts when the visitor arrives from an audit
+            report. Empty otherwise, and the API treats empty as absent. */}
+        <input type="hidden" name="auditId" value="" />
 
         {/* honeypot: hidden from humans, bots tend to fill it */}
         <input

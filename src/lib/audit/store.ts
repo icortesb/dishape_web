@@ -1,10 +1,10 @@
 import { randomBytes } from "node:crypto";
 import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { isAuditId } from "./id";
 import type { AuditRecord } from "./types";
 
 const TTL_MS = 30 * 24 * 3600_000; // 30 days
-const ID_RE = /^[a-z0-9]{8}$/;
 
 /**
  * Read at call time, not at module load: the value must point OUTSIDE the
@@ -32,7 +32,7 @@ export async function saveAudit(record: AuditRecord): Promise<void> {
 
 export async function getAudit(id: string): Promise<AuditRecord | null> {
   // Reject anything that is not a plain id before it reaches the filesystem.
-  if (!ID_RE.test(id)) return null;
+  if (!isAuditId(id)) return null;
   try {
     return JSON.parse(await readFile(recordPath(id), "utf8")) as AuditRecord;
   } catch {

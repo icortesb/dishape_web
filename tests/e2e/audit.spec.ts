@@ -137,6 +137,37 @@ test.describe("report page", () => {
     expect(robots).toBe("noindex, follow");
   });
 
+  // The CTA is the tool's conversion surface, and the link it builds is a
+  // contract with the contact form. tests/e2e/contact.spec.ts constructs that
+  // query string by hand, so it cannot see a rename on either side — only
+  // following the real anchor can.
+  test("its CTA lands on a contact form that already knows the site", async ({
+    page,
+  }) => {
+    const id = "seedcta1";
+    await seedRecord(id, {
+      page: {
+        status: 200,
+        finalUrl: "https://ejemplo.com/precios",
+        redirects: 0,
+        bytes: 12_345,
+        title: "Ejemplo",
+      },
+    });
+    // The contact form lives below the fold, where GSAP hides it until a
+    // ScrollTrigger fires — see tests/e2e/contact.spec.ts for the full note.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`/auditoria/r/${id}/`);
+    await page.click('[data-cta="audit_report_top"]');
+
+    await expect(
+      page.locator("[data-contact-form] textarea[name='message']"),
+    ).toHaveValue(/https:\/\/ejemplo\.com\/precios/);
+    await expect(page.locator("[data-contact-form] input[name='auditId']")).toHaveValue(
+      id,
+    );
+  });
+
   test("never prints a raw placeholder or an internal enum token (es)", async ({
     page,
   }) => {

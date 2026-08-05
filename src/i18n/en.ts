@@ -143,6 +143,13 @@ export const en = {
       sending: "Sending…",
       success: "Message sent. I'll reply within 24 hours.",
       error: "The message couldn't be sent. You can also reach me on WhatsApp.",
+      // Written for someone arriving from an audit report: it is the visitor's
+      // message, not ours, and it stays editable. It names the site it is
+      // about and leaves the report link; it does not list findings, which are
+      // already in the report. Neutral about the outcome — a clean report ends
+      // up here too. {url} and {report} are filled by src/scripts/contact.ts.
+      auditPrefill:
+        "I ran the audit on {url} and I'd like to talk about what the report says:\n{report}\n\n",
     },
     asideTitle: "Rather talk directly?",
     asideBody:
