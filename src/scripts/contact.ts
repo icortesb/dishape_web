@@ -61,12 +61,15 @@ function prefillFromAudit(form: HTMLFormElement) {
   // Astro, where `lang` is authoritative, not inferred here (UrlForm.astro
   // and scripts/audit.ts:21 do it the same way).
   const report = `${location.origin}${form.dataset.reportBase ?? "/auditoria/r/"}${id}/`;
-  // Replacer functions, not strings: `$&` and friends inside an audited URL
-  // are substitution patterns to String.replace, and this one is attacker-fed.
+  // One pass over the template, not one per placeholder: substituting {url}
+  // first would put an attacker-fed URL into the haystack the {report} replace
+  // then searches, and the URL parser leaves braces alone in a query or a
+  // fragment. A replacer function, not a string, because `$&` and friends
+  // inside that URL are substitution patterns to String.replace.
   // Written with .value — never innerHTML — so the URL stays inert text.
-  message.value = template
-    .replace("{url}", () => audited)
-    .replace("{report}", () => report);
+  message.value = template.replace(/\{url\}|\{report\}/g, (m) =>
+    m === "{url}" ? audited : report,
+  );
 }
 
 function track(event: string, params: Record<string, unknown> = {}) {

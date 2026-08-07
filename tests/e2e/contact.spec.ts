@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-// The report CTA sends the visitor to /#contacto?ref=audit&id=…&url=… . These
+// The report CTA sends the visitor to /?ref=audit&id=…&url=…#contacto . These
 // tests pin the loop that closes there: the visitor arrives with the audited
 // URL and the report link already in the message, and the id rides along to
 // the mailbox. Everything in that query string is attacker-controllable, so
@@ -15,12 +15,13 @@ const box = "[data-contact-form] textarea[name='message']";
 const hidden = "[data-contact-form] input[name='auditId']";
 
 // The contact form sits below the fold, where motion.ts hides every .reveal
-// with GSAP (autoAlpha 0) until a ScrollTrigger fires. The GSAP bundle is only
-// imported on the first pointerdown/scroll (motionLoader.ts), so it lands
-// mid-test and the form can end up hidden while the test is typing into it —
-// 6 of 8 runs under load. Under prefers-reduced-motion the same script paints
-// everything at once (motion.ts:45): a real visitor preference, and the
-// deterministic path. Emulated per page rather than through
+// with GSAP (autoAlpha 0) until a ScrollTrigger fires, and the GSAP bundle is
+// only imported on the first pointerdown/scroll (motionLoader.ts), so it lands
+// mid-test. Under prefers-reduced-motion the same script paints everything at
+// once (motion.ts:86), which is a real visitor preference and takes the
+// animation out of tests that are about the prefilled text. The default
+// branch is covered on its own further down this file. Emulated per page
+// rather than through
 // `test.use({ reducedMotion })`, which was verified NOT to reach matchMedia
 // here — a probe reading matchMedia in the page got `reduce: false` under
 // `test.use`, and `true` with the call below.
@@ -115,6 +116,25 @@ test.describe("contact form — arriving from an audit report", () => {
     });
   }
 
+  test("a url carrying a placeholder does not swallow the report link", async ({
+    page,
+  }) => {
+    // The audited URL is substituted into the message before the report link
+    // is, so it joins the haystack. The URL parser percent-encodes braces in a
+    // path but leaves them alone in a query or a fragment, which is how a
+    // hand-crafted link reaches this: a first-match replace would inject the
+    // report inside the audited URL and leave the visitor's own message
+    // ending in a raw {report}.
+    const nasty = "https://ejemplo.com/?x={report}#{url}";
+    await page.goto(`/?ref=audit&id=${ID}&url=${encodeURIComponent(nasty)}#contacto`);
+    const origin = new URL(page.url()).origin;
+
+    await expect(page.locator(box)).toHaveValue(
+      `Hice la auditoría de ${nasty} y quiero hablar de lo que salió en el reporte:\n` +
+        `${origin}/auditoria/r/${ID}/\n\n`,
+    );
+  });
+
   test("a url carrying markup lands as inert text", async ({ page }) => {
     // Two payloads in one link. The raw markup is percent-encoded by the URL
     // parser on the way in; the HTML entities are the discriminating half,
@@ -131,6 +151,64 @@ test.describe("contact form — arriving from an audit report", () => {
     await expect(page.locator("img[src='x']")).toHaveCount(0);
     // The field itself survived: nothing broke out of it.
     await expect(page.locator(box)).toHaveCount(1);
+  });
+});
+
+// Everything above runs under prefers-reduced-motion. That is a real visitor
+// configuration, but it is also the one branch where neither half of the
+// reveal machinery runs: motion.ts:86 paints every .reveal at once, and
+// global.css:198 turns the fragment scroll into an instant jump. The tests
+// below take the default branch — smooth fragment scroll, GSAP hiding
+// everything below the fold — which is what most visitors get.
+test.describe("contact form — reaching it with motion on", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+  });
+
+  const form = "[data-contact-form]";
+
+  test("a #contacto navigation lands on a form the visitor can see", async ({
+    page,
+  }) => {
+    // Seven links across the site point at #contacto; they all produce this
+    // navigation. It is the site's only conversion surface, so landing
+    // anywhere else — or on a hidden form — is a total failure of the click.
+    await page.goto("/#contacto");
+
+    // The fragment scroll is animated and motion.ts decides what to hide once
+    // it settles, so judge the end state. An assertion that fires mid-flight
+    // can pass on a form that is hidden, or scrolled away from, a frame later.
+    await expect(page.locator(form)).toBeInViewport();
+    await page.waitForTimeout(500);
+    await expect(page.locator(form)).toBeInViewport();
+    await expect(page.locator(form)).toBeVisible();
+  });
+
+  test("a scroll that overshoots the reveal trigger still reveals the form", async ({
+    page,
+  }) => {
+    // Restored positions, scrollIntoView and a visitor's own fast flick all
+    // arrive as one instant jump, landing past `start: "top 85%"` instead of
+    // crossing it. Everything below the fold enters in a single batch, and
+    // the form is near the end of it.
+    await page.goto("/");
+    // How a visitor wakes the GSAP bundle: motionLoader.ts imports it on the
+    // first scroll. Everything below the fold is hidden from here on.
+    await page.mouse.wheel(0, 20);
+    await expect(page.locator(form)).toBeHidden();
+
+    await page.evaluate(() => {
+      const el = document.querySelector("[data-contact-form]")!;
+      window.scrollTo({
+        top: window.scrollY + el.getBoundingClientRect().top - 27,
+        behavior: "instant",
+      });
+    });
+
+    // Tight on purpose: a reveal the visitor has to wait seconds for is the
+    // defect, not the fix. Anything that reveals the form at all eventually
+    // passes a default timeout.
+    await expect(page.locator(form)).toBeVisible({ timeout: 2000 });
   });
 });
 

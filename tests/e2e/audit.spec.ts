@@ -168,6 +168,34 @@ test.describe("report page", () => {
     );
   });
 
+  // The same anchor with motion left on — the branch a visitor without a
+  // reduced-motion preference gets, and the one where the fragment scroll is
+  // animated and GSAP hides everything below the fold. A prefilled form the
+  // visitor never arrives at converts nobody.
+  test("its CTA lands on a form the visitor can see, with motion on", async ({
+    page,
+  }) => {
+    const id = "seedcta2";
+    await seedRecord(id);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`/auditoria/r/${id}/`);
+    // Clicking through warms the shared asset cache exactly as a real visitor
+    // does, which is the timing that matters here.
+    await page.click('[data-cta="audit_report_top"]');
+
+    // The fragment scroll is animated and motion.ts decides what to hide once
+    // it settles, so judge the end state. An assertion that fires mid-flight
+    // can pass on a form that is hidden, or scrolled away from, a frame later.
+    const form = page.locator("[data-contact-form]");
+    await expect(form).toBeInViewport();
+    await page.waitForTimeout(500);
+    await expect(form).toBeInViewport();
+    await expect(form).toBeVisible();
+    await expect(page.locator("[data-contact-form] input[name='auditId']")).toHaveValue(
+      id,
+    );
+  });
+
   test("never prints a raw placeholder or an internal enum token (es)", async ({
     page,
   }) => {
