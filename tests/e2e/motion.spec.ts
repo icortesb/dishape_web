@@ -143,3 +143,140 @@ test.describe("motion — reveals on a fragment navigation", () => {
     ).toBe(0);
   });
 });
+
+test.describe("motion — a scroll that starts in the frame the bundle refreshes", () => {
+  /**
+   * ScrollTrigger's global refresh measures every trigger from the top of the
+   * page: it writes the scroll to 0 and back (ScrollTrigger.js:502 `obj(0)`,
+   * :549 `obj(obj.rec)`). That write cancels whatever scroll the browser is
+   * animating. ScrollTrigger's own guard against it (:484) tests
+   * `_lastScrollTime`, which is set only by a dispatched `scroll` event
+   * (:388) — one frame narrower than "a scroll is animating" — so a scroll
+   * that begins in the same frame as the refresh is cancelled before it has
+   * moved a pixel, with no `scrollStart` ever dispatched.
+   *
+   * Both cases below are ordinary visitor behaviour: a click held for a fifth
+   * of a second, and a keypress a fifth of a second after the one that woke
+   * the bundle. Landing at the top of the page with the contact form thousands
+   * of pixels below is the failure this guards.
+   *
+   * The timings are swept rather than pinned, because where that frame falls
+   * depends on how long this machine takes to fetch and evaluate the chunk.
+   * The step is smaller than the window measured here (~15ms wide, at a
+   * 215-230ms hold on 1280x720), so a window anywhere in the band is hit by at
+   * least one sample. The chunk is warmed into the HTTP cache first for the
+   * same reason: a cold fetch moves the window out of the band.
+   */
+  const MOTION_CHUNK = /\/_astro\/motion\.[^/]*\.js(\?|$)/;
+  const BAND = [192, 200, 208, 216, 224, 232, 240, 248, 256, 264];
+
+  const formOnScreen = (page: import("@playwright/test").Page) =>
+    page.evaluate(() => {
+      const r = document.getElementById("contacto")!.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0;
+    });
+
+  const scrollY = (page: import("@playwright/test").Page) =>
+    page.evaluate(() => Math.round(window.scrollY));
+
+  const warm = async (page: import("@playwright/test").Page) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    const woken = page.waitForResponse(MOTION_CHUNK);
+    await page.keyboard.press("Tab");
+    await woken;
+  };
+
+  const settle = async (page: import("@playwright/test").Page) =>
+    page
+      .waitForFunction(
+        () => {
+          const r = document
+            .getElementById("contacto")!
+            .getBoundingClientRect();
+          return r.top < window.innerHeight && r.bottom > 0;
+        },
+        undefined,
+        { timeout: 3000 },
+      )
+      .then(() => true)
+      .catch(() => false);
+
+  test("a click held while the bundle refreshes still lands on the contact form", async ({
+    page,
+  }) => {
+    test.slow();
+    await warm(page);
+
+    const failures: string[] = [];
+    for (const hold of BAND) {
+      await page.goto("/");
+      // Guard the guard: the form has to start off screen, or "it is on
+      // screen afterwards" proves nothing.
+      expect(await formOnScreen(page), `form already on screen at ${hold}ms`).toBe(
+        false,
+      );
+
+      const link = page
+        .locator('a[href*="#contacto"]')
+        .filter({ visible: true })
+        .first();
+      const box = await link.boundingBox();
+      expect(box, "no visible #contacto link on the home page").toBeTruthy();
+
+      await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(hold);
+      await page.mouse.up();
+
+      if (!(await settle(page)))
+        failures.push(`${hold}ms hold → scrollY ${await scrollY(page)}`);
+    }
+
+    expect(
+      failures,
+      "the click's smooth scroll was cancelled, leaving the visitor at the top of the page with the contact form far below",
+    ).toEqual([]);
+  });
+
+  test("End pressed while the bundle refreshes still reaches the bottom", async ({
+    page,
+  }) => {
+    test.slow();
+    await warm(page);
+
+    const failures: string[] = [];
+    for (const gap of BAND) {
+      await page.goto("/");
+      const bottom = await page.evaluate(() =>
+        Math.round(document.documentElement.scrollHeight - window.innerHeight),
+      );
+      expect(bottom, "End only means something on a scrollable page").toBeGreaterThan(
+        2000,
+      );
+
+      // Tab wakes the bundle and starts no scroll of its own, so the refresh
+      // it schedules is already running when End arrives.
+      await page.keyboard.press("Tab");
+      await page.waitForTimeout(gap);
+      await page.keyboard.press("End");
+
+      const reached = await page
+        .waitForFunction(
+          (target) =>
+            Math.round(window.scrollY) >= target,
+          bottom - 2,
+          { timeout: 3000 },
+        )
+        .then(() => true)
+        .catch(() => false);
+      if (!reached)
+        failures.push(`${gap}ms gap → scrollY ${await scrollY(page)} of ${bottom}`);
+    }
+
+    expect(
+      failures,
+      "the End keypress never scrolled — its animated scroll was cancelled in the frame the refresh ran",
+    ).toEqual([]);
+  });
+});
