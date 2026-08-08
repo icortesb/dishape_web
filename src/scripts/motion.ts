@@ -47,15 +47,17 @@ function hashTarget(): HTMLElement | null {
 /**
  * Run `fn` once the page has held still for a few frames.
  *
- * Nothing below may measure a position while a scroll is in flight, and
- * ScrollTrigger.refresh() saves and restores the scroll position, which
- * cancels an animated scroll that has not finished. A fragment navigation is
- * both of those at once: global.css gives it `scroll-behavior: smooth`, and
- * the first frame of that scroll is what wakes this bundle, since
- * motionLoader.ts listens for `scroll`.
+ * A fragment navigation is an animated scroll — global.css gives the page
+ * `scroll-behavior: smooth` — and its first frame is what wakes this bundle,
+ * since motionLoader.ts listens for `scroll`. Measuring positions then reads
+ * the page the visitor is leaving, not the one they asked for, and hides the
+ * section they are on their way to.
  *
- * `timeout` is a ceiling, not a promise the scroll has ended: a visitor who
- * keeps scrolling never settles, and they still need the reveals armed.
+ * `timeout` is a ceiling, not a promise the scroll has ended. Measured against
+ * a scroll that never stops: the ceiling fires with the page wherever that
+ * scroll has reached, and if nothing there sits below the 85% line then
+ * `reveals` is empty, no batch is armed, and none is armed later either. That
+ * costs nothing visible — an unarmed reveal is a reveal that was never hidden.
  */
 function whenScrollSettles(fn: () => void, timeout: number) {
   const STILL_FRAMES = 5;
@@ -97,9 +99,14 @@ mm.add(
 
     const setup = () => {
       // ---- Scroll reveals for everything below the fold ----
-      // Only hide elements still below the fold when GSAP finally loads —
-      // anything already on screen stays visible, so late loading never causes
-      // a flash. Nothing inside the fragment's target is hidden either: that
+      // Only hide what is below the line when GSAP finally loads, so late
+      // loading does not take away what the visitor is already reading. The
+      // line is at 85% of the viewport, not at its bottom edge, so an element
+      // in that last 15% is on screen and gets hidden anyway: reloading the
+      // home page part-way down leaves one such element hidden at top 657 of a
+      // 720px viewport until the visitor scrolls it back across the line.
+      // Approved design, measured identical before and after this file learned
+      // to defer. Nothing inside the fragment's target is hidden either: that
       // is the element the visitor asked to be looking at, so it must survive
       // this filter however the scroll that carries them there behaves.
       const reveals = gsap.utils
@@ -110,9 +117,9 @@ mm.add(
             !target?.contains(el) &&
             el.getBoundingClientRect().top > window.innerHeight * 0.85,
         );
-      // A page can legitimately have none — the audit report is all
-      // above-the-fold diagnosis — and GSAP logs "target not found" when
-      // handed an empty set.
+      // A page can legitimately have none — the audit report and the blog
+      // posts carry no .reveal at all — and GSAP warns "target not found" when
+      // handed an empty set (gsap-core.js:3181).
       if (reveals.length > 0) {
         gsap.set(reveals, { autoAlpha: 0, y: 32 });
 
@@ -150,14 +157,27 @@ mm.add(
       });
 
       runCounters(false);
-      ScrollTrigger.refresh();
+      // A plain ScrollTrigger.refresh() saves and restores the scroll
+      // position, which cancels an animated scroll that has not finished — and
+      // this bundle wakes on the visitor's first scroll or keypress, which are
+      // the events that start one. `true` asks for the safe refresh instead:
+      // ScrollTrigger runs it 0.2s later, and later still if a scroll is in
+      // progress, on its own scrollEnd. Observed on an End keypress, which is
+      // both the wake and a smooth scroll to the foot of the page: the plain
+      // call refreshed at y=0 mid-flight and the scroll died at 1311 of 6696;
+      // this one refreshed 4ms after scrollEnd, at 6696.
+      ScrollTrigger.refresh(true);
     };
 
-    // A fragment navigation is still animating when this bundle wakes up, so
-    // hold everything until it lands — see whenScrollSettles. ctx.add keeps
-    // the deferred animations inside this matchMedia context. Without a
-    // fragment there is no scroll going anywhere in particular and measuring
-    // now is correct.
+    // A scroll can already be animating when this bundle wakes, for reasons
+    // nothing here can see: a fragment, End, PageDown, Space, an arrow key. So
+    // no line above may cancel one — that is what refresh(true) is for, and it
+    // holds whatever started the scroll. The fragment is the one case worth
+    // waiting out, because it is the one whose destination is in the URL and
+    // the one where measuring early hides the very element the visitor named;
+    // every other scroll is measured immediately, as an ordinary wheel scroll
+    // always has been. ctx.add keeps the deferred animations inside this
+    // matchMedia context.
     if (target) whenScrollSettles(() => ctx.add(setup), 4000);
     else setup();
   },
