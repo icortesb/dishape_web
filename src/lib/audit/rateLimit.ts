@@ -7,8 +7,15 @@ type Bucket = { count: number; resetAt: number };
 // nginx. If that ever becomes several processes, this needs shared state.
 const buckets = new Map<string, Bucket>();
 
-/** Consume one token for this ip. False when the caller is over the limit. */
-export function takeToken(ip: string, now = Date.now()): boolean {
+/**
+ * Consume one token for this key. False when the caller is over the limit.
+ *
+ * The key is usually an ip, but callers may namespace it ("vitals:1.2.3.4") to
+ * get an independent bucket. Without that, reading the performance panel would
+ * spend the same five tokens as running an audit, and an ordinary visitor who
+ * audited five sites could not see any of their scores.
+ */
+export function takeToken(ip: string, now = Date.now(), limit = LIMIT): boolean {
   const bucket = buckets.get(ip);
 
   if (!bucket || now >= bucket.resetAt) {
@@ -17,7 +24,7 @@ export function takeToken(ip: string, now = Date.now()): boolean {
     return true;
   }
 
-  if (bucket.count >= LIMIT) return false;
+  if (bucket.count >= limit) return false;
   bucket.count += 1;
   return true;
 }

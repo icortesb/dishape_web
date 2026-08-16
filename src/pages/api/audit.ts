@@ -69,6 +69,7 @@ export const POST: APIRoute = async ({ request }) => {
     checks,
     vitals: null,
     vitalsError: null,
+    vitalsErrorAt: null,
   };
 
   await saveAudit(record);

@@ -25,6 +25,7 @@ const record = (over: Partial<AuditRecord> = {}): AuditRecord => ({
   checks: [{ id: "seo.title.present", status: "pass" }],
   vitals: null,
   vitalsError: null,
+  vitalsErrorAt: null,
   ...over,
 });
 
