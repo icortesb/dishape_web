@@ -13,6 +13,29 @@ const UA =
 const BLOCKED_ADDRESS = "ERR_BLOCKED_ADDRESS";
 
 /**
+ * The v4 address embedded in an IPv4-mapped (`::ffff:*`) or IPv4-compatible
+ * (`::*`) IPv6 address, or null.
+ *
+ * Both spellings must be handled, and the HEX one is the one that matters: the
+ * WHATWG URL parser never gives back the dotted form. `new URL("http://
+ * [::ffff:169.254.169.254]/").hostname` is `[::ffff:a9fe:a9fe]`, so a rule
+ * written only against `::ffff:169.254.169.254` never fires on a real request —
+ * which is exactly how a redirect reached the metadata endpoint before this
+ * existed. Anything under `::/96` is reserved, so reading the low 32 bits as v4
+ * and applying the v4 rules cannot misjudge a genuine public address.
+ */
+function embeddedV4(v6: string): string | null {
+  const dotted = v6.match(/^::(?:ffff:)?(\d+\.\d+\.\d+\.\d+)$/);
+  if (dotted) return dotted[1];
+
+  const hex = v6.match(/^::(?:ffff:)?([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+  if (!hex) return null;
+  const high = parseInt(hex[1], 16);
+  const low = parseInt(hex[2], 16);
+  return `${high >> 8}.${high & 0xff}.${low >> 8}.${low & 0xff}`;
+}
+
+/**
  * True when the address belongs to a range that must never be reachable from a
  * user-supplied URL: loopback, RFC1918 private space, link-local (which includes
  * the 169.254.169.254 cloud metadata endpoint), multicast and reserved, and
@@ -38,9 +61,9 @@ export function isBlockedAddress(ip: string): boolean {
     if (v6 === "::1" || v6 === "::") return true;
     if (v6.startsWith("fe80")) return true;                       // link-local
     if (/^f[cd]/.test(v6)) return true;                           // unique local
-    // IPv4-mapped (::ffff:127.0.0.1) must be judged by its v4 part.
-    const mapped = v6.match(/::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-    if (mapped) return isBlockedAddress(mapped[1]);
+    // An address carrying an IPv4 one must be judged by that v4 part.
+    const embedded = embeddedV4(v6);
+    if (embedded) return isBlockedAddress(embedded);
     return false;
   }
 

@@ -17,6 +17,19 @@ test.describe("isBlockedAddress", () => {
     "::1",
     "fe80::1",
     "fc00::1",
+    // IPv4-mapped, in the HEX spelling. This is the form that actually reaches
+    // the guard: the WHATWG URL parser re-serializes ::ffff:127.0.0.1 as
+    // ::ffff:7f00:1, so a rule that only matches the dotted-quad spelling never
+    // fires on anything that arrived through a URL.
+    "::ffff:127.0.0.1", // dotted, for completeness
+    "::ffff:7f00:1", // == 127.0.0.1
+    "::ffff:a9fe:a9fe", // == 169.254.169.254, cloud metadata
+    "::ffff:a00:1", // == 10.0.0.1
+    "::ffff:c0a8:101", // == 192.168.1.1
+    "::ffff:ac10:1", // == 172.16.0.1
+    "::ffff:6440:1", // == 100.64.0.1, CGNAT
+    // IPv4-compatible (deprecated, but still routable input).
+    "::7f00:1", // == 127.0.0.1
   ];
   for (const ip of blocked) {
     test(`blocks ${ip}`, () => {
@@ -61,6 +74,42 @@ test.describe("safeFetch rejects hostile input", () => {
     const r = await safeFetch("http://169.254.169.254/latest/meta-data/");
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.error).toBe("url_blocked");
+  });
+
+  test("a redirect into IPv4-mapped IPv6 does not escape the address policy", async () => {
+    // The exploitable shape: /api/audit's own input is filtered by normalizeUrl
+    // (which rejects a dotless hostname, and every bracketed literal is dotless
+    // once the parser is done with it), but a REDIRECT is built by the URL
+    // constructor inside the loop and never sees that filter. Same for the
+    // auxiliary URLs safeProbe takes from the audited page's markup.
+    const victim = createServer((_req, res) => {
+      res.writeHead(200, { "content-type": "text/html" });
+      res.end("<html><head><title>internal</title></head><body>secret</body></html>");
+    });
+    await new Promise<void>((r) => victim.listen(0, "127.0.0.1", r));
+    const victimPort = (victim.address() as { port: number }).port;
+
+    // The attacker is a public site, so it is reachable under the real policy;
+    // it is only its redirect TARGET that must be refused.
+    const attacker = createServer((_req, res) => {
+      res.writeHead(302, { location: `http://[::ffff:127.0.0.1]:${victimPort}/` });
+      res.end();
+    });
+    await new Promise<void>((r) => attacker.listen(0, "127.0.0.2", r));
+    const attackerPort = (attacker.address() as { port: number }).port;
+
+    const fetchFromPublicAttacker = createSafeFetch({
+      isBlocked: (ip) => ip !== "127.0.0.2" && isBlockedAddress(ip),
+    });
+
+    try {
+      const result = await fetchFromPublicAttacker(`http://127.0.0.2:${attackerPort}/`);
+      expect(result.ok).toBe(false);
+      if (!result.ok) expect(result.error).toBe("url_blocked");
+    } finally {
+      victim.close();
+      attacker.close();
+    }
   });
 
   test("re-validates the address on each redirect hop", async () => {
