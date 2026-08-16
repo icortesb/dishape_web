@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import * as store from "../../src/lib/audit/store";
@@ -71,6 +71,38 @@ test.describe("store", () => {
     const old = new Date(Date.now() - 48 * 3600_000).toISOString();
     await saveAudit(record({ createdAt: old }));
     expect(await findCachedByUrl("https://example.com", 24 * 3600_000)).toBeNull();
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  // findCachedByUrl runs BEFORE the rate limiter on /api/audit (deliberately:
+  // a repeat visit is not abuse), so its cost is an unauthenticated cost and
+  // must not scale with how many records the store holds. That is enforced by
+  // an index rather than by a test: a timing assertion was tried and thrown
+  // away, because the records a test writes are still in the page cache and a
+  // 60MB scan measured 89ms — fast enough that the bound would not discriminate.
+  // What IS asserted here is the index being the source of truth, which no
+  // scan-every-record implementation can satisfy.
+  test("resolves through the index, not by scanning record contents", async () => {
+    const { dir, saveAudit, findCachedByUrl } = await freshStore();
+    await saveAudit(record());
+
+    // Rewrite the record so its own normalizedUrl no longer matches. A scan
+    // would now miss; the index still knows this id was stored for that url.
+    const stored = JSON.parse(await readFile(join(dir, "abc12345.json"), "utf8"));
+    stored.normalizedUrl = "https://something-else.example";
+    await writeFile(join(dir, "abc12345.json"), JSON.stringify(stored), "utf8");
+
+    expect(await findCachedByUrl("https://example.com", 60_000)).toBe("abc12345");
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  test("does not return an id whose record has been swept away", async () => {
+    const { dir, saveAudit, findCachedByUrl } = await freshStore();
+    await saveAudit(record());
+    // Delete the record but leave the index behind, which is exactly the state
+    // the sweep produces if it removes one before the other.
+    await rm(join(dir, "abc12345.json"), { force: true });
+    expect(await findCachedByUrl("https://example.com", 60_000)).toBeNull();
     await rm(dir, { recursive: true, force: true });
   });
 
