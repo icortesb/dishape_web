@@ -43,6 +43,16 @@ Copy `.env.example` → `.env` and fill it in:
 `PUBLIC_*` vars are baked in at **build time** — rebuild after changing them.
 The rest are read at **runtime**.
 
+> **Local dev reads `.env` too, but only because `npm run dev` forces it.**
+> Astro/Vite loads `.env` into `import.meta.env` and only for `PUBLIC_*`; server
+> code here reads `process.env`, which plain `astro dev` never populates. So the
+> `dev` script runs Astro through `node --env-file-if-exists=.env`, mirroring the
+> `--env-file=` in the systemd unit. Run `astro dev` directly and every runtime
+> var is undefined — `AUDIT_DATA_DIR` falls back to the VPS path and the first
+> audit dies with `EACCES: mkdir '/var/lib/dishape'`.
+>
+> Set `AUDIT_DATA_DIR=./.audit-data` in your local `.env` (it is gitignored).
+
 ## Email (Resend)
 
 1. Add domain `dishape.dev` in Resend → add the DKIM/SPF DNS records → wait for verified.
