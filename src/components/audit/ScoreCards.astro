@@ -1,0 +1,60 @@
+---
+import { getLang, getDict } from "../../i18n";
+import type { CategoryScore } from "../../lib/audit/score";
+
+interface Props {
+  seo: CategoryScore;
+  social: CategoryScore;
+  perfScore: number | null;
+  /** True while PageSpeed is still being measured — the client script fills it in. */
+  perfPending: boolean;
+}
+const { seo, social, perfScore, perfPending } = Astro.props;
+const t = getDict(getLang(Astro)).audit.report;
+
+const tone = (n: number | null) =>
+  n === null
+    ? "text-faint"
+    : n >= 90
+      ? "text-accent-light"
+      : n >= 50
+        ? "text-amber-400"
+        : "text-red-400";
+
+const passedCount = (s: CategoryScore) =>
+  t.passedCount.replace("{passed}", String(s.passed)).replace("{total}", String(s.total));
+---
+
+<div class="grid gap-4 sm:grid-cols-3" data-score-cards>
+  <div class="rounded-xl border border-line bg-card p-5">
+    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.seo}</p>
+    <p class={`mt-2 text-4xl font-semibold ${tone(seo.percent)}`}>{seo.percent}</p>
+    <p class="mt-1 text-sm text-muted">{passedCount(seo)}</p>
+  </div>
+
+  <div class="rounded-xl border border-line bg-card p-5">
+    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.social}</p>
+    <p class={`mt-2 text-4xl font-semibold ${tone(social.percent)}`}>{social.percent}</p>
+    <p class="mt-1 text-sm text-muted">{passedCount(social)}</p>
+  </div>
+
+  <div class="rounded-xl border border-line bg-card p-5">
+    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.perf}</p>
+    <p class={`mt-2 text-4xl font-semibold ${tone(perfScore)}`} data-perf-score>
+      {perfPending ? "—" : (perfScore ?? "—")}
+    </p>
+    <p
+      class="mt-1 text-sm text-muted"
+      data-perf-note
+      data-unavailable={t.vitalsUnavailableShort}
+    >
+      {
+        perfPending
+          ? t.measuring
+          : perfScore === null
+            ? t.vitalsUnavailableShort
+            : "PageSpeed Insights"
+      }
+    </p>
+  </div>
+</div>

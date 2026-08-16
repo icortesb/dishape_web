@@ -1,0 +1,34 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Navbar from "../Navbar.astro";
+import Footer from "../Footer.astro";
+import WhatsAppFab from "../WhatsAppFab.astro";
+import { getLang, getDict } from "../../i18n";
+
+// Records are swept 30 days after the audit, so a shared report link outlives
+// its record. That link is the whole point of the tool being shareable; landing
+// on an empty 404 would read as a broken product rather than an expired page.
+const lang = getLang(Astro);
+const t = getDict(lang).audit.report;
+const auditPath = lang === "en" ? "audit" : "auditoria";
+---
+
+{/* An expired link is still a first impression: give it the same way back
+    into the site that every other page has. */}
+<Navbar />
+<main class="shell flex min-h-[60vh] flex-col items-start justify-center gap-6 py-20">
+  <h1 class="text-3xl font-semibold text-ink">{t.expiredTitle}</h1>
+  <p class="max-w-xl text-muted">{t.expiredBody}</p>
+  <a
+    href={getRelativeLocaleUrl(lang, auditPath)}
+    data-cta="audit_report_expired"
+    class="rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+  >
+    {t.reAudit}
+  </a>
+</main>
+<Footer />
+{/* The live report carries the fab; the expired one needs it more. Whoever
+    lands here was forwarded a link that no longer resolves, and the only other
+    way out is a button that asks them to run an audit they did not ask for. */}
+<WhatsAppFab />

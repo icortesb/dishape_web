@@ -33,3 +33,6 @@ pnpm-debug.log*
 # CocoIndex Code (ccc)
 /.cocoindex_code/
 /.codegraph/
+
+# Local audit report store (AUDIT_DATA_DIR in dev)
+.audit-data/

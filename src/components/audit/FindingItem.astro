@@ -1,0 +1,61 @@
+---
+import { getLang, getDict } from "../../i18n";
+import { checkCopy, checkText } from "../../lib/audit/copy";
+import { checkById } from "../../lib/audit/registry";
+import type { CheckResult, CheckStatus } from "../../lib/audit/types";
+
+interface Props {
+  result: CheckResult;
+}
+const { result } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).audit.report;
+const copy = checkCopy(lang, result.id);
+const severity = checkById.get(result.id)?.severity ?? "minor";
+
+// "na" is not a soft failure and not a quiet pass: it is the absence of a
+// verdict, so it gets neutral colours and says so.
+const badge: Record<CheckStatus, string> = {
+  fail: "border-red-500/30 bg-red-500/10 text-red-300",
+  warn: "border-amber-500/30 bg-amber-500/10 text-amber-300",
+  pass: "border-accent/30 bg-accent/10 text-accent-light",
+  na: "border-line bg-elevated text-faint",
+};
+
+const text = copy ? checkText(copy, result.evidence) : null;
+---
+
+{
+  copy && text && (
+    <article class="rounded-xl border border-line bg-card p-5">
+      <header class="flex flex-wrap items-center gap-3">
+        <span
+          class={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${badge[result.status]}`}
+        >
+          {t.status[result.status]}
+        </span>
+        <h3 class="text-base font-semibold text-ink">{copy.name}</h3>
+        {result.status === "fail" && severity === "critical" && (
+          <span class="text-xs text-faint">{t.severity.critical}</span>
+        )}
+      </header>
+
+      {result.status !== "pass" && (
+        <dl class="mt-4 grid gap-3 text-sm">
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-faint">{t.found}</dt>
+            <dd class="mt-1 text-muted">{text.found}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-faint">{t.why}</dt>
+            <dd class="mt-1 text-muted">{text.why}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-faint">{t.fix}</dt>
+            <dd class="mt-1 text-muted">{text.fix}</dd>
+          </div>
+        </dl>
+      )}
+    </article>
+  )
+}

@@ -19,6 +19,11 @@ const links = [
   { label: nav.stack, href: `${home}#stack` },
   { label: nav.benefits, href: `${home}#resultados` },
   { label: nav.blog, href: getRelativeLocaleUrl(lang, "blog") },
+  {
+    label: nav.audit,
+    // Slug differs per language; Spanish sits at the root (no /es/ tree).
+    href: getRelativeLocaleUrl(lang, lang === "en" ? "audit" : "auditoria"),
+  },
   { label: nav.contact, href: `${home}#contacto` },
 ];
 

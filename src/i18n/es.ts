@@ -12,6 +12,7 @@ export const es = {
     benefits: "Beneficios",
     blog: "Blog",
     contact: "Contacto",
+    audit: "Auditoría",
     cta: "Hablemos",
     book: "Agendar 10 min",
   },
@@ -143,6 +144,13 @@ export const es = {
       sending: "Enviando…",
       success: "Mensaje enviado. Respondo en menos de 24 horas.",
       error: "El mensaje no se pudo enviar. Otra opción es escribir por WhatsApp.",
+      // Escrito para quien llega desde un reporte de auditoría: es el mensaje
+      // del visitante, no nuestro, y queda editable. Dice de qué sitio habla y
+      // deja el link del reporte; no enumera hallazgos, que ya están ahí.
+      // Neutro respecto del resultado — un reporte sin problemas también
+      // termina acá. {url} y {report} los completa src/scripts/contact.ts.
+      auditPrefill:
+        "Hice la auditoría de {url} y quiero hablar de lo que salió en el reporte:\n{report}\n\n",
     },
     asideTitle: "¿Hablamos directo?",
     asideBody:
@@ -340,5 +348,323 @@ export const es = {
       "Usamos cookies para medir el tráfico y mejorar tu experiencia. Se pueden aceptar o rechazar.",
     accept: "Aceptar",
     reject: "Rechazar",
+  },
+  audit: {
+    meta: {
+      // 56 characters: this string is the landing's <title>, and the tool warns
+      // any visitor whose title runs past TITLE_MAX (60). Pinned by
+      // tests/unit/i18n-audit.spec.ts against the constant itself.
+      title: "Auditoría web gratis | Diagnóstico de tu sitio | dishape",
+      description:
+        "Basta con la URL de tu sitio para obtener un diagnóstico técnico: SEO, rendimiento y cómo se ve tu web al compartirla. Gratis y sin registro.",
+      // schema.org WebApplication.name — the product's name, not the SEO
+      // title. The pipe-delimited title above is written for a SERP snippet;
+      // as a schema name it reads as three fragments glued together.
+      appName: "Auditoría web dishape",
+    },
+    hero: {
+      eyebrow: "HERRAMIENTA GRATUITA",
+      title: "¿Qué está frenando a tu sitio?",
+      subtitle:
+        "Un diagnóstico técnico de tu web en menos de un minuto: qué ve Google, qué tan rápido carga y cómo se ve cuando alguien comparte el link. Sin registro y sin costo.",
+      // Accessible name for the URL field; the design shows only a placeholder.
+      label: "Dirección de tu sitio",
+      placeholder: "tusitio.com",
+      submit: "Analizar mi sitio",
+      analyzing: "Analizando…",
+      disclaimer: "Analizamos la página que indiques, no todo el sitio.",
+    },
+    whatWeCheck: {
+      // {count} comes from the check registry, never from a typed number — and
+      // the registry holds SEO and sharing only. Performance is measured by
+      // PageSpeed, not counted, so the eyebrow names it apart instead of
+      // letting the number appear to cover the third card below it.
+      eyebrow: "{count} CHEQUEOS + RENDIMIENTO",
+      title: "Qué revisa el análisis.",
+      // Deliberately not report.categoryIntro: those say "esta página",
+      // meaning the audited page. On the landing nothing has been audited yet,
+      // so the same sentence would point at nothing.
+      cards: {
+        seo: "Título, meta descripción, canónica, encabezados, sitemap, hreflang y HTTPS: lo que Google necesita para entender una página.",
+        social:
+          "Open Graph, Twitter Card y favicon: lo que decide cómo se ve un link cuando alguien lo pega en WhatsApp o LinkedIn.",
+        perf: "Velocidad de carga medida con la API de PageSpeed Insights de Google, con datos de laboratorio y de usuarios reales cuando el sitio tiene tráfico suficiente.",
+      },
+    },
+    errors: {
+      url_invalid: "Esa dirección no parece válida. El formato esperado es algo como tusitio.com",
+      url_blocked: "No podemos analizar direcciones internas o privadas.",
+      url_unreachable: "No pudimos acceder a esa página. ¿Está en línea?",
+      not_html: "Esa dirección no devuelve una página web.",
+      too_large: "La página es demasiado pesada para analizarla.",
+      rate_limited: "Alcanzaste el límite de análisis. En un rato vuelve a estar disponible.",
+      server: "Algo falló de nuestro lado. Intenta de nuevo.",
+    },
+    report: {
+      auditedOn: "Analizado el",
+      urgent: "Lo más urgente",
+      urgentEmpty: "No encontramos problemas críticos en esta página.",
+      categories: {
+        seo: "SEO técnico",
+        social: "Al compartir",
+        perf: "Rendimiento",
+      },
+      categoryIntro: {
+        seo: "Qué encuentra Google cuando entra a esta página.",
+        social: "Qué ve alguien cuando comparte el link en WhatsApp o LinkedIn.",
+        perf: "Qué tan rápido carga, medido por Google.",
+      },
+      passedCount: "{passed} de {total} chequeos",
+      showPassed: "Ver los {count} chequeos que pasaron",
+      // Una categoría con un solo chequeo aprobado es el caso límite, no un
+      // borde: el <details> aparece apenas hay uno (FindingList.astro:32). El
+      // singular no lleva {count} — "el chequeo" antes que "1 chequeo".
+      showPassedOne: "Ver el chequeo que pasó",
+      status: {
+        pass: "Bien",
+        warn: "A mejorar",
+        fail: "Problema",
+        // Not a verdict: we could not determine this one either way.
+        na: "Sin determinar",
+      },
+      severity: { critical: "Crítico", important: "Importante", minor: "Menor" },
+      found: "Qué encontramos",
+      why: "Por qué importa",
+      fix: "Cómo se resuelve",
+      measuring: "Midiendo el rendimiento con Google…",
+      measuringNote: "Esto tarda unos segundos.",
+      vitalsUnavailable:
+        "No pudimos medir el rendimiento en este momento. El resto del diagnóstico sigue siendo válido.",
+      // Caption for the score card, where the long sentence does not fit.
+      vitalsUnavailableShort: "No se pudo medir",
+      fieldTitle: "Datos de usuarios reales",
+      labTitle: "Medición de laboratorio",
+      weight: "Peso",
+      noFieldData:
+        "Este sitio no tiene tráfico suficiente para que Google reporte datos de usuarios reales.",
+      sharePreview: "Así se ve tu link al compartirlo",
+      sharePreviewBroken:
+        "Esta página no tiene imagen para compartir, así que el link se ve vacío.",
+      copyLink: "Copiar link del reporte",
+      copied: "Link copiado",
+      reAudit: "Analizar otro sitio",
+      expiredTitle: "Este reporte ya no está disponible.",
+      expiredBody:
+        "Los reportes se guardan 30 días. Pasado ese plazo el link deja de funcionar. Volver a analizar el sitio toma menos de un minuto.",
+    },
+    cta: {
+      title: "Encontramos {count} cosas para resolver en esta página.",
+      // Un solo problema es el reporte de un sitio casi limpio, justamente el
+      // que más mira un prospecto: "1 cosas" ahí se lee como una plantilla rota.
+      titleOne: "Encontramos una cosa para resolver en esta página.",
+      titleClean: "Esta página está bien resuelta.",
+      body:
+        "Cada uno de estos puntos tiene una solución concreta. Si te interesa que los resolvamos, hablemos y te contamos qué implica.",
+      bodyOne:
+        "Este punto tiene una solución concreta. Si te interesa que lo resolvamos, hablemos y te contamos qué implica.",
+      bodyClean:
+        "Si estás por encarar un proyecto nuevo o te interesa llevar esto más lejos, hablemos.",
+      button: "Quiero resolver esto",
+    },
+    faq: {
+      title: "Preguntas frecuentes",
+      items: [
+        [
+          "¿Es realmente gratis?",
+          "Sí. No pedimos email ni registro, y el reporte completo se ve al instante.",
+        ],
+        [
+          "¿Qué analiza exactamente?",
+          // El número tiene que cubrir exactamente lo que cubre el registro de
+          // chequeos: SEO y compartir. El rendimiento se mide con PageSpeed y
+          // no se cuenta, igual que dice el eyebrow de whatWeCheck.
+          "Alrededor de veinte chequeos técnicos sobre la página que se indique: SEO técnico (qué entiende Google) y cómo se ve el link al compartirlo. El rendimiento se mide aparte, con la API de PageSpeed Insights de Google, y no entra en esa cuenta.",
+        ],
+        [
+          "¿Analiza todo mi sitio?",
+          "No. Analiza la URL exacta que se indique. Para revisar varias páginas, el análisis se corre una vez por cada una.",
+        ],
+        [
+          "¿Los datos de rendimiento son confiables?",
+          "Vienen directo de la API de PageSpeed Insights de Google, la misma que usa PageSpeed. Cualquier número se puede verificar corriendo la herramienta oficial.",
+        ],
+        [
+          "¿Guardan mi sitio o mis datos?",
+          "Guardamos el reporte por 30 días para que puedas compartir el link. No pedimos datos personales.",
+        ],
+      ] as [string, string][],
+    },
+    checks: {
+      "seo.title.present": {
+        name: "Título de la página",
+        why: "Es el texto que Google muestra como titular en los resultados de búsqueda. Sin título, el buscador inventa uno con lo que encuentra en la página.",
+        found: "La página no tiene etiqueta <title>.",
+        fix: "Falta un <title> descriptivo y único en el <head>, con el término por el que interesa que Google encuentre la página.",
+      },
+      "seo.title.length": {
+        name: "Largo del título",
+        why: "Google corta los títulos largos y descarta los muy cortos por poco informativos. Entre 30 y 60 caracteres se ve completo.",
+        found: "El título tiene {actual} caracteres.",
+        // warn se dispara por debajo de TITLE_MIN, así que un título de un
+        // solo carácter llega hasta acá: "1 caracteres" es alcanzable.
+        foundOne: "El título tiene un solo carácter.",
+        foundEmpty: "Esta página no tiene título, así que no hay longitud que medir.",
+        // "ajustar el título" apuntaba a algo que el chequeo había determinado
+        // que no existe: su rama "na", donde no hay título. "na" se descarta
+        // aguas arriba y nunca se renderiza (score.ts:55 lo saca de los
+        // hallazgos ordenados y FindingList.astro:17 vuelve a filtrar a
+        // fail|warn), así que solo llega la rama warn. Aun así un `fix` se
+        // exige verdadero en toda rama que no sea pass: la regla es más
+        // estricta que lo que se muestra, a propósito.
+        fix: "El título debe tener entre 30 y 60 caracteres, con lo más importante al principio.",
+      },
+      "seo.description.present": {
+        name: "Meta descripción",
+        why: "Es el resumen que aparece debajo del título en los resultados. No afecta el posicionamiento, pero sí cuánta gente hace clic.",
+        found: "La página no tiene meta descripción.",
+        fix: "Falta <meta name=\"description\" content=\"…\"> con un resumen concreto de lo que ofrece la página.",
+      },
+      "seo.description.length": {
+        name: "Largo de la meta descripción",
+        why: "Google trunca las descripciones largas a mitad de frase. Entre 70 y 160 caracteres se muestra entera.",
+        found: "La meta descripción tiene {actual} caracteres.",
+        // Igual que seo.title.length: warn cubre todo lo que está por debajo
+        // de DESC_MIN, incluido un solo carácter.
+        foundOne: "La meta descripción tiene un solo carácter.",
+        foundEmpty: "Esta página no tiene meta descripción, así que no hay longitud que medir.",
+        // Igual que seo.title.length: en la rama "na" no hay descripción que
+        // reescribir, y "na" nunca se renderiza (score.ts:55,
+        // FindingList.astro:17). El requisito es verdadero ahí de todos modos.
+        fix: "La meta descripción debe tener entre 70 y 160 caracteres.",
+      },
+      "seo.h1.unique": {
+        name: "Encabezado principal único",
+        why: "El H1 le dice al buscador de qué trata la página. Si hay varios o ninguno, esa señal se diluye.",
+        found: "La página tiene {actual} encabezados H1.",
+        fix: "Cada página lleva exactamente un H1, con el tema principal. El resto de los títulos van como H2 o H3.",
+      },
+      "seo.headings.hierarchy": {
+        name: "Jerarquía de encabezados",
+        why: "Los encabezados forman el índice de la página. Saltear niveles rompe esa estructura para buscadores y lectores de pantalla.",
+        found: "Hay un salto de {from} a {to} sin pasar por el nivel intermedio.",
+        foundEmpty: "Esta página no tiene encabezados que evaluar.",
+        fix: "Conviene usar los encabezados en orden, sin saltear niveles. Si el salto es por estética, el tamaño se cambia con CSS, no el nivel.",
+      },
+      "seo.canonical": {
+        name: "URL canónica",
+        why: "Le dice a Google cuál es la versión oficial de la página. Sin ella, las variantes con parámetros compiten entre sí y reparten la señal.",
+        found: "La canónica declarada es {found}.",
+        foundEmpty: "Esta página no declara una URL canónica propia.",
+        fix: "El <link rel=\"canonical\"> debe apuntar a la URL absoluta y definitiva de esta misma página.",
+      },
+      "seo.html.lang": {
+        name: "Idioma declarado",
+        why: "Sin el atributo lang, los buscadores adivinan el idioma y los lectores de pantalla lo pronuncian mal.",
+        found: "La etiqueta <html> no declara el atributo lang.",
+        fix: "El atributo lang va en la etiqueta <html>, por ejemplo <html lang=\"es\">.",
+      },
+      "seo.robots.txt": {
+        name: "Archivo robots.txt",
+        why: "Es lo primero que consulta un buscador al llegar. Sin él no hay bloqueo, pero tampoco forma de indicar dónde está el sitemap.",
+        found: "No pudimos acceder a /robots.txt.",
+        fix: "Con un robots.txt mínimo en la raíz del dominio basta, y es donde se declara la ubicación del sitemap.",
+      },
+      "seo.sitemap": {
+        name: "Sitemap",
+        why: "Le da a Google la lista completa de páginas a indexar, en vez de dejar que las descubra siguiendo links.",
+        found: "No encontramos un sitemap accesible.",
+        fix: "El sitemap.xml se genera y se declara en robots.txt con la línea Sitemap: https://tudominio.com/sitemap.xml",
+      },
+      "seo.noindex": {
+        name: "Página indexable",
+        why: "Una directiva noindex le pide a Google que excluya la página de los resultados. En una página pública casi siempre es un error de configuración.",
+        found: "La página se declara noindex ({source}).",
+        evidenceLabels: {
+          meta: "por la etiqueta robots del <head>",
+          header: "por el encabezado HTTP X-Robots-Tag",
+        },
+        fix: "La directiva noindex se quita del meta robots o del encabezado X-Robots-Tag. Suele quedar de un entorno de pruebas.",
+      },
+      "seo.hreflang": {
+        name: "Etiquetas hreflang",
+        why: "En un sitio con varios idiomas, indican qué versión mostrar a cada usuario. Un conjunto incompleto hace que Google las ignore por completo.",
+        found: "Encontramos {count} etiquetas hreflang con un problema de configuración.",
+        // Las dos ramas warn llegan a 1: "no-self" cuenta todas las entradas y
+        // basta una sola alternativa sin autorreferencia (la forma habitual de
+        // un sitio bilingüe a medio configurar); "invalid-code" cuenta las
+        // inválidas, mínimo una por su propia guarda.
+        foundOne: "Encontramos una etiqueta hreflang con un problema de configuración.",
+        foundEmpty: "Esta página no declara etiquetas hreflang.",
+        fix: "Cada versión debe listar todas las alternativas, incluida ella misma, con códigos de idioma válidos.",
+      },
+      "seo.https": {
+        name: "Conexión segura",
+        why: "Los navegadores marcan como \"no seguro\" cualquier sitio sin HTTPS, y Google lo usa como señal de posicionamiento.",
+        found: "La página se sirve por HTTP, sin cifrar.",
+        fix: "El sitio debe servirse por HTTPS, con un certificado TLS. Con Let's Encrypt es gratis y se renueva solo.",
+      },
+      "seo.http.redirect": {
+        name: "Redirección a HTTPS",
+        why: "Si la versión HTTP sigue respondiendo, existen dos copias de cada página y el tráfico se reparte entre ambas.",
+        found: "http:// no redirige a https://",
+        fix: "Todo el tráfico HTTP debe redirigirse a HTTPS con una redirección 301 permanente.",
+      },
+      "social.og.title": {
+        name: "Título al compartir",
+        why: "Es el titular que aparece cuando alguien pega el link en WhatsApp, LinkedIn o Slack. Sin él, cada plataforma improvisa.",
+        found: "No hay etiqueta og:title.",
+        fix: "Falta <meta property=\"og:title\" content=\"…\"> con el título que debe verse al compartir.",
+      },
+      "social.og.description": {
+        name: "Descripción al compartir",
+        why: "Es el texto debajo del titular en la tarjeta del link. Es lo que decide si alguien hace clic o sigue de largo.",
+        found: "No hay etiqueta og:description.",
+        fix: "Falta <meta property=\"og:description\"> con un resumen breve y concreto.",
+      },
+      "social.og.image": {
+        name: "Imagen al compartir",
+        why: "Un link sin imagen ocupa una fracción del espacio en el feed y recibe muchos menos clics que uno con tarjeta visual.",
+        // The whole sentence lives in the label: a shared frame like "has a
+        // problem: {reason}" asserts a defect before the branch is known, which
+        // is false for "declares none" and dishonest for the unverified case.
+        found: "{reason}",
+        evidenceLabels: {
+          missing: "Esta página no declara una imagen para compartir.",
+          unreachable: "La imagen declarada no responde.",
+          relative: "La imagen declarada usa una URL relativa, no una absoluta.",
+          unverified: "No pudimos confirmar que la imagen declarada responda.",
+        },
+        fix: "La imagen para compartir debe medir 1200×630 px y declararse en og:image con la URL absoluta completa, incluido https://",
+      },
+      "social.twitter.card": {
+        name: "Tarjeta de X/Twitter",
+        why: "Define el formato de la vista previa en X. Sin ella el link se muestra en el formato más chico disponible.",
+        found: "No hay etiqueta twitter:card.",
+        fix: "El <meta name=\"twitter:card\" content=\"summary_large_image\"> debe ir en el <head>.",
+      },
+      "social.jsonld": {
+        name: "Datos estructurados",
+        why: "Le explican a Google qué es esta página en un formato que entiende. Habilitan resultados enriquecidos y son cada vez más importantes para que los asistentes de IA citen el sitio.",
+        found: "{reason}",
+        evidenceLabels: {
+          missing: "Esta página no incluye datos estructurados.",
+          unparseable: "El bloque JSON-LD declarado no es JSON válido.",
+          "no-type": "El bloque JSON-LD declarado no indica un @type.",
+        },
+        // "Conviene incluir un bloque JSON-LD" era falso en las dos ramas warn:
+        // social.ts:84 filtra por hasBlocks antes de los casos unparseable y
+        // no-type, así que ahí el <script type="application/ld+json"> existe.
+        // Mismo razonamiento que seo.canonical: lo que está mal es el contenido
+        // del bloque, no su ausencia. El requisito nombra las dos propiedades
+        // que el chequeo mira: JSON válido y un @type declarado.
+        fix: "La página necesita un bloque JSON-LD válido, con el @type que corresponda (Organization, Product, Article, LocalBusiness…).",
+      },
+      "social.favicon": {
+        name: "Favicon",
+        why: "Es el ícono de la pestaña. Sin él, el sitio se vuelve difícil de encontrar entre veinte pestañas abiertas.",
+        found: "No hay ícono declarado.",
+        fix: "El <link rel=\"icon\" href=\"/favicon.svg\"> debe ir en el <head>.",
+      },
+    },
   },
 } as const;

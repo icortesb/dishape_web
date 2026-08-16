@@ -13,6 +13,8 @@ interface Props {
   alternates?: { es: string; en?: string };
   ogType?: "website" | "article";
   article?: { publishedTime: string; headline: string };
+  /** Keep this page out of the index (audit reports). */
+  noindex?: boolean;
 }
 
 const lang = getLang(Astro);
@@ -23,6 +25,7 @@ const {
   alternates,
   ogType,
   article,
+  noindex,
 } = Astro.props;
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 ---
@@ -45,7 +48,14 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     </script>
 
     <title>{title}</title>
-    <Seo title={title} description={description} alternates={alternates} ogType={ogType} article={article} />
+    <Seo
+      title={title}
+      description={description}
+      alternates={alternates}
+      ogType={ogType}
+      article={article}
+      noindex={noindex}
+    />
     <Analytics />
   </head>
   <body class="min-h-screen bg-base text-ink antialiased">
@@ -68,6 +78,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
       import "../scripts/calendly";
       import "../scripts/cta";
       import "../scripts/motionLoader";
+      import "../scripts/audit";
     </script>
   </body>
 </html>

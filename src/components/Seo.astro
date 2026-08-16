@@ -17,6 +17,8 @@ interface Props {
   ogType?: "website" | "article";
   /** When present, emit BlogPosting (article) schema instead of ProfessionalService. */
   article?: { publishedTime: string; headline: string };
+  /** Report pages are generated per-visitor; index them and you flood Google. */
+  noindex?: boolean;
 }
 const {
   title,
@@ -25,6 +27,7 @@ const {
   alternates: altPaths,
   ogType = "website",
   article,
+  noindex = false,
 } = Astro.props;
 const lang = getLang(Astro);
 
@@ -87,7 +90,10 @@ const jsonLd = article
 {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 
 <meta name="description" content={description} />
-<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta
+  name="robots"
+  content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large"}
+/>
 
 {/* Open Graph */}
 <meta property="og:type" content={ogType} />

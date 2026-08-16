@@ -12,6 +12,7 @@ export const en = {
     benefits: "Benefits",
     blog: "Blog",
     contact: "Contact",
+    audit: "Audit",
     cta: "Let's talk",
     book: "Book 10 min",
   },
@@ -142,6 +143,13 @@ export const en = {
       sending: "Sending…",
       success: "Message sent. I'll reply within 24 hours.",
       error: "The message couldn't be sent. You can also reach me on WhatsApp.",
+      // Written for someone arriving from an audit report: it is the visitor's
+      // message, not ours, and it stays editable. It names the site it is
+      // about and leaves the report link; it does not list findings, which are
+      // already in the report. Neutral about the outcome — a clean report ends
+      // up here too. {url} and {report} are filled by src/scripts/contact.ts.
+      auditPrefill:
+        "I ran the audit on {url} and I'd like to talk about what the report says:\n{report}\n\n",
     },
     asideTitle: "Rather talk directly?",
     asideBody:
@@ -339,5 +347,341 @@ export const en = {
       "We use cookies to measure traffic and improve your experience. You can accept or reject them.",
     accept: "Accept",
     reject: "Reject",
+  },
+  audit: {
+    meta: {
+      // 57 characters: this string is the landing's <title>, and the tool warns
+      // any visitor whose title runs past TITLE_MAX (60). Pinned by
+      // tests/unit/i18n-audit.spec.ts against the constant itself.
+      title: "Free website audit | Your site's SEO in seconds | dishape",
+      description:
+        "Paste your site's URL and get a technical diagnosis: SEO, performance and how your site looks when shared. Free, no signup.",
+      // schema.org WebApplication.name — the product's name, not the SEO
+      // title. The pipe-delimited title above is written for a SERP snippet;
+      // as a schema name it reads as three fragments glued together.
+      appName: "dishape Website Audit",
+    },
+    hero: {
+      eyebrow: "FREE TOOL",
+      title: "Find out what's slowing your site down.",
+      subtitle:
+        "A technical diagnosis of your site in under a minute: what Google sees, how fast it loads and what it looks like when someone shares the link. No signup, no cost.",
+      // Accessible name for the URL field; the design shows only a placeholder.
+      label: "Your site's address",
+      placeholder: "yoursite.com",
+      submit: "Analyze my site",
+      analyzing: "Analyzing…",
+      disclaimer: "We analyze the page you enter, not the whole site.",
+    },
+    whatWeCheck: {
+      // {count} comes from the check registry, never from a typed number — and
+      // the registry holds SEO and sharing only. Performance is measured by
+      // PageSpeed, not counted, so the eyebrow names it apart instead of
+      // letting the number appear to cover the third card below it.
+      eyebrow: "{count} CHECKS + PERFORMANCE",
+      title: "What the audit looks at.",
+      // Deliberately not report.categoryIntro: those say "this page", meaning
+      // the audited page. On the landing nothing has been audited yet, so the
+      // same sentence would point at nothing.
+      cards: {
+        seo: "Title, meta description, canonical, headings, sitemap, hreflang and HTTPS: what Google needs in order to understand a page.",
+        social:
+          "Open Graph, Twitter Card and favicon: what decides how a link looks when someone pastes it into WhatsApp or LinkedIn.",
+        perf: "Load speed measured with Google's PageSpeed Insights API, with lab data plus real-user data when the site has enough traffic.",
+      },
+    },
+    errors: {
+      url_invalid: "That address doesn't look valid. Try something like yoursite.com",
+      url_blocked: "We can't analyze internal or private addresses.",
+      url_unreachable: "We couldn't reach that page. Is it online?",
+      not_html: "That address doesn't return a web page.",
+      too_large: "The page is too heavy to analyze.",
+      rate_limited: "You've reached the analysis limit. Try again in a while.",
+      server: "Something failed on our end. Try again.",
+    },
+    report: {
+      auditedOn: "Audited on",
+      urgent: "Most urgent",
+      urgentEmpty: "We didn't find any critical problems on this page.",
+      categories: {
+        seo: "Technical SEO",
+        social: "When shared",
+        perf: "Performance",
+      },
+      categoryIntro: {
+        seo: "What Google finds when it visits this page.",
+        social: "What someone sees when they share the link on WhatsApp or LinkedIn.",
+        perf: "How fast it loads, measured by Google.",
+      },
+      passedCount: "{passed} of {total} checks",
+      showPassed: "Show the {count} checks that passed",
+      // A category with a single passing check is the boundary case, not an
+      // edge: the <details> renders as soon as there is one
+      // (FindingList.astro:32). The singular carries no {count}.
+      showPassedOne: "Show the check that passed",
+      status: {
+        pass: "Good",
+        warn: "Needs work",
+        fail: "Problem",
+        // Not a verdict: we could not determine this one either way.
+        na: "Undetermined",
+      },
+      severity: { critical: "Critical", important: "Important", minor: "Minor" },
+      found: "What we found",
+      why: "Why it matters",
+      fix: "How to fix it",
+      measuring: "Measuring performance with Google…",
+      measuringNote: "This takes a few seconds.",
+      vitalsUnavailable:
+        "We couldn't measure performance right now. The rest of the diagnosis still stands.",
+      // Caption for the score card, where the long sentence does not fit.
+      vitalsUnavailableShort: "Could not be measured",
+      fieldTitle: "Real user data",
+      labTitle: "Lab measurement",
+      weight: "Weight",
+      noFieldData:
+        "This site doesn't have enough traffic for Google to report real user data.",
+      sharePreview: "How your link looks when shared",
+      sharePreviewBroken:
+        "This page has no image to share, so the link shows up empty.",
+      copyLink: "Copy report link",
+      copied: "Link copied",
+      reAudit: "Analyze another site",
+      expiredTitle: "This report is no longer available.",
+      expiredBody:
+        "Reports are kept for 30 days. After that the link stops working. Running the analysis again takes under a minute.",
+    },
+    cta: {
+      title: "We found {count} things to fix on this page.",
+      // A single problem is the report of an almost-clean site, which is the
+      // one a prospect is most likely to be reading: "1 things" there reads as
+      // a broken template.
+      titleOne: "We found one thing to fix on this page.",
+      titleClean: "This page is in good shape.",
+      body:
+        "Each of these points has a concrete fix. If you want us to handle them, get in touch and we'll tell you what's involved.",
+      bodyOne:
+        "This point has a concrete fix. If you want us to handle it, get in touch and we'll tell you what's involved.",
+      bodyClean:
+        "If you're starting a new project or want to take this further, let's talk.",
+      button: "I want this fixed",
+    },
+    faq: {
+      title: "Frequently asked questions",
+      items: [
+        [
+          "Is it really free?",
+          "Yes. We don't ask for an email or signup, and the full report shows up instantly.",
+        ],
+        [
+          "What exactly does it check?",
+          // The number has to cover exactly what the check registry covers: SEO
+          // and sharing. Performance is measured with PageSpeed and is not
+          // counted, which is what the whatWeCheck eyebrow says too.
+          "About twenty technical checks on the page you enter: technical SEO (what Google understands) and how the link looks when shared. Performance is measured separately, with Google's PageSpeed Insights API, and is not part of that count.",
+        ],
+        [
+          "Does it check my whole site?",
+          "No. It checks the exact URL you enter. If you want to review several pages, run the analysis once per page.",
+        ],
+        [
+          "Is the performance data reliable?",
+          "It comes directly from Google's PageSpeed Insights API, the same one PageSpeed uses. You can verify any number by running the official tool.",
+        ],
+        [
+          "Do you store my site or my data?",
+          "We store the report for 30 days so you can share the link. We don't ask for personal data.",
+        ],
+      ] as [string, string][],
+    },
+    checks: {
+      "seo.title.present": {
+        name: "Page title",
+        why: "It's the text Google shows as the headline in search results. Without a title, the search engine makes one up from whatever it finds on the page.",
+        found: "The page has no <title> tag.",
+        fix: "Add a descriptive, unique <title> in the <head>, including the term you want to be found for.",
+      },
+      "seo.title.length": {
+        name: "Title length",
+        why: "Google truncates long titles and discounts very short ones as uninformative. Between 30 and 60 characters shows in full.",
+        found: "The title is {actual} characters long.",
+        // warn fires below TITLE_MIN, so a one-character title lands here:
+        // "1 characters" is reachable.
+        foundOne: "The title is a single character long.",
+        foundEmpty: "This page has no title, so there's no length to measure.",
+        // "adjust the title" pointed at something the check had determined does
+        // not exist — its "na" branch, where there is no title. "na" is dropped
+        // upstream and never renders (score.ts:55 filters it out of the ranked
+        // findings, FindingList.astro:17 refilters to fail|warn), so only the
+        // warn branch reaches a visitor. A `fix` is still held to being true on
+        // every non-pass branch: the rule is stricter than what renders, on
+        // purpose, and the requirement form satisfies it.
+        fix: "The title needs to be 30–60 characters, with the most important part first.",
+      },
+      "seo.description.present": {
+        name: "Meta description",
+        why: "It's the summary that appears below the title in search results. It doesn't affect ranking, but it does affect how many people click.",
+        found: "The page has no meta description.",
+        fix: "Add <meta name=\"description\" content=\"…\"> with a concrete summary of what the page offers.",
+      },
+      "seo.description.length": {
+        name: "Meta description length",
+        why: "Google cuts long descriptions off mid-sentence. Between 70 and 160 characters shows in full.",
+        found: "The meta description is {actual} characters long.",
+        // Same as seo.title.length: warn covers everything below DESC_MIN,
+        // a single character included.
+        foundOne: "The meta description is a single character long.",
+        foundEmpty: "This page has no meta description, so there's no length to measure.",
+        // Same as seo.title.length: the "na" branch has no description to
+        // rewrite, and "na" never renders (score.ts:55, FindingList.astro:17).
+        // The requirement form holds on it anyway, which is the rule.
+        fix: "The meta description needs to be 70 to 160 characters.",
+      },
+      "seo.h1.unique": {
+        name: "Single main heading",
+        why: "The H1 tells the search engine what the page is about. With several or none, that signal gets diluted.",
+        found: "The page has {actual} H1 headings.",
+        fix: "Keep exactly one H1 per page, with the main topic. Everything else goes as H2 or H3.",
+      },
+      "seo.headings.hierarchy": {
+        name: "Heading hierarchy",
+        why: "Headings form the page's outline. Skipping levels breaks that structure for search engines and screen readers.",
+        found: "There's a jump from {from} to {to} without passing through the level in between.",
+        foundEmpty: "This page has no headings to evaluate.",
+        fix: "Use headings in order, without skipping levels. If the jump is for visual reasons, change the size with CSS, not the level.",
+      },
+      "seo.canonical": {
+        name: "Canonical URL",
+        why: "It tells Google which version of the page is the official one. Without it, variants with parameters compete against each other and split the signal.",
+        found: "The declared canonical is {found}.",
+        foundEmpty: "This page does not declare a canonical URL of its own.",
+        // "Add <link rel=canonical>" was false on two of the three displayed
+        // branches: the cross-host warn and the unparseable-href fail both have
+        // the tag. What is wrong there is where it points, not that it is absent.
+        fix: "The <link rel=\"canonical\"> must point to the absolute, definitive URL of this same page.",
+      },
+      "seo.html.lang": {
+        name: "Declared language",
+        why: "Without the lang attribute, search engines guess the language and screen readers mispronounce it.",
+        found: "The <html> tag does not declare a lang attribute.",
+        fix: "Add the lang attribute to the <html> tag, for example <html lang=\"en\">.",
+      },
+      "seo.robots.txt": {
+        name: "robots.txt file",
+        why: "It's the first thing a search engine checks on arrival. Without it there's no blocking, but also no way to point to the sitemap.",
+        found: "We couldn't reach /robots.txt.",
+        // The only displayed branch is robotsTxt === null, which parse.ts sets
+        // for a transport failure and for a non-2xx alike — so "publish a
+        // robots.txt" asserts an absence we never observed. Matches the Spanish.
+        fix: "The domain root must serve a robots.txt; a minimal one is enough, and it is where the sitemap location is declared.",
+      },
+      "seo.sitemap": {
+        name: "Sitemap",
+        why: "It gives Google the full list of pages to index, instead of leaving it to discover them by following links.",
+        found: "We couldn't find an accessible sitemap.",
+        // On the "na" probe-failure branch nothing was determined about the
+        // sitemap, so "generate a sitemap.xml" would assert it is missing.
+        // "na" never renders (score.ts:55, FindingList.astro:17); the
+        // requirement is written to be true there regardless.
+        fix: "The sitemap.xml must be generated and declared in robots.txt, with the line Sitemap: https://yourdomain.com/sitemap.xml",
+      },
+      "seo.noindex": {
+        name: "Indexable page",
+        why: "A noindex directive asks Google to exclude the page from results. On a public page it's almost always a configuration mistake.",
+        found: "The page is declared noindex ({source}).",
+        evidenceLabels: {
+          meta: "via the robots tag in the <head>",
+          header: "via X-Robots-Tag on the server response",
+        },
+        fix: "Remove the noindex directive from the meta robots tag or the X-Robots-Tag header. It's usually left over from a staging environment.",
+      },
+      "seo.hreflang": {
+        name: "Hreflang tags",
+        why: "On a site with multiple languages, they indicate which version to show each user. An incomplete set makes Google ignore them entirely.",
+        found: "We found {count} hreflang tags with a configuration problem.",
+        // Both warn branches reach 1: "no-self" counts every entry, and one
+        // alternate with no self-reference is the ordinary shape of a
+        // half-configured bilingual site; "invalid-code" counts the invalid
+        // ones, at least one by its own guard.
+        foundOne: "We found one hreflang tag with a configuration problem.",
+        foundEmpty: "This page does not declare hreflang tags.",
+        fix: "Each version must list all alternatives, including itself, with valid language codes.",
+      },
+      "seo.https": {
+        name: "Secure connection",
+        why: "Browsers flag any site without HTTPS as \"not secure\", and Google uses it as a ranking signal.",
+        found: "The page is served over HTTP, unencrypted.",
+        // The check only observes that this URL came over HTTP; whether the
+        // site has a certificate at all was never determined.
+        fix: "The site must be served over HTTPS, with a TLS certificate. With Let's Encrypt it's free and renews itself.",
+      },
+      "seo.http.redirect": {
+        name: "Redirect to HTTPS",
+        why: "If the HTTP version still responds, there are two copies of every page and traffic splits between them.",
+        found: "http:// does not redirect to https://",
+        // On the "na" branch the probe never resolved and no redirect was
+        // observed either way. "na" never renders (score.ts:55,
+        // FindingList.astro:17); the requirement is true on it regardless.
+        fix: "All HTTP traffic must redirect to HTTPS with a permanent 301.",
+      },
+      "social.og.title": {
+        name: "Share title",
+        why: "It's the headline that shows up when someone pastes the link into WhatsApp, LinkedIn or Slack. Without it, each platform improvises.",
+        found: "No og:title tag.",
+        fix: "Add <meta property=\"og:title\" content=\"…\"> with the title you want to show when shared.",
+      },
+      "social.og.description": {
+        name: "Share description",
+        why: "It's the text below the headline in the link's preview card. It's what decides whether someone clicks or scrolls past.",
+        found: "No og:description tag.",
+        fix: "Add <meta property=\"og:description\"> with a short, concrete summary.",
+      },
+      "social.og.image": {
+        name: "Share image",
+        why: "A link without an image takes up a fraction of the space in the feed and gets far fewer clicks than one with a visual card.",
+        // The whole sentence lives in the label: a shared frame like "has a
+        // problem: {reason}" asserts a defect before the branch is known, which
+        // is false for "declares none" and dishonest for the unverified case.
+        found: "{reason}",
+        evidenceLabels: {
+          missing: "This page declares no share image.",
+          unreachable: "The declared image does not respond.",
+          relative: "The declared image URL is not absolute.",
+          unverified: "We could not confirm the declared image responds.",
+        },
+        // On the "relative" and "unverified" branches an og:image IS declared,
+        // so "publish an image and declare it" contradicts what we found.
+        fix: "The share image must be 1200×630 px and declared in og:image with the full absolute URL, including https://",
+      },
+      "social.twitter.card": {
+        name: "X/Twitter card",
+        why: "It defines the preview format on X. Without it the link shows in the smallest format available.",
+        found: "No twitter:card tag.",
+        fix: "Add <meta name=\"twitter:card\" content=\"summary_large_image\"> in the <head>.",
+      },
+      "social.jsonld": {
+        name: "Structured data",
+        why: "It tells Google what this page is in a format it understands. It enables rich results and is increasingly important for AI assistants to cite the site.",
+        found: "{reason}",
+        evidenceLabels: {
+          missing: "This page includes no structured data.",
+          unparseable: "The declared JSON-LD block is not valid JSON.",
+          "no-type": "The declared JSON-LD block states no @type.",
+        },
+        // "Add a JSON-LD block" was false on both warn branches: social.ts:84
+        // gates on hasBlocks before the unparseable and no-type cases, so a
+        // <script type="application/ld+json"> demonstrably exists there. Same
+        // reasoning as seo.canonical above — what is wrong is the block's
+        // content, not its absence — so the requirement names both properties
+        // the check actually tests: valid JSON, and a declared @type.
+        fix: "The page needs a valid JSON-LD block with the @type that applies (Organization, Product, Article, LocalBusiness…).",
+      },
+      "social.favicon": {
+        name: "Favicon",
+        why: "It's the tab icon. Without it, the site becomes hard to find among twenty open tabs.",
+        found: "No icon declared.",
+        fix: "Add <link rel=\"icon\" href=\"/favicon.svg\"> in the <head>.",
+      },
+    },
   },
 } as const;

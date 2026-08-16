@@ -1,0 +1,20 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import Base from "../../layouts/Base.astro";
+import AuditLanding from "../../components/audit/AuditLanding.astro";
+import { getDict } from "../../i18n";
+
+// Static: the landing is the same page for everyone, and it is the one page of
+// the tool that has to rank.
+export const prerender = true;
+
+const t = getDict("es").audit.meta;
+const alternates = {
+  es: getRelativeLocaleUrl("es", "auditoria"),
+  en: getRelativeLocaleUrl("en", "audit"),
+};
+---
+
+<Base title={t.title} description={t.description} alternates={alternates}>
+  <AuditLanding />
+</Base>

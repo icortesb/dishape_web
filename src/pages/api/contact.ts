@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
+import { buildContactEmail } from "../../lib/contactEmail";
 
 // On-demand (server) route — everything else stays static.
 export const prerender = false;
@@ -10,11 +11,6 @@ const json = (data: unknown, status = 200) =>
     status,
     headers: { "Content-Type": "application/json" },
   });
-
-const escapeHtml = (s: string) =>
-  s.replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
-  );
 
 export const POST: APIRoute = async ({ request }) => {
   let body: Record<string, unknown>;
@@ -29,6 +25,9 @@ export const POST: APIRoute = async ({ request }) => {
   const company = String(body.company ?? "").trim();
   const message = String(body.message ?? "").trim();
   const honeypot = String(body.website ?? "").trim();
+  // Optional: set by the contact form when the visitor arrives from a report.
+  // Validated inside buildContactEmail — a bad id costs the link, not the lead.
+  const auditId = String(body.auditId ?? "").trim();
 
   // Bot caught by honeypot — pretend success, send nothing.
   if (honeypot) return json({ ok: true });
@@ -54,16 +53,7 @@ export const POST: APIRoute = async ({ request }) => {
       from,
       to,
       replyTo: email,
-      subject: `Nuevo contacto: ${name}${company ? ` · ${company}` : ""}`,
-      html: `
-        <h2>Nuevo mensaje desde dishape.dev</h2>
-        <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
-        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-        ${company ? `<p><strong>Empresa:</strong> ${escapeHtml(company)}</p>` : ""}
-        <p><strong>Mensaje:</strong></p>
-        <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
-      `,
-      text: `Nombre: ${name}\nEmail: ${email}\n${company ? `Empresa: ${company}\n` : ""}\n${message}`,
+      ...buildContactEmail({ name, email, company, message, auditId }),
     });
 
     if (error) {

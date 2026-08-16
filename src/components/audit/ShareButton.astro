@@ -1,0 +1,14 @@
+---
+import { getLang, getDict } from "../../i18n";
+
+const t = getDict(getLang(Astro)).audit.report;
+---
+
+<button
+  type="button"
+  data-copy-link
+  data-copied={t.copied}
+  class="self-start rounded-lg border border-line bg-card px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-accent/40"
+>
+  {t.copyLink}
+</button>

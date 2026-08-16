@@ -1,0 +1,94 @@
+---
+import Navbar from "../Navbar.astro";
+import Footer from "../Footer.astro";
+import WhatsAppFab from "../WhatsAppFab.astro";
+import ScoreCards from "./ScoreCards.astro";
+import UrgentFindings from "./UrgentFindings.astro";
+import FindingList from "./FindingList.astro";
+import VitalsPanel from "./VitalsPanel.astro";
+import SharePreview from "./SharePreview.astro";
+import AuditCta from "./AuditCta.astro";
+import ShareButton from "./ShareButton.astro";
+import { getLang, getDict } from "../../i18n";
+import { checkById } from "../../lib/audit/registry";
+import { scoreCategory, rankFindings } from "../../lib/audit/score";
+import type { AuditRecord } from "../../lib/audit/types";
+
+interface Props {
+  record: AuditRecord;
+}
+const { record } = Astro.props;
+const lang = getLang(Astro);
+const t = getDict(lang).audit.report;
+
+// rankFindings drops "na" — a check we could not determine is left out of the
+// lists entirely, which is also what keeps them in step with the score, whose
+// denominator excludes it too.
+const byCategory = (category: "seo" | "social") =>
+  rankFindings(record.checks).filter((r) => checkById.get(r.id)?.category === category);
+
+const seo = scoreCategory(record.checks, "seo");
+const social = scoreCategory(record.checks, "social");
+const problems = record.checks.filter((r) => r.status === "fail" || r.status === "warn");
+const host = new URL(record.page.finalUrl).host;
+const audited = new Date(record.createdAt).toLocaleDateString(
+  lang === "es" ? "es-AR" : "en-US",
+);
+---
+
+{/* A report is what a stranger receives by link. Without the site's own
+    navigation the diagnosis is orphaned: nothing says who produced it. The top
+    padding is trimmed so the header the navbar now sits above still opens the
+    page. */}
+<Navbar />
+<main class="shell flex flex-col gap-16 pb-20 pt-12" data-audit-id={record.id}>
+  <header class="flex flex-col gap-6">
+    <p class="text-sm text-faint">{t.auditedOn} {audited}</p>
+    <h1 class="text-4xl font-semibold text-ink">{host}</h1>
+    <ScoreCards
+      seo={seo}
+      social={social}
+      perfScore={record.vitals?.score ?? null}
+      perfPending={record.vitals === null && record.vitalsError === null}
+    />
+  </header>
+
+  <UrgentFindings results={record.checks} />
+
+  <AuditCta
+    problemCount={problems.length}
+    auditId={record.id}
+    auditedUrl={record.page.finalUrl}
+    location="audit_report_top"
+  />
+
+  <FindingList
+    title={t.categories.seo}
+    intro={t.categoryIntro.seo}
+    results={byCategory("seo")}
+  />
+
+  <FindingList
+    title={t.categories.social}
+    intro={t.categoryIntro.social}
+    results={byCategory("social")}
+  />
+
+  <VitalsPanel vitals={record.vitals} error={record.vitalsError} />
+
+  <SharePreview results={record.checks} finalUrl={record.page.finalUrl} />
+
+  <AuditCta
+    problemCount={problems.length}
+    auditId={record.id}
+    auditedUrl={record.page.finalUrl}
+    location="audit_report_bottom"
+  />
+
+  <ShareButton />
+</main>
+<Footer />
+{/* The lowest-friction exit on a page a stranger reached through a forwarded
+    link: no form, no scroll back to a CTA, and it carries the visitor into the
+    channel this business actually answers on. */}
+<WhatsAppFab />

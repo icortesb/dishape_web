@@ -1,0 +1,119 @@
+---
+import Navbar from "../Navbar.astro";
+import Footer from "../Footer.astro";
+import WhatsAppFab from "../WhatsAppFab.astro";
+import SectionHeader from "../SectionHeader.astro";
+import UrlForm from "./UrlForm.astro";
+import { getLang, getDict } from "../../i18n";
+import { SITE } from "../../site";
+import { registry } from "../../lib/audit/registry";
+
+const lang = getLang(Astro);
+const t = getDict(lang).audit;
+
+// Counted, never typed: the eyebrow cannot drift from the catalog it describes.
+const count = registry.length;
+
+// Same expression Seo.astro uses for <link rel="canonical">, so the schema can
+// never claim a different URL than the page declares for itself.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Both nodes describe this page and nothing else: the FAQ entries are the same
+// array the section below renders, and the offer is the tool being free.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      // Not meta.title: that string is a SERP snippet with pipes in it, and a
+      // schema name is the product's name.
+      name: t.meta.appName,
+      description: t.meta.description,
+      url: canonical,
+      inLanguage: lang,
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Any",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      provider: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    },
+    {
+      "@type": "FAQPage",
+      inLanguage: lang,
+      mainEntity: t.faq.items.map(([question, answer]) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      })),
+    },
+  ],
+};
+---
+
+<Navbar />
+<main>
+  <section id="top" class="relative overflow-hidden border-b border-line bg-base">
+    <div
+      class="blueprint-grid pointer-events-none absolute inset-x-0 -top-[40%] h-[180%]"
+      data-parallax="0.3"
+    >
+    </div>
+    <div class="shell relative flex flex-col items-start gap-5 py-20 lg:py-24">
+      <span class="eyebrow reveal">{t.hero.eyebrow}</span>
+      <h1
+        class="reveal max-w-3xl text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl"
+      >
+        {t.hero.title}
+      </h1>
+      <p class="reveal max-w-2xl text-lg leading-relaxed text-muted">{t.hero.subtitle}</p>
+      {/* Outside .reveal on purpose: the one element that converts must not
+          depend on an animation, or on the bundle that drives it. */}
+      <div class="mt-3 w-full">
+        <UrlForm />
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-line bg-surface">
+    <div class="shell flex flex-col gap-10 py-20">
+      <SectionHeader
+        eyebrow={t.whatWeCheck.eyebrow.replace("{count}", String(count))}
+        title={t.whatWeCheck.title}
+      />
+      {/* The card headings are h3, not h2: SectionHeader already emits the
+          section's h2, and a page that reports heading hierarchy has to keep
+          its own. */}
+      <div class="grid gap-6 md:grid-cols-3">
+        {
+          (["seo", "social", "perf"] as const).map((key) => (
+            <div class="reveal rounded-2xl border border-line bg-card p-7">
+              <h3 class="text-lg font-semibold text-ink">{t.report.categories[key]}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-muted">
+                {t.whatWeCheck.cards[key]}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-base">
+    <div class="shell flex flex-col gap-8 py-20">
+      <h2 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{t.faq.title}</h2>
+      <div class="grid max-w-3xl gap-4">
+        {
+          t.faq.items.map(([question, answer]) => (
+            <details class="rounded-2xl border border-line bg-card p-6">
+              <summary class="cursor-pointer font-medium text-ink">{question}</summary>
+              <p class="mt-3 text-sm leading-relaxed text-muted">{answer}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</main>
+<Footer />
+<WhatsAppFab />
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
