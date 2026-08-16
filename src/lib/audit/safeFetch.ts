@@ -2,7 +2,7 @@ import { lookup as dnsLookup } from "node:dns";
 import { request as httpRequest, type IncomingMessage } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { isIP } from "node:net";
-import type { SafeFetchResult } from "./types";
+import type { AuditErrorCode, SafeFetchResult } from "./types";
 
 const MAX_BYTES = 2 * 1024 * 1024; // 2 MB
 const TIMEOUT_MS = 10_000;

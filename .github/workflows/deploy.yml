@@ -50,6 +50,10 @@ jobs:
             cd /opt/dishape
             git fetch --prune origin main
             git reset --hard origin/main
+            # Audit reports persist outside the release dir, which `git reset
+            # --hard` wipes. Path must match AUDIT_DATA_DIR (unset today, so the
+            # store.ts default applies). Idempotent; the deploy user is root.
+            mkdir -p /var/lib/dishape/audits
             npm ci
             npm run build
             systemctl restart dishape

@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "playwright test -c playwright.unit.config.ts",
     "test:e2e": "playwright test",
@@ -22,6 +23,7 @@
     "resend": "^6.12.4"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@fontsource-variable/inter": "^5.1.1",
     "@fontsource-variable/jetbrains-mono": "^5.1.2",
     "@fontsource-variable/space-grotesk": "^5.1.1",
@@ -31,6 +33,7 @@
     "@types/three": "^0.176.0",
     "gsap": "^3.13.0",
     "tailwindcss": "^4.3.0",
-    "three": "^0.176.0"
+    "three": "^0.176.0",
+    "typescript": "^6.0.3"
   }
 }
