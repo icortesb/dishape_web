@@ -30,11 +30,28 @@ function parseCandidate(input: string): URL | null {
 }
 
 /**
- * Canonical form used as the cache key. Two inputs that describe the same page
- * must produce the same string, so we force https, drop "www.", lowercase the
- * host, and discard query and hash (tracking params are not a different page).
- * Path case is preserved — paths are case-sensitive on most servers.
- * Port is preserved — different ports are different origins.
+ * Canonical form used as the cache key AND as the URL the audit actually
+ * requests (api/audit.ts hands this string straight to safeFetch).
+ *
+ * Because it is the destination, it must not rewrite anything that decides
+ * what comes back:
+ *
+ * - **Scheme is kept.** Forcing https meant `ctx.url.protocol` was https by
+ *   construction, which made the `seo.https` check — severity critical —
+ *   unable to ever report `fail`.
+ * - **"www." is kept.** Plenty of sites answer only on www and have no A
+ *   record on the apex (cetys.mx, measured). Stripping it produced
+ *   `url_unreachable` for a site that returns 200, i.e. the auditor telling a
+ *   visitor their working site does not exist.
+ *
+ * Both are therefore part of the cache key too, which is correct: if two
+ * inputs can produce different findings, they are not the same audit.
+ *
+ * What IS normalized is only what cannot change the result: the host is
+ * lowercased (hosts are case-insensitive), query and hash are dropped
+ * (tracking params are not a different page), and a trailing slash is removed.
+ * Path case is preserved — paths are case-sensitive on most servers. Port is
+ * preserved — different ports are different origins.
  *
  * Returns null for anything that is not a plausible http(s) URL.
  */
@@ -45,11 +62,11 @@ export function normalizeUrl(input: string): string | null {
   // A hostname with no dot is either localhost or a typo; neither is auditable.
   if (!url.hostname.includes(".")) return null;
 
-  const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  const host = url.hostname.toLowerCase();
   const port = url.port ? `:${url.port}` : "";
   const path = url.pathname.replace(/\/+$/, "");
 
-  return `https://${host}${port}${path}`;
+  return `${url.protocol}//${host}${port}${path}`;
 }
 
 /**

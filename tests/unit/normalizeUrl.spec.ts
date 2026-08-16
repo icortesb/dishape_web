@@ -2,8 +2,30 @@ import { test, expect } from "@playwright/test";
 import { isDotlessHttpHost, normalizeUrl } from "../../src/lib/audit/normalizeUrl";
 
 test.describe("normalizeUrl", () => {
-  test("forces https, drops www, lowercases host", () => {
-    expect(normalizeUrl("http://WWW.Example.COM")).toBe("https://example.com");
+  test("lowercases the host but keeps the scheme and the www the user gave", () => {
+    expect(normalizeUrl("http://WWW.Example.COM")).toBe("http://www.example.com");
+  });
+
+  // This string is what safeFetch actually requests, so rewriting the host is
+  // rewriting the destination. Plenty of real sites answer on www and have no
+  // A record on the apex at all (cetys.mx, measured), and stripping www turned
+  // those into "url_unreachable" — the auditor telling a visitor their working
+  // site does not exist.
+  test("does not strip www, which can be the only host that resolves", () => {
+    expect(normalizeUrl("https://www.cetys.mx")).toBe("https://www.cetys.mx");
+  });
+
+  // Forcing https meant ctx.url.protocol was https by construction, so the
+  // seo.https check — severity critical — could never report fail.
+  test("does not force https, so an http-only site can still be judged", () => {
+    expect(normalizeUrl("http://example.com/a")).toBe("http://example.com/a");
+  });
+
+  test("scheme and www are part of the cache key, because they change the result", () => {
+    expect(normalizeUrl("https://example.com")).not.toBe(normalizeUrl("http://example.com"));
+    expect(normalizeUrl("https://www.example.com")).not.toBe(
+      normalizeUrl("https://example.com"),
+    );
   });
 
   test("adds a scheme when the user omits it", () => {
