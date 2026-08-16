@@ -93,4 +93,11 @@ export type AuditRecord = {
   checks: CheckResult[];
   vitals: VitalsResult | null;
   vitalsError: string | null;
+  /**
+   * When vitalsError was recorded. A failure is served back from the record
+   * until this ages out, so a permanently failing URL cannot be looped to burn
+   * the PageSpeed quota. Null on records written before this field existed —
+   * treated as stale, so they retry once and then start ageing normally.
+   */
+  vitalsErrorAt: number | null;
 };

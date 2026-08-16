@@ -55,6 +55,52 @@ test.describe("GET /api/audit/:id/vitals", () => {
     const res = await request.get("/api/audit/..%2F..%2Fetc%2Fpasswd/vitals");
     expect([404, 400]).toContain(res.status());
   });
+
+  // A failed PSI call used to be written but never read back, so every GET
+  // re-issued a 45s upstream call against a billed quota. The route is
+  // unauthenticated, so one report id was enough to drain it in a loop.
+  // `reason` is what discriminates: the stored error comes back verbatim on a
+  // short-circuit, while a real retry would return a psi_* reason instead.
+  test("a recent failure is served from the record, without calling PageSpeed", async ({
+    request,
+  }) => {
+    const id = "seedvit1";
+    await seedRecord(id, { vitalsError: "stored_failure", vitalsErrorAt: Date.now() });
+
+    const res = await request.get(`/api/audit/${id}/vitals`);
+    expect(res.ok()).toBe(true);
+    const body = await res.json();
+    expect(body.status).toBe("unavailable");
+    expect(body.reason).toBe("stored_failure");
+  });
+
+  test("a stale failure is retried, so a transient outage is not cached forever", async ({
+    request,
+  }) => {
+    const id = "seedvit2";
+    await seedRecord(id, {
+      vitalsError: "stored_failure",
+      vitalsErrorAt: Date.now() - 60 * 60_000, // an hour ago
+      page: {
+        status: 200,
+        // The retry hands this URL to PageSpeed rather than fetching it here,
+        // so the assertion below is deliberately "not the stored reason": it
+        // holds whether Google answers 429, rejects the address, or the run
+        // has no network at all.
+        finalUrl: "http://169.254.169.254/",
+        redirects: 0,
+        bytes: 1,
+        title: "x",
+      },
+    });
+
+    const res = await request.get(`/api/audit/${id}/vitals`);
+    expect(res.ok()).toBe(true);
+    const body = await res.json();
+    expect(body.status).toBe("unavailable");
+    // It actually retried, so the reason is the new failure, not the stored one.
+    expect(body.reason).not.toBe("stored_failure");
+  });
 });
 
 // The SSRF guard blocks the test server's own loopback address, by design, so
