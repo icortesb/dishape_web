@@ -2,11 +2,12 @@
 title: "Por qué una web lenta te está costando ventas"
 description: "La velocidad de carga no es un detalle técnico: define cuántos visitantes se quedan, cuántos compran y dónde aparece el sitio en Google. Los números y cómo solucionarlo."
 pubDate: 2026-06-04
+updatedDate: 2026-08-18
 lang: es
 slug: web-lenta-pierde-ventas
 translationKey: speed-conversion
 category: "Rendimiento"
-readingTime: "5 min"
+readingTime: "6 min"
 relatedService: web
 ---
 
@@ -20,9 +21,15 @@ Y al revés también funciona: estudios de la industria muestran que **cada 0,1 
 
 ## La velocidad también define el puesto en Google
 
-Hay un segundo efecto, más silencioso. Google usa la velocidad y la experiencia de carga (las llamadas Core Web Vitals) como factor de posicionamiento. Un sitio lento no solo pierde a los que llegan: aparece más abajo en los resultados, así que llega menos gente desde el principio.
+Hay un segundo efecto, más silencioso. Google mide la experiencia de carga con tres métricas, las Core Web Vitals, y las usa como señal de posicionamiento:
 
-Es un círculo: el sitio carga lento, Google lo muestra más abajo, recibe menos visitas, y las pocas que recibe se van por la demora. La velocidad afecta las dos puntas del embudo a la vez.
+- **LCP** (Largest Contentful Paint): cuánto tarda en aparecer el elemento principal de la pantalla. Bien: menos de 2,5 segundos.
+- **INP** (Interaction to Next Paint): cuánto tarda la página en responder a un clic o a un toque. Bien: menos de 200 milisegundos. Reemplazó a la métrica anterior, FID, en marzo de 2024, así que un sitio optimizado antes de esa fecha puede estar aprobando algo que ya no se mide.
+- **CLS** (Cumulative Layout Shift): cuánto se mueve el contenido mientras carga, eso de ir a tocar un botón y que salte de lugar. Bien: menos de 0,1.
+
+Dos detalles cambian cómo se leen esos números. Google no mira el promedio, mira el percentil 75 de las visitas reales: para aprobar hace falta que cargue bien para el 75 % de los visitantes, no para el visitante promedio. Y el peso en el ranking es más modesto de lo que se suele vender: funciona como desempate entre páginas de relevancia parecida, no compensa un contenido que no responde a lo que la persona buscó.
+
+Aun así el círculo existe: el sitio carga lento, queda debajo de un competidor equivalente, recibe menos visitas, y las pocas que recibe se van por la demora. La velocidad afecta las dos puntas del embudo a la vez.
 
 ## Por qué los sitios terminan lentos
 
@@ -48,4 +55,4 @@ Por eso, en cualquier proyecto bien hecho, el rendimiento es lo primero que se r
 
 ## En resumen
 
-Una web lenta pierde visitas, convierte menos y aparece más abajo en Google, todo al mismo tiempo, y lo hace de forma invisible. La buena noticia es que es de los problemas con mejor relación entre lo que cuesta resolverlo y lo que se recupera. Un buen punto de partida es medir cómo carga hoy el sitio: el número suele sorprender.
+Una web lenta pierde visitas, convierte menos y aparece más abajo en Google, todo al mismo tiempo, y lo hace de forma invisible. La buena noticia es que es de los problemas con mejor relación entre lo que cuesta resolverlo y lo que se recupera. Un buen punto de partida es [medir cómo carga hoy el sitio](/auditoria/): el diagnóstico devuelve esas tres métricas con datos de visitantes reales, es gratis y no pide registro. El número suele sorprender.
