@@ -337,6 +337,7 @@ export const es = {
     readingSuffix: "de lectura",
     back: "Volver al blog",
     postedOn: "Publicado el",
+    updatedOn: "Actualizado el",
     relatedTitle: "Servicio relacionado",
     ctaTitle: "¿Tienes un proyecto en mente?",
     ctaBody:

@@ -9,7 +9,9 @@ export const prerender = true;
 
 const t = getDict("es").blog;
 const posts = (await getCollection("blog", ({ data }) => data.lang === "es")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) =>
+    (b.data.updatedDate ?? b.data.pubDate).valueOf() -
+    (a.data.updatedDate ?? a.data.pubDate).valueOf(),
 );
 const alternates = {
   es: getRelativeLocaleUrl("es", "blog"),

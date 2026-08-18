@@ -7,6 +7,8 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
+    /** Set only on a real revision: it drives the visible date and dateModified. */
+    updatedDate: z.coerce.date().optional(),
     lang: z.enum(["es", "en"]),
     slug: z.string(),
     /** Shared key that pairs the ES and EN versions of the same article. */
