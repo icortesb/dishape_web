@@ -336,6 +336,7 @@ export const en = {
     readingSuffix: "read",
     back: "Back to blog",
     postedOn: "Published on",
+    updatedOn: "Updated on",
     relatedTitle: "Related service",
     ctaTitle: "Have a project in mind?",
     ctaBody:

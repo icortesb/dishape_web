@@ -2,11 +2,12 @@
 title: "Why a slow website is costing you sales"
 description: "Load speed isn't a technical detail: it defines how many visitors stay, how many buy, and where the site ranks on Google. The numbers and how to fix it."
 pubDate: 2026-06-04
+updatedDate: 2026-08-18
 lang: en
 slug: slow-website-costs-sales
 translationKey: speed-conversion
 category: "Performance"
-readingTime: "5 min"
+readingTime: "6 min"
 relatedService: web
 ---
 
@@ -20,9 +21,15 @@ And it works in reverse too: industry studies show that **every 0.1 second of sp
 
 ## Speed also defines your spot on Google
 
-There's a second, quieter effect. Google uses speed and loading experience (the so-called Core Web Vitals) as a ranking factor. A slow site doesn't just lose the people who arrive: it shows up lower in results, so fewer people arrive in the first place.
+There's a second, quieter effect. Google measures loading experience with three metrics, the Core Web Vitals, and uses them as a ranking signal:
 
-It's a loop: the site loads slowly, Google ranks it lower, it gets fewer visits, and the few it gets leave over the delay. Speed affects both ends of the funnel at once.
+- **LCP** (Largest Contentful Paint): how long the main element on screen takes to appear. Good: under 2.5 seconds.
+- **INP** (Interaction to Next Paint): how long the page takes to respond to a click or a tap. Good: under 200 milliseconds. It replaced the previous metric, FID, in March 2024, so a site tuned before that date may be passing something that is no longer measured.
+- **CLS** (Cumulative Layout Shift): how much the content moves while it loads, the button that jumps just as you reach for it. Good: under 0.1.
+
+Two details change how those numbers read. Google doesn't look at the average, it looks at the 75th percentile of real visits: passing means it loads well for 75% of visitors, not for the average one. And the ranking weight is more modest than it's usually sold as: it works as a tiebreaker between pages of similar relevance, it doesn't make up for content that fails to answer what the person searched for.
+
+Even so, the loop is real: the site loads slowly, it sits below an equivalent competitor, it gets fewer visits, and the few it gets leave over the delay. Speed affects both ends of the funnel at once.
 
 ## Why sites end up slow
 
@@ -48,4 +55,4 @@ That's why, on any well-built project, performance is the first thing solved, be
 
 ## In short
 
-A slow site loses visits, converts less and ranks lower on Google, all at the same time, and it does so invisibly. The good news is that it's one of the problems with the best ratio between what it costs to fix and what it recovers. A good starting point is to measure how the site loads today: the number tends to surprise.
+A slow site loses visits, converts less and ranks lower on Google, all at the same time, and it does so invisibly. The good news is that it's one of the problems with the best ratio between what it costs to fix and what it recovers. A good starting point is to [measure how the site loads today](/en/audit/): the diagnosis returns those three metrics with real-visitor data, it's free and it asks for no signup. The number tends to surprise.

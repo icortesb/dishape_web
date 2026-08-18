@@ -29,6 +29,7 @@ const alternates = {
 };
 const article = {
   publishedTime: post.data.pubDate.toISOString(),
+  modifiedTime: post.data.updatedDate?.toISOString(),
   headline: post.data.title,
 };
 ---

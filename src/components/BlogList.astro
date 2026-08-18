@@ -53,10 +53,11 @@ const dateLocale = lang === "es" ? "es-AR" : "en-US";
             </h2>
             <p class="text-sm leading-relaxed text-muted">{post.data.description}</p>
             <span class="mt-auto text-xs text-faint">
-              {post.data.pubDate.toLocaleDateString(dateLocale, {
+              {(post.data.updatedDate ?? post.data.pubDate).toLocaleDateString(dateLocale, {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
+                timeZone: "UTC",
               })}
             </span>
           </a>

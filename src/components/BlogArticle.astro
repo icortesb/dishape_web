@@ -19,6 +19,11 @@ const blogHome = getRelativeLocaleUrl(lang, "blog");
 const contact = `${getRelativeLocaleUrl(lang, "")}#contacto`;
 const related = getDict(lang).servicePages[post.data.relatedService];
 const relatedUrl = getRelativeLocaleUrl(lang, related.slug);
+
+// The revision date is the one that matters to the reader; fall back to the
+// original when the article has never been revised.
+const shownDate = post.data.updatedDate ?? post.data.pubDate;
+const dateLabel = post.data.updatedDate ? t.updatedOn : t.postedOn;
 ---
 
 <Navbar />
@@ -48,12 +53,15 @@ const relatedUrl = getRelativeLocaleUrl(lang, related.slug);
         </h1>
         <p class="text-lg leading-relaxed text-muted">{post.data.description}</p>
         <span class="text-sm text-faint">
-          {t.postedOn}{" "}
-          <time datetime={post.data.pubDate.toISOString()}>
-            {post.data.pubDate.toLocaleDateString(dateLocale, {
+          {dateLabel}{" "}
+          <time datetime={shownDate.toISOString()}>
+            {shownDate.toLocaleDateString(dateLocale, {
               year: "numeric",
               month: "long",
               day: "numeric",
+              // Frontmatter dates parse as midnight UTC: format them there too,
+              // or a UTC-3 build renders every post a day early.
+              timeZone: "UTC",
             })}
           </time>
         </span>
