@@ -36,3 +36,6 @@ pnpm-debug.log*
 
 # Local audit report store (AUDIT_DATA_DIR in dev)
 .audit-data/
+
+# Outbound prospect lists and their audits (personal data)
+prospects/
