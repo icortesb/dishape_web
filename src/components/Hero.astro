@@ -22,10 +22,16 @@ const t = getDict(getLang(Astro)).hero;
   >
     {/* copy */}
     <div class="flex flex-col items-start gap-7">
-      <span class="eyebrow reveal flex items-center gap-2">
+      {/* Visitors click the availability badge expecting it to lead somewhere
+          (Clarity: one session clicked it three times), so it does. */}
+      <a
+        href="#contacto"
+        data-cta="hero_badge"
+        class="eyebrow reveal flex items-center gap-2 transition-opacity hover:opacity-80"
+      >
         <span class="h-2 w-2 rounded-full bg-accent"></span>
         {t.badge}
-      </span>
+      </a>
       <h1
         class="reveal text-4xl font-bold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]"
       >
