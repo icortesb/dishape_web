@@ -39,3 +39,9 @@ pnpm-debug.log*
 
 # Outbound prospect lists and their audits (personal data)
 prospects/
+
+# Impeccable working files (captures, mocks, decision pages, hook cache)
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/hook.cache.json

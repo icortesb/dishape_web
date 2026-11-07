@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T00:00:00Z",
+  "title": "Design System: dishape",
+  "extensions": {
+    "colorMeta": {
+      "base": {
+        "role": "neutral",
+        "displayName": "Table Grey",
+        "canonical": "#ececec",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "card-hover": {
+        "role": "neutral",
+        "displayName": "Sheet Hover",
+        "canonical": "#fafafa",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "elevated": {
+        "role": "neutral",
+        "displayName": "Soft Fill",
+        "canonical": "#f2f2f2",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e3e3e3",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#111111",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Graphite Text",
+        "canonical": "#555555",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Pencil",
+        "canonical": "#6b6b6b",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Ember",
+        "canonical": "#c2410c",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-top": {
+        "role": "primary",
+        "displayName": "Brand Shape, Light",
+        "canonical": "#ff8a4c",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-left": {
+        "role": "primary",
+        "displayName": "Brand Shape, Core",
+        "canonical": "#ff5b1f",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-right": {
+        "role": "primary",
+        "displayName": "Brand Shape, Deep",
+        "canonical": "#c93d0a",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "danger": {
+        "role": "semantic",
+        "displayName": "Danger",
+        "canonical": "#b42318",
+        "tonalRamp": [
+          "#3b0b07",
+          "#6e160e",
+          "#b42318",
+          "#d63a2e",
+          "#f87171",
+          "#fca5a5",
+          "#fecaca",
+          "#fef2f2"
+        ]
+      },
+      "warn": {
+        "role": "semantic",
+        "displayName": "Warn",
+        "canonical": "#a15c07",
+        "tonalRamp": [
+          "#3a2103",
+          "#6b3e05",
+          "#a15c07",
+          "#d18a10",
+          "#fbbf24",
+          "#fcd34d",
+          "#fde68a",
+          "#fffbeb"
+        ]
+      },
+      "base-dark": {
+        "role": "neutral",
+        "displayName": "Table Grey (dark)",
+        "canonical": "#0c0c0c",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "card-dark": {
+        "role": "neutral",
+        "displayName": "Sheet (dark)",
+        "canonical": "#161616",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "card-hover-dark": {
+        "role": "neutral",
+        "displayName": "Sheet Hover (dark)",
+        "canonical": "#1b1b1b",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "elevated-dark": {
+        "role": "neutral",
+        "displayName": "Soft Fill (dark)",
+        "canonical": "#202020",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#262626",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink (dark)",
+        "canonical": "#ededed",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Graphite Text (dark)",
+        "canonical": "#a6a6a6",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "faint-dark": {
+        "role": "neutral",
+        "displayName": "Pencil (dark)",
+        "canonical": "#8c8c8c",
+        "tonalRamp": [
+          "#0c0c0c",
+          "#161616",
+          "#262626",
+          "#555555",
+          "#8c8c8c",
+          "#cfcfcf",
+          "#ececec",
+          "#ffffff"
+        ]
+      },
+      "accent-dark": {
+        "role": "primary",
+        "displayName": "Ember (dark)",
+        "canonical": "#ff8a4c",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-top-dark": {
+        "role": "primary",
+        "displayName": "Brand Shape, Light (dark)",
+        "canonical": "#ff6a2b",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-left-dark": {
+        "role": "primary",
+        "displayName": "Brand Shape, Core (dark)",
+        "canonical": "#d9480f",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "cube-right-dark": {
+        "role": "primary",
+        "displayName": "Brand Shape, Deep (dark)",
+        "canonical": "#a3360b",
+        "tonalRamp": [
+          "#3d1403",
+          "#6e2306",
+          "#a3360b",
+          "#c93d0a",
+          "#ff5b1f",
+          "#ff8a4c",
+          "#ffc3a1",
+          "#fff0e6"
+        ]
+      },
+      "danger-dark": {
+        "role": "semantic",
+        "displayName": "Danger (dark)",
+        "canonical": "#f87171",
+        "tonalRamp": [
+          "#3b0b07",
+          "#6e160e",
+          "#b42318",
+          "#d63a2e",
+          "#f87171",
+          "#fca5a5",
+          "#fecaca",
+          "#fef2f2"
+        ]
+      },
+      "warn-dark": {
+        "role": "semantic",
+        "displayName": "Warn (dark)",
+        "canonical": "#fbbf24",
+        "tonalRamp": [
+          "#3a2103",
+          "#6b3e05",
+          "#a15c07",
+          "#d18a10",
+          "#fbbf24",
+          "#fcd34d",
+          "#fde68a",
+          "#fffbeb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero sentence only, staggered indented lines."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "Items read as one staggered statement."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section h2."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Process step numbers only."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "List and card h3."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Intros and copy in muted."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "List explanations."
+      },
+      "article": {
+        "displayName": "Article",
+        "purpose": "Long-form blog prose."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Nav, form labels, footer links."
+      },
+      "board-label": {
+        "displayName": "Board Label",
+        "purpose": "Artboard name or back-link on the canvas above a sheet."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Geist Mono for source citations and figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "overlay",
+        "value": "0 8px 30px rgb(0 0 0 / 0.12)",
+        "purpose": "Floating consent banner only; artboards never carry a shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Every eased transition and entrance."
+      },
+      {
+        "name": "reveal-up",
+        "value": "0.9s ease-out-expo; translateY(14px) + blur(6px) to rest; 60ms stagger",
+        "purpose": "Hero entrance (CSS-only) and section reveals; reduced-motion gated."
+      },
+      {
+        "name": "mark-in",
+        "value": "disc scale 0.6→1 at 150ms, bar scaleY 0.2→1 from bottom at 350ms, 1s ease-out-expo",
+        "purpose": "Hero brand mark entrance."
+      },
+      {
+        "name": "press",
+        "value": "hover translateY(-1px), active scale(0.98), 0.25s",
+        "purpose": "Pill buttons."
+      },
+      {
+        "name": "shape-drift",
+        "value": "translateY(-6px), 0.9s ease-out-expo",
+        "purpose": "Brand shape on service sheet hover."
+      },
+      {
+        "name": "underline",
+        "value": "text-decoration-color 0.2s, 25% ink to ink",
+        "purpose": "Text link hover."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ],
+    "colorScheme": "Light by default; dark values (*-dark keys) apply under prefers-color-scheme: dark via the same CSS custom properties."
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink pill; the one action per view.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Agendar 10 min</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:999px;background:var(--color-ink,#111);color:var(--color-card,#fff);font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif;font-weight:500;font-size:15px;line-height:1;padding:.95rem 1.4rem;text-decoration:none;transition:transform .25s cubic-bezier(.16,1,.3,1),opacity .2s}.ds-btn:hover{transform:translateY(-1px)}.ds-btn:active{transform:scale(.98)}.ds-btn:focus-visible{outline:2px solid var(--color-accent,#c2410c);outline-offset:3px}"
+    },
+    {
+      "name": "Small Button",
+      "kind": "button",
+      "refersTo": "button-small",
+      "description": "Nav booking pill.",
+      "html": "<a class=\"ds-btn-sm\" href=\"#\">Agendar 10 min</a>",
+      "css": ".ds-btn-sm{display:inline-flex;align-items:center;border-radius:999px;background:var(--color-ink,#111);color:var(--color-card,#fff);font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif;font-weight:500;font-size:13px;line-height:1;padding:.6rem .95rem;text-decoration:none;transition:transform .25s cubic-bezier(.16,1,.3,1)}.ds-btn-sm:hover{transform:translateY(-1px)}.ds-btn-sm:active{transform:scale(.98)}.ds-btn-sm:focus-visible{outline:2px solid var(--color-accent,#c2410c);outline-offset:3px}"
+    },
+    {
+      "name": "Text Link",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Underlined secondary action beside a pill.",
+      "html": "<a class=\"ds-link\" href=\"#\">o escribinos por WhatsApp</a>",
+      "css": ".ds-link{color:var(--color-ink,#111);font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif;font-size:15px;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--color-ink,#111) 25%,transparent);text-underline-offset:4px;text-decoration-thickness:1px;transition:text-decoration-color .2s}.ds-link:hover{text-decoration-color:var(--color-ink,#111)}.ds-link:focus-visible{outline:2px solid var(--color-accent,#c2410c);outline-offset:3px;border-radius:4px}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Soft-fill input; turns to sheet with an ink border on focus.",
+      "html": "<label class=\"ds-field-label\">Nombre<input class=\"ds-field\" placeholder=\"Tu nombre\"></label>",
+      "css": ".ds-field-label{display:block;font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif;font-size:13px;color:var(--color-muted,#555)}.ds-field{display:block;margin-top:.5rem;width:100%;box-sizing:border-box;border-radius:6px;background:var(--color-elevated,#f2f2f2);border:1px solid transparent;padding:.8rem .9rem;font:inherit;font-size:15px;color:var(--color-ink,#111);caret-color:var(--color-accent,#c2410c);transition:border-color .2s,background .2s}.ds-field::placeholder{color:var(--color-faint,#6b6b6b)}.ds-field:hover{border-color:var(--color-line,#e3e3e3)}.ds-field:focus{outline:none;background:var(--color-card,#fff);border-color:var(--color-ink,#111)}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Sticky blurred canvas bar: mark, muted links, ink pill.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-mark\">dishape<span>.</span></span><span class=\"ds-nav-links\"><a href=\"#\">Servicios</a><a href=\"#\">Proceso</a><a href=\"#\">Contacto</a></span><a class=\"ds-nav-cta\" href=\"#\">Agendar 10 min</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px;padding:0 16px;background:color-mix(in srgb,var(--color-base,#ececec) 85%,transparent);backdrop-filter:blur(12px);font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif}.ds-nav-mark{font-size:17px;font-weight:500;letter-spacing:-.03em;color:var(--color-ink,#111)}.ds-nav-mark span{color:var(--color-accent,#c2410c)}.ds-nav-links{display:flex;gap:28px}.ds-nav-links a{font-size:13px;color:var(--color-muted,#555);text-decoration:none;transition:color .15s}.ds-nav-links a:hover{color:var(--color-ink,#111)}.ds-nav-links a:focus-visible,.ds-nav-cta:focus-visible{outline:2px solid var(--color-accent,#c2410c);outline-offset:3px}.ds-nav-cta{border-radius:999px;background:var(--color-ink,#111);color:var(--color-card,#fff);font-size:13px;font-weight:500;padding:.6rem .95rem;text-decoration:none}"
+    },
+    {
+      "name": "Artboard",
+      "kind": "card",
+      "refersTo": "artboard",
+      "description": "Borderless sheet on the canvas with one cropped flat shape.",
+      "html": "<div class=\"ds-canvas\"><span class=\"ds-board-label\">IA aplicada</span><section class=\"ds-board\"><span class=\"ds-shape\"></span><h2>Datos que se vuelven decisiones</h2><p>Texto de apoyo en gris, ancho contenido.</p></section></div>",
+      "css": ".ds-canvas{background:var(--color-base,#ececec);padding:24px;font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif}.ds-board-label{display:block;margin-bottom:.5rem;font-size:11px;line-height:1.4;color:var(--color-faint,#6b6b6b)}.ds-board{position:relative;overflow:hidden;background:var(--color-card,#fff);border-radius:4px;padding:40px}.ds-shape{position:absolute;top:-80px;right:-60px;width:220px;height:220px;border-radius:999px;background:var(--color-cube-top,#ff8a4c)}.ds-board h2{position:relative;margin:0 0 16px;max-width:28rem;font-size:2.25rem;line-height:1.08;font-weight:500;letter-spacing:-.035em;color:var(--color-ink,#111)}.ds-board p{position:relative;margin:0;max-width:28rem;font-size:15px;line-height:1.6;color:var(--color-muted,#555)}"
+    },
+    {
+      "name": "Ruled List",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Title and body rows under a hairline; no icons.",
+      "html": "<ul class=\"ds-rows\"><li><h3>Automatizar reportes</h3><p>Lo que hoy se arma a mano, generado solo.</p></li><li><h3>Asistentes internos</h3><p>Respuestas sobre tus propios documentos.</p></li></ul>",
+      "css": ".ds-rows{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;column-gap:40px;font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif}.ds-rows li{border-top:1px solid var(--color-line,#e3e3e3);padding:24px 0;display:flex;flex-direction:column;gap:8px}.ds-rows h3{margin:0;font-size:17px;line-height:1.375;font-weight:500;letter-spacing:-.015em;color:var(--color-ink,#111)}.ds-rows p{margin:0;font-size:14px;line-height:1.625;color:var(--color-muted,#555)}"
+    },
+    {
+      "name": "Tick Ruler",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Position indicator: ticks with a sliding window.",
+      "html": "<div class=\"ds-ruler\"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b></b></div>",
+      "css": ".ds-ruler{position:relative;display:flex;align-items:center;justify-content:space-between;width:192px;height:16px}.ds-ruler i{width:1px;height:10px;background:color-mix(in srgb,var(--color-faint,#6b6b6b) 50%,transparent)}.ds-ruler b{position:absolute;top:0;left:0;width:24px;height:16px;box-sizing:border-box;border-radius:2px;border:1px solid color-mix(in srgb,var(--color-ink,#111) 60%,transparent);transform:translateX(56px);transition:transform .3s cubic-bezier(.16,1,.3,1)}.ds-ruler:hover b{transform:translateX(120px)}"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "status-chip-fail",
+      "description": "Audit check status; danger and warn variants.",
+      "html": "<span class=\"ds-chip ds-chip-fail\">Falla</span> <span class=\"ds-chip ds-chip-warn\">Mejorable</span>",
+      "css": ".ds-chip{display:inline-block;border-radius:999px;border:1px solid;padding:2px 10px;font-family:'Geist Variable',ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:500}.ds-chip-fail{color:var(--color-danger,#b42318);border-color:color-mix(in srgb,var(--color-danger,#b42318) 30%,transparent);background:color-mix(in srgb,var(--color-danger,#b42318) 10%,transparent)}.ds-chip-warn{color:var(--color-warn,#a15c07);border-color:color-mix(in srgb,var(--color-warn,#a15c07) 30%,transparent);background:color-mix(in srgb,var(--color-warn,#a15c07) 10%,transparent)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Artboard Table",
+    "overview": "**Creative North Star: \"The Artboard Table\"**\n\nThe site is a grey work table with white sheets laid on it. Each section is one artboard: a borderless sheet with a barely-there 4px corner, no shadow, no outline. Type carries the page: Geist at weight 500 with tight negative tracking, set large and allowed to step in and out across lines like a sentence being spoken. Each sheet gets exactly one colour moment, a flat geometric shape in the brand's orange tones, usually oversized and cropped by the sheet's edge. Everything else is ink on white, or white on graphite in dark mode.\n\nThe world follows the visitor's system preference: a light table (#ececec under white) and a dark table (#0c0c0c under graphite #161616), with the orange tones re-tuned per mode. Density is calm: sheets are padded generously (56px at desktop), separated by 64px of bare canvas, held to a 1240px shell. Lists and data read as ruled text, hairline above each row, never as tiles or icon cards.\n\nThe mark is a lowercase \"d\" built from two flat shapes, a disc and a rounded bar, with its counter cut as a true transparent hole so it sits on any ground. The same construction, oversized, is the hero artboard's shape.",
+    "keyCharacteristics": [
+      "Grey canvas, borderless artboards (4px radius), depth by tone only",
+      "Geist Variable at 500 for every heading, tracking between -0.015em and -0.05em",
+      "One flat orange shape per artboard, cropped by the sheet edge",
+      "Ink pill buttons, underlined text links, soft-fill fields",
+      "Tick ruler as position indicator (page scroll in the hero, reel scroll under services)",
+      "Light and dark by `prefers-color-scheme`, no toggle"
+    ],
+    "rules": [
+      {
+        "name": "The One Shape Rule",
+        "body": "Each artboard carries one flat shape in a brand shape tone and no other colour moment. Shapes are solid fills (or one thick ring), never gradients, never outlined.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Not Orange Rule",
+        "body": "Actions are ink. Orange never fills a button or colours body copy; it is shape, mark and focus.",
+        "section": "colors"
+      },
+      {
+        "name": "The Medium Ceiling Rule",
+        "body": "Headings top out at 500. Hierarchy comes from size and tracking, not bold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Means Data Rule",
+        "body": "Geist Mono is for sources, figures and code only; never headings, labels or prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tone Is The Edge Rule",
+        "body": "A sheet is defined by its fill against the canvas. Don't add a border or shadow to make it read.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put each section on its own borderless artboard (4px radius) over the grey canvas, 64px apart.",
+      "Do give each artboard exactly one flat shape in a brand shape tone, oversized and cropped by the sheet edge.",
+      "Do set every heading in Geist at 500 with negative tracking that tightens as size grows (-0.015em at 17px to -0.04em at display).",
+      "Do use the ink pill for the action and an underlined text link for the alternative beside it.",
+      "Do list content as ruled text rows with a hairline above each.",
+      "Do tune any new shape tone for both modes: vivid in light so ink reads on it, deeper in dark so white reads on it.",
+      "Do keep numerals limited to sequences that are real sequences (the process steps) and to data."
+    ],
+    "donts": [
+      "Don't put an eyebrow, kicker or numbered label above a section heading; the heading stands alone, with only an optional artboard name on the canvas above the sheet.",
+      "Don't add borders or shadows to artboards, or a second colour moment to a sheet.",
+      "Don't fill buttons or colour body text with orange.",
+      "Don't set headings bolder than 500.",
+      "Don't use Geist Mono outside sources, figures and code.",
+      "Don't draw icon tiles or icon-led card grids; icons are small Lucide line SVGs on links and controls only.",
+      "Don't use danger or warn outside the audit tool."
+    ]
+  }
+}
