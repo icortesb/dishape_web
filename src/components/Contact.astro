@@ -14,14 +14,9 @@ const row =
 ---
 
 <Board id="contacto" class="mt-16" inner="relative overflow-hidden p-6 sm:p-10 lg:p-14">
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute -right-20 -bottom-20 hidden h-56 w-56 rounded-full bg-cube-left lg:block"
-  >
-  </div>
   <div class="relative grid gap-14 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
     <div class="flex flex-col gap-10">
-      <SectionHeader title={t.title}>
+      <SectionHeader title={t.title} shape="half">
         <p class="text-[15px] leading-relaxed text-muted">{t.intro}</p>
       </SectionHeader>
 

@@ -7,13 +7,8 @@ const t = getDict(getLang(Astro)).process;
 ---
 
 <Board id="proceso" class="mt-16" inner="relative overflow-hidden p-6 sm:p-10 lg:p-14">
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute -top-10 right-10 hidden h-28 w-28 bg-cube-right sm:block lg:right-16 lg:h-36 lg:w-36"
-  >
-  </div>
   <div class="relative flex flex-col gap-14">
-    <SectionHeader title={t.title}>
+    <SectionHeader title={t.title} shape="square">
       <p class="text-[15px] leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
 

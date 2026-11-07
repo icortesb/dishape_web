@@ -1,13 +1,41 @@
 ---
 interface Props {
   title: string;
+  /** A flat shape set behind the heading's tail, so the type crosses it. */
+  shape?: "disc" | "square" | "half";
 }
-const { title } = Astro.props;
+const { title, shape } = Astro.props;
+// The shape hangs off the last word, wherever the line breaks.
+const cut = title.lastIndexOf(" ");
+const head = cut > 0 ? title.slice(0, cut + 1) : "";
+const last = cut > 0 ? title.slice(cut + 1) : title;
+// Light uses the vivid tone (ink reads on it); dark the deep one (white reads on it).
+const tone = "bg-cube-top dark:bg-cube-right";
+const shapes = {
+  disc: "h-[1.9em] w-[1.9em] rounded-full",
+  square: "h-[1.6em] w-[1.6em]",
+  half: "h-[1em] w-[2em] rounded-t-full",
+};
 ---
 
 <div class="reveal flex max-w-2xl flex-col items-start gap-4">
-  <h2 class="text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.08] font-medium tracking-[-0.035em] text-ink">
-    {title}
+  <h2 class="relative isolate text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.08] font-medium tracking-[-0.035em] text-ink">
+    {
+      shape ? (
+        <>
+          {head}
+          <span class="relative inline-block">
+            {last}
+            <span
+              aria-hidden="true"
+              class={`absolute right-[-0.9em] bottom-[-0.25em] -z-10 ${tone} ${shapes[shape]}`}
+            />
+          </span>
+        </>
+      ) : (
+        title
+      )
+    }
   </h2>
   <slot />
 </div>

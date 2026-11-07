@@ -8,13 +8,8 @@ const groups = t.groups as readonly (readonly [string, readonly string[]])[];
 ---
 
 <Board id="stack" class="mt-16" inner="relative overflow-hidden p-6 sm:p-10 lg:p-14">
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute -bottom-32 -left-32 hidden h-64 w-64 rounded-full bg-cube-top lg:block"
-  >
-  </div>
   <div class="relative grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-    <SectionHeader title={t.title}>
+    <SectionHeader title={t.title} shape="disc">
       <p class="text-[15px] leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
     <dl class="flex flex-col">
