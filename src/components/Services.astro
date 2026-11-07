@@ -1,6 +1,6 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
-import Card from "./Card.astro";
+import { Icon } from "astro-icon/components";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLang, getDict } from "../i18n";
 
@@ -10,36 +10,171 @@ const serviceLinks = Object.values(getDict(lang).servicePages).map((p) => ({
   label: p.navLabel,
   href: getRelativeLocaleUrl(lang, p.slug),
 }));
+const ticks = 48;
+const prevLabel = lang === "en" ? "Previous service" : "Servicio anterior";
+const nextLabel = lang === "en" ? "Next service" : "Servicio siguiente";
 ---
 
-<section id="servicios" class="scroll-mt-20 border-b border-line bg-surface">
-  <div class="shell flex flex-col gap-14 py-24">
-    <SectionHeader eyebrow={t.eyebrow} title={t.title}>
-      <p class="text-lg leading-relaxed text-muted">{t.intro}</p>
-    </SectionHeader>
-
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        t.items.map(([icon, title, body]) => (
-          <Card icon={icon} title={title}>
-            {body}
-          </Card>
-        ))
-      }
-    </div>
-
-    <div class="reveal flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-      <span class="text-faint">{t.more}</span>
-      {
-        serviceLinks.map((link) => (
-          <a
-            href={link.href}
-            class="font-medium text-accent-light transition-colors hover:text-ink"
-          >
-            {link.label}
-          </a>
-        ))
-      }
+<section id="servicios" class="mt-16 scroll-mt-20">
+  <div class="shell">
+    <div class="flex flex-col justify-between gap-6 pt-4 lg:flex-row lg:items-end">
+      <SectionHeader title={t.title}>
+        <p class="text-[15px] leading-relaxed text-muted">{t.intro}</p>
+      </SectionHeader>
+      <div class="reveal flex flex-wrap gap-x-5 gap-y-2 text-[13px] lg:justify-end">
+        <span class="text-faint">{t.more}</span>
+        {serviceLinks.map((link) => <a href={link.href} class="link">{link.label}</a>)}
+      </div>
     </div>
   </div>
+
+  <div
+    class="reel mt-8 flex snap-x snap-proximity gap-4 overflow-x-auto pb-6"
+    data-reel
+    tabindex="0"
+    aria-label={t.title}
+  >
+    {
+      t.items.map(([, title, body], i) => (
+        <article class="board group relative flex h-[26rem] w-[19rem] shrink-0 snap-start flex-col overflow-hidden p-6 sm:w-[21rem]">
+          <div class="relative z-10 flex flex-col gap-2">
+            <h3 class="text-[17px] leading-snug font-medium tracking-[-0.015em] text-ink">{title}</h3>
+            <p class="text-[13.5px] leading-relaxed text-muted">{body}</p>
+          </div>
+          <span aria-hidden="true" class={`shape shape-${i % 6}`} />
+        </article>
+      ))
+    }
+  </div>
+
+  {/* Tick ruler: the lit window tracks the reel's scroll position. */}
+  <div class="shell flex items-center justify-center gap-5">
+    <button type="button" data-reel-step="-1" aria-label={prevLabel} class="reel-btn">
+      <Icon name="lucide:arrow-left" class="h-4 w-4" />
+    </button>
+    <div class="ruler relative flex h-4 w-48 items-center justify-between" data-ruler aria-hidden="true">
+      {Array.from({ length: ticks }, () => <span class="h-2.5 w-px bg-faint/50" />)}
+      <span
+        class="absolute top-0 left-0 h-4 w-6 rounded-[2px] border border-ink/60 transition-transform duration-300 ease-[var(--ease-out-expo)]"
+        data-ruler-window
+      >
+      </span>
+    </div>
+    <button type="button" data-reel-step="1" aria-label={nextLabel} class="reel-btn">
+      <Icon name="lucide:arrow-right" class="h-4 w-4" />
+    </button>
+  </div>
 </section>
+
+<style>
+  .reel {
+    scroll-padding-inline: max(1rem, calc((100vw - 1240px) / 2 + 2rem));
+    padding-inline: max(1rem, calc((100vw - 1240px) / 2 + 2rem));
+    scrollbar-width: none;
+  }
+  @media (max-width: 767px) {
+    .reel {
+      scroll-padding-inline: 1rem;
+      padding-inline: 1rem;
+    }
+  }
+  .reel::-webkit-scrollbar {
+    display: none;
+  }
+  /* One flat shape per sheet, each a different form, anchored low. */
+  .shape {
+    position: absolute;
+    pointer-events: none;
+    transition: transform 0.9s var(--ease-out-expo);
+  }
+  .group:hover .shape {
+    transform: translateY(-6px);
+  }
+  .shape-0 {
+    width: 15rem;
+    height: 15rem;
+    right: -3rem;
+    bottom: -4rem;
+    border-radius: 999px;
+    background: var(--color-cube-top);
+  }
+  .shape-1 {
+    width: 9rem;
+    height: 9rem;
+    left: 1.5rem;
+    bottom: 1.5rem;
+    background: var(--color-cube-right);
+  }
+  .shape-2 {
+    width: 18rem;
+    height: 9rem;
+    left: 50%;
+    bottom: 0;
+    translate: -50% 0;
+    border-radius: 9rem 9rem 0 0;
+    background: var(--color-cube-left);
+  }
+  .shape-3 {
+    width: 12rem;
+    height: 12rem;
+    right: 0;
+    bottom: 0;
+    border-radius: 12rem 0 0 0;
+    background: var(--color-cube-top);
+  }
+  .shape-4 {
+    width: 6rem;
+    height: 14rem;
+    right: 2.5rem;
+    bottom: -2rem;
+    border-radius: 999px;
+    background: var(--color-cube-right);
+  }
+  .shape-5 {
+    width: 11rem;
+    height: 11rem;
+    left: -2rem;
+    bottom: -2rem;
+    border-radius: 999px;
+    border: 2.25rem solid var(--color-cube-left);
+  }
+  .reel-btn {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    color: var(--color-ink);
+    background: var(--color-card);
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .reel-btn:hover {
+    transform: scale(1.06);
+  }
+  .reel-btn:active {
+    transform: scale(0.94);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-reel]").forEach((reel) => {
+    const ruler = reel.parentElement?.querySelector<HTMLElement>("[data-ruler]");
+    const win = ruler?.querySelector<HTMLElement>("[data-ruler-window]");
+    if (!ruler || !win) return;
+    const update = () => {
+      const max = reel.scrollWidth - reel.clientWidth;
+      const p = max > 0 ? reel.scrollLeft / max : 0;
+      win.style.transform = `translateX(${p * (ruler.clientWidth - win.offsetWidth)}px)`;
+    };
+    reel.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+
+    const step = () => (reel.querySelector("article")?.offsetWidth ?? 320) + 16;
+    reel.parentElement?.querySelectorAll<HTMLButtonElement>("[data-reel-step]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        reel.scrollBy({ left: Number(btn.dataset.reelStep) * step(), behavior: "smooth" });
+      });
+    });
+  });
+</script>

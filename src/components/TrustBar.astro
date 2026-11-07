@@ -1,31 +1,40 @@
 ---
+import Board from "./Board.astro";
 import { getLang, getDict } from "../i18n";
 const t = getDict(getLang(Astro)).trust;
 ---
 
-<section class="border-b border-line bg-surface">
-  <div class="shell flex flex-col gap-7 py-10">
-    <span class="eyebrow reveal">{t.caption}</span>
-    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+<Board class="mt-16" inner="relative overflow-hidden p-6 sm:p-10 lg:p-14">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute right-[8%] -bottom-24 hidden h-48 w-48 rounded-full bg-cube-left lg:block"
+  >
+  </div>
+  <div class="relative grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
+    <ul class="flex flex-col">
       {
         t.metrics.map((m) => (
-          <div class="reveal flex flex-col gap-1.5">
-            <span
-              class="text-3xl font-bold text-accent-light"
-              data-count={m.count}
-              data-prefix={m.prefix}
-              data-suffix={m.suffix}
-            >
-              {m.prefix}
-              {m.count}
-              {m.suffix}
-            </span>
-            <span class="text-xs leading-snug text-faint">{m.label}</span>
-          </div>
+          <li class="reveal border-t border-line py-5 first:border-t-0 first:pt-0">
+            <p class="text-[clamp(1.25rem,2.2vw,1.75rem)] leading-[1.2] font-medium tracking-[-0.025em] text-muted">
+              <span
+                class="text-ink tabular-nums"
+                data-count={m.count}
+                data-prefix={m.prefix}
+                data-suffix={m.suffix}
+              >
+                {m.prefix}
+                {m.count}
+                {m.suffix}
+              </span>{" "}
+              {m.label}
+            </p>
+          </li>
         ))
       }
+    </ul>
+    <div class="reveal flex flex-col gap-5 lg:max-w-sm">
+      <p class="text-[clamp(1.05rem,1.6vw,1.25rem)] leading-[1.45] tracking-[-0.01em] text-ink">{t.stance}</p>
+      <span class="font-mono text-[11px] text-faint">{t.sources}</span>
     </div>
-    <p class="reveal max-w-2xl text-sm leading-relaxed text-muted">{t.stance}</p>
-    <span class="reveal font-mono text-[11px] text-faint/70">{t.sources}</span>
   </div>
-</section>
+</Board>

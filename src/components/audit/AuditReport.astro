@@ -44,7 +44,7 @@ const audited = new Date(record.createdAt).toLocaleDateString(
 <main class="shell flex flex-col gap-16 pb-20 pt-12" data-audit-id={record.id}>
   <header class="flex flex-col gap-6">
     <p class="text-sm text-faint">{t.auditedOn} {audited}</p>
-    <h1 class="text-4xl font-semibold text-ink">{host}</h1>
+    <h1 class="text-4xl font-medium tracking-[-0.02em] text-ink">{host}</h1>
     <ScoreCards
       seo={seo}
       social={social}

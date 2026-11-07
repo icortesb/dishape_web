@@ -1,6 +1,6 @@
 ---
-import "@fontsource-variable/inter";
-import "@fontsource-variable/jetbrains-mono";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
 import "../styles/global.css";
 import Seo from "../components/Seo.astro";
 import Analytics from "../components/Analytics.astro";
@@ -36,8 +36,10 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="theme-color" content="#ececec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)" />
 
     <script is:inline>
       // Remember the visitor's current language so nginx can route them

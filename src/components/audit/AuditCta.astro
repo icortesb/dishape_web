@@ -20,8 +20,9 @@ const clean = problemCount === 0;
 const single = problemCount === 1;
 ---
 
-<aside class="rounded-2xl border border-accent/25 bg-accent/[0.06] p-8">
-  <h2 class="text-2xl font-semibold text-ink">
+<aside class="board relative overflow-hidden p-6 sm:p-10">
+  <div aria-hidden="true" class="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-cube-top"></div>
+  <h2 class="relative max-w-xl text-[clamp(1.4rem,2.6vw,2rem)] leading-[1.1] font-medium tracking-[-0.03em] text-ink">
     {
       clean
         ? t.titleClean
@@ -30,13 +31,13 @@ const single = problemCount === 1;
           : t.title.replace("{count}", String(problemCount))
     }
   </h2>
-  <p class="mt-3 max-w-2xl text-muted">
+  <p class="relative mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
     {clean ? t.bodyClean : single ? t.bodyOne : t.body}
   </p>
   <a
     href={href}
     data-cta={location}
-    class="mt-6 inline-block rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+    class="btn relative mt-6"
   >
     {t.button}
   </a>

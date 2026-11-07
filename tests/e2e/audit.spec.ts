@@ -788,7 +788,7 @@ test.describe("landing page", () => {
     // The check count comes from the registry, not from a hand-typed number —
     // and the registry excludes performance, so the eyebrow has to say so
     // rather than appear to count the third card in the grid below it.
-    expect(text).toMatch(/\d+ CHEQUEOS \+ RENDIMIENTO/);
+    expect(text).toMatch(/\d+ chequeos \+ rendimiento/i);
     expect(text).not.toMatch(/\{\w+\}/);
   });
 
@@ -885,7 +885,7 @@ test.describe("landing page", () => {
       "https://dishape.dev/auditoria/",
     );
     const text = (await page.locator("main").textContent()) ?? "";
-    expect(text).toMatch(/\d+ CHECKS \+ PERFORMANCE/);
+    expect(text).toMatch(/\d+ checks \+ performance/i);
     expect(text).not.toMatch(/\{\w+\}/);
   });
 });

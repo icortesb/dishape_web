@@ -1,13 +1,13 @@
 ---
 interface Props {
-  eyebrow: string;
   title: string;
 }
-const { eyebrow, title } = Astro.props;
+const { title } = Astro.props;
 ---
 
-<div class="reveal flex max-w-3xl flex-col items-start gap-4">
-  <span class="eyebrow">{eyebrow}</span>
-  <h2 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl">{title}</h2>
+<div class="reveal flex max-w-2xl flex-col items-start gap-4">
+  <h2 class="text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.08] font-medium tracking-[-0.035em] text-ink">
+    {title}
+  </h2>
   <slot />
 </div>

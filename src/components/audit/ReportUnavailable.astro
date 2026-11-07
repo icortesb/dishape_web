@@ -17,12 +17,12 @@ const auditPath = lang === "en" ? "audit" : "auditoria";
     into the site that every other page has. */}
 <Navbar />
 <main class="shell flex min-h-[60vh] flex-col items-start justify-center gap-6 py-20">
-  <h1 class="text-3xl font-semibold text-ink">{t.expiredTitle}</h1>
+  <h1 class="text-3xl font-medium tracking-[-0.02em] text-ink">{t.expiredTitle}</h1>
   <p class="max-w-xl text-muted">{t.expiredBody}</p>
   <a
     href={getRelativeLocaleUrl(lang, auditPath)}
     data-cta="audit_report_expired"
-    class="rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
+    class="btn"
   >
     {t.reAudit}
   </a>

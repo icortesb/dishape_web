@@ -93,9 +93,9 @@ if (form) {
   const setStatus = (text: string, kind: "ok" | "err" | "pending") => {
     if (!status) return;
     status.textContent = text;
-    status.classList.remove("hidden", "text-accent-light", "text-red-400", "text-muted");
+    status.classList.remove("hidden", "text-accent-light", "text-danger", "text-muted");
     status.classList.add(
-      kind === "ok" ? "text-accent-light" : kind === "err" ? "text-red-400" : "text-muted",
+      kind === "ok" ? "text-accent-light" : kind === "err" ? "text-danger" : "text-muted",
     );
   };
 

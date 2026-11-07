@@ -31,17 +31,17 @@ const t = getDict(lang).audit;
       autocapitalize="none"
       spellcheck="false"
       placeholder={t.hero.placeholder}
-      class="w-full rounded-lg border border-line bg-card px-4 py-3.5 text-sm text-ink placeholder:text-faint transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+      class="field"
     />
     <button
       type="submit"
       data-cta="audit_landing"
-      class="shrink-0 rounded-lg bg-accent px-6 py-3.5 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+      class="shrink-0 btn"
     >
       {t.hero.submit}
     </button>
   </div>
 
-  <p data-audit-error role="alert" class="hidden text-sm text-red-400"></p>
+  <p data-audit-error role="alert" class="hidden text-sm text-danger"></p>
   <p class="text-xs text-faint">{t.hero.disclaimer}</p>
 </form>

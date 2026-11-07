@@ -16,14 +16,14 @@ const mb = (v: number | null) => (v === null ? "—" : `${(v / 1024 / 1024).toFi
 
 <section class="flex flex-col gap-5">
   <header>
-    <h2 class="text-2xl font-semibold text-ink">{t.categories.perf}</h2>
+    <h2 class="text-2xl font-medium tracking-[-0.02em] text-ink">{t.categories.perf}</h2>
     <p class="mt-1 text-muted">{t.categoryIntro.perf}</p>
   </header>
 
   {
     !vitals && !error && (
       <div
-        class="rounded-xl border border-line bg-card p-6"
+        class="board p-6"
         data-vitals-pending
         data-unavailable={t.vitalsUnavailable}
       >
@@ -35,7 +35,7 @@ const mb = (v: number | null) => (v === null ? "—" : `${(v / 1024 / 1024).toFi
 
   {
     !vitals && error && (
-      <p class="rounded-xl border border-line bg-card p-6 text-muted">
+      <p class="board p-6 text-muted">
         {t.vitalsUnavailable}
       </p>
     )
@@ -44,8 +44,8 @@ const mb = (v: number | null) => (v === null ? "—" : `${(v / 1024 / 1024).toFi
   {
     vitals && (
       <div class="grid gap-4 sm:grid-cols-2">
-        <div class="rounded-xl border border-line bg-card p-5">
-          <p class="text-xs uppercase tracking-wide text-faint">{t.labTitle}</p>
+        <div class="board p-5">
+          <p class="text-[12px] text-faint">{t.labTitle}</p>
           <dl class="mt-3 grid gap-2 text-sm">
             <div class="flex justify-between">
               <dt class="text-muted">LCP</dt>
@@ -70,8 +70,8 @@ const mb = (v: number | null) => (v === null ? "—" : `${(v / 1024 / 1024).toFi
           </dl>
         </div>
 
-        <div class="rounded-xl border border-line bg-card p-5">
-          <p class="text-xs uppercase tracking-wide text-faint">{t.fieldTitle}</p>
+        <div class="board p-5">
+          <p class="text-[12px] text-faint">{t.fieldTitle}</p>
           {vitals.field ? (
             <dl class="mt-3 grid gap-2 text-sm">
               <div class="flex justify-between">

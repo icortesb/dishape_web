@@ -17,23 +17,19 @@ export const es = {
     book: "Agendar 10 min",
   },
   hero: {
-    badge: "DISPONIBLE PARA NUEVOS PROYECTOS",
-    title:
-      "La misma persona que diseña tu web la programa, la publica y la mantiene.",
-    subtitle:
-      "Diseño, desarrollo, infraestructura y analítica en un solo lugar. Sin repartir el proyecto entre varios proveedores ni pagar el margen de cada intermediario.",
-    ctaPrimary: "Hablemos de tu proyecto",
-    ctaSecondary: "Ver servicios",
-    panelFile: "flujo.ts",
-    panelComment: "// las piezas que resuelvo en cada proyecto",
-    flow: [
-      ["diseño", "interfaces UI/UX"],
-      ["desarrollo", "frontend + backend"],
-      ["datos", "SQL / NoSQL"],
-      ["infra", "deploy · hosting · mails"],
-      ["analítica", "GA4 / GTM"],
-      ["conversión", "SEO · CRO · performance"],
+    badge: "Disponible para nuevos proyectos",
+    // Una línea por renglón; el hero las escalona.
+    lines: [
+      "Sitios web rápidos,",
+      "bien diseñados",
+      "y fáciles de encontrar,",
+      "para profesionales",
+      "y negocios.",
     ],
+    subtitle:
+      "Diseño, desarrollo, servidor y analítica a cargo de la misma persona, que además mantiene el sitio después de publicarlo.",
+    ctaPrimary: "Agendar 10 min",
+    ctaSecondary: "Escribir por WhatsApp",
   },
   trust: {
     // Datos de industria con fuente — usados como lente diagnóstica, no como resultados propios.
@@ -50,7 +46,7 @@ export const es = {
     sources: "Fuentes: Google · Deloitte · BrightEdge",
   },
   value: {
-    eyebrow: "01 / TODO EN UNO",
+    eyebrow: "Cómo se trabaja",
     title: "Un solo interlocutor para todo el proyecto.",
     intro:
       "Coordinar diseñador, programador, administrador de servidores y agencia por separado cuesta tiempo, y el margen de cada uno se suma a la factura. Acá hay una sola persona que domina todas las piezas y responde por cómo encajan entre sí.",
@@ -62,7 +58,7 @@ export const es = {
     ],
   },
   services: {
-    eyebrow: "02 / SERVICIOS",
+    eyebrow: "Servicios",
     title: "Servicios",
     intro: "Todo lo que un proyecto necesita para funcionar bien y convertir visitas en clientes.",
     more: "Páginas dedicadas:",
@@ -76,7 +72,7 @@ export const es = {
     ],
   },
   ai: {
-    eyebrow: "03 / IA & AUTOMATIZACIÓN",
+    eyebrow: "IA y automatización",
     title: "IA aplicada a problemas concretos, no a la moda",
     intro:
       "Inteligencia artificial puesta donde reduce trabajo manual o mejora la atención: respuestas a toda hora, procesos que corren solos y decisiones apoyadas en datos. Solo donde hay un problema real que resolver.",
@@ -88,7 +84,7 @@ export const es = {
     ],
   },
   process: {
-    eyebrow: "04 / PROCESO",
+    eyebrow: "Proceso",
     title: "Cómo trabajo",
     intro: "Un proceso claro y predecible, con un precio cerrado antes de empezar.",
     steps: [
@@ -99,7 +95,7 @@ export const es = {
     ],
   },
   stack: {
-    eyebrow: "05 / STACK",
+    eyebrow: "Stack",
     title: "Con qué trabajo",
     intro:
       "Cada capa elegida por una razón, no por moda. Esto es lo que corro en producción.",
@@ -112,7 +108,7 @@ export const es = {
     ],
   },
   results: {
-    eyebrow: "06 / RESULTADOS",
+    eyebrow: "Beneficios",
     title: "Beneficios para tu negocio",
     intro:
       "La parte que se nota en el negocio: que el sitio cargue, que aparezca en Google y que la venta se concrete sin fricción.",
@@ -127,7 +123,7 @@ export const es = {
     ],
   },
   contact: {
-    eyebrow: "07 / CONTACTO",
+    eyebrow: "Contacto",
     title: "¿Listo para empezar tu proyecto?",
     intro:
       "Con una descripción breve del proyecto, devuelvo una propuesta clara en menos de 24 horas.",
@@ -167,6 +163,7 @@ export const es = {
     rights: "Todos los derechos reservados.",
     sectionsTitle: "Secciones",
     servicesTitle: "Servicios",
+    elsewhereTitle: "En otros lados",
   },
   servicePages: {
     web: {
@@ -175,7 +172,7 @@ export const es = {
       metaTitle: "Desarrollo web a medida para empresas | dishape",
       metaDescription:
         "Sitios y aplicaciones web a medida, diseñados, programados y mantenidos por una sola persona. Código propio, rápido y pensado para convertir visitas en clientes.",
-      eyebrow: "DESARROLLO WEB",
+      eyebrow: "Desarrollo web",
       h1: "Desarrollo web a medida, de la primera línea de código al deploy.",
       subtitle:
         "Sitios y aplicaciones hechos para tu negocio, no adaptados de una plantilla. La misma persona los diseña, los programa, los publica y los mantiene.",
@@ -183,7 +180,7 @@ export const es = {
       ctaSecondary: "Ver todo lo que hago",
       back: "Volver al inicio",
       includes: {
-        eyebrow: "QUÉ INCLUYE",
+        eyebrow: "Qué incluye",
         title: "Todo lo que necesita el proyecto, en un solo lugar",
         intro:
           "Desde el diseño hasta el servidor donde corre. Una sola persona responde por cómo encaja cada pieza.",
@@ -197,7 +194,7 @@ export const es = {
         ],
       },
       why: {
-        eyebrow: "POR QUÉ IMPORTA",
+        eyebrow: "Por qué importa",
         title: "La velocidad no es un detalle técnico, es conversión",
         body:
           "El 53 % de los visitantes abandona un sitio que tarda más de 3 segundos en cargar, y cada 0,1 s de mejora puede sumar hasta un 8 % de conversión. Por eso el rendimiento es lo primero que resuelvo, antes que cualquier otra capa.",
@@ -214,7 +211,7 @@ export const es = {
       metaTitle: "Tienda online a medida | dishape",
       metaDescription:
         "Tiendas online propias, rápidas y listas para vender. Pagos con Stripe y MercadoPago, integraciones y analítica, desarrolladas y mantenidas por una sola persona.",
-      eyebrow: "TIENDA ONLINE",
+      eyebrow: "Tienda online",
       h1: "Una tienda online propia, lista para vender sin fricción.",
       subtitle:
         "Tu propio e-commerce, no un alquiler en una plataforma que cobra comisión por venta. Rápido, integrado con tus medios de pago y pensado para que la compra se concrete.",
@@ -222,7 +219,7 @@ export const es = {
       ctaSecondary: "Ver todo lo que hago",
       back: "Volver al inicio",
       includes: {
-        eyebrow: "QUÉ INCLUYE",
+        eyebrow: "Qué incluye",
         title: "De la vidriera al checkout, todo conectado",
         intro:
           "Una tienda no es solo un catálogo: es pagos, stock, envíos y datos funcionando juntos sin que nada se trabe.",
@@ -236,7 +233,7 @@ export const es = {
         ],
       },
       why: {
-        eyebrow: "POR QUÉ IMPORTA",
+        eyebrow: "Por qué importa",
         title: "Una tienda propia no te cobra comisión por cada venta",
         body:
           "Las plataformas de alquiler se llevan un porcentaje de cada operación y te atan a sus reglas. Una tienda a medida es tuya: el margen queda en tu negocio y las decisiones también.",
@@ -253,7 +250,7 @@ export const es = {
       metaTitle: "Chatbots e IA para empresas | dishape",
       metaDescription:
         "Chatbots y asistentes con IA entrenados sobre la información de tu negocio. Atención a toda hora, integrados a tus herramientas, aplicados a problemas concretos.",
-      eyebrow: "CHATBOTS & IA",
+      eyebrow: "Chatbots & IA",
       h1: "IA aplicada a tu negocio, no a la moda.",
       subtitle:
         "Chatbots y asistentes entrenados sobre tu propia información, que responden a toda hora con tu tono y derivan a una persona cuando hace falta.",
@@ -261,7 +258,7 @@ export const es = {
       ctaSecondary: "Ver todo lo que hago",
       back: "Volver al inicio",
       includes: {
-        eyebrow: "QUÉ INCLUYE",
+        eyebrow: "Qué incluye",
         title: "Atención que no duerme, entrenada sobre tu negocio",
         intro:
           "No un bot enlatado: un asistente que conoce tu información, habla con tu tono y sabe cuándo dar paso a una persona.",
@@ -275,7 +272,7 @@ export const es = {
         ],
       },
       why: {
-        eyebrow: "POR QUÉ IMPORTA",
+        eyebrow: "Por qué importa",
         title: "La IA suma cuando resuelve un problema real, no cuando está de moda",
         body:
           "Puesta donde corresponde, la IA reduce trabajo manual y mejora la atención: respuestas inmediatas, procesos que corren solos y decisiones apoyadas en datos. Puesta de adorno, solo agrega ruido.",
@@ -292,7 +289,7 @@ export const es = {
       metaTitle: "Automatización de procesos | dishape",
       metaDescription:
         "Automatización de tareas repetitivas y flujos de trabajo: clasificar, responder, cargar y mover datos sin intervención manual. Integrado a las herramientas que ya usas.",
-      eyebrow: "AUTOMATIZACIÓN",
+      eyebrow: "Automatización",
       h1: "Las tareas repetitivas se las dejas al software.",
       subtitle:
         "Flujos que se encargan del trabajo manual y repetitivo: clasificar, responder, cargar y mover datos entre tus sistemas, sin que nadie tenga que hacerlo a mano.",
@@ -300,7 +297,7 @@ export const es = {
       ctaSecondary: "Ver todo lo que hago",
       back: "Volver al inicio",
       includes: {
-        eyebrow: "QUÉ INCLUYE",
+        eyebrow: "Qué incluye",
         title: "Menos trabajo manual, menos errores",
         intro:
           "Todo lo que hoy alguien hace a mano de forma repetitiva es candidato a automatizarse: tiempo que vuelve al negocio.",
@@ -314,7 +311,7 @@ export const es = {
         ],
       },
       why: {
-        eyebrow: "POR QUÉ IMPORTA",
+        eyebrow: "Por qué importa",
         title: "El tiempo en tareas repetitivas es tiempo que no vuelve",
         body:
           "Cada proceso manual cuesta horas y abre la puerta a errores. Automatizarlo libera ese tiempo para lo que de verdad mueve el negocio, y baja el costo de cada operación.",
@@ -330,7 +327,7 @@ export const es = {
     metaTitle: "Blog | dishape",
     metaDescription:
       "Artículos sobre desarrollo web, tiendas online, rendimiento e IA aplicada a negocios. Respuestas claras a lo que conviene saber antes de encarar un proyecto.",
-    eyebrow: "BLOG",
+    eyebrow: "Blog",
     title: "Notas sobre web, negocio y conversión",
     intro:
       "Lo que conviene saber antes de encarar un proyecto: precios, decisiones técnicas y por qué algunas cosas mueven las ventas y otras no.",
@@ -364,7 +361,7 @@ export const es = {
       appName: "Auditoría web dishape",
     },
     hero: {
-      eyebrow: "HERRAMIENTA GRATUITA",
+      eyebrow: "Herramienta gratuita",
       title: "¿Qué está frenando a tu sitio?",
       subtitle:
         "Un diagnóstico técnico de tu web en menos de un minuto: qué ve Google, qué tan rápido carga y cómo se ve cuando alguien comparte el link. Sin registro y sin costo.",
@@ -380,7 +377,7 @@ export const es = {
       // the registry holds SEO and sharing only. Performance is measured by
       // PageSpeed, not counted, so the eyebrow names it apart instead of
       // letting the number appear to cover the third card below it.
-      eyebrow: "{count} CHEQUEOS + RENDIMIENTO",
+      eyebrow: "{count} chequeos + rendimiento",
       title: "Qué revisa el análisis.",
       // Deliberately not report.categoryIntro: those say "esta página",
       // meaning the audited page. On the landing nothing has been audited yet,
