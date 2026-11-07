@@ -17,7 +17,6 @@ const links = [
   { label: nav.ai, href: `${home}#ia` },
   { label: nav.process, href: `${home}#proceso` },
   { label: nav.stack, href: `${home}#stack` },
-  { label: nav.benefits, href: `${home}#resultados` },
   { label: nav.blog, href: getRelativeLocaleUrl(lang, "blog") },
   {
     label: nav.audit,
@@ -42,76 +41,71 @@ const social = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-base">
-  <div class="shell flex flex-col gap-8 py-12">
-    <div class="flex flex-col justify-between gap-8 md:flex-row md:items-start">
+<footer class="mt-24">
+  <div class="shell flex flex-col gap-12 pb-10">
+    <div class="grid gap-10 border-t border-ink/10 pt-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
       <div class="flex max-w-xs flex-col gap-3">
-        <div class="flex items-center gap-2.5">
-          <LogoMark class="h-7 w-7" />
-          <Wordmark class="text-lg" />
+        <div class="flex items-center gap-2">
+          <LogoMark class="h-6 w-6" />
+          <Wordmark class="text-[17px]" />
         </div>
-        <p class="text-sm leading-relaxed text-faint">{t.tagline}</p>
+        <p class="text-[13px] leading-relaxed text-muted">{t.tagline}</p>
       </div>
 
-      <div class="flex flex-wrap gap-x-16 gap-y-8">
-        <nav class="flex flex-col gap-3">
-          <span class="eyebrow">{t.sectionsTitle}</span>
-          <ul class="flex flex-col gap-2.5">
-            {
-              links.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="text-sm font-medium text-muted transition-colors hover:text-ink"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+      <nav class="flex flex-col gap-3" aria-label={t.sectionsTitle}>
+        <span class="text-[13px] text-faint">{t.sectionsTitle}</span>
+        <ul class="flex flex-col gap-2">
+          {
+            links.map((link) => (
+              <li>
+                <a href={link.href} class="text-[13px] text-ink transition-opacity hover:opacity-60">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
 
-        <nav class="flex flex-col gap-3">
-          <span class="eyebrow">{t.servicesTitle}</span>
-          <ul class="flex flex-col gap-2.5">
-            {
-              serviceLinks.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="text-sm font-medium text-muted transition-colors hover:text-ink"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-      </div>
+      <nav class="flex flex-col gap-3" aria-label={t.servicesTitle}>
+        <span class="text-[13px] text-faint">{t.servicesTitle}</span>
+        <ul class="flex flex-col gap-2">
+          {
+            serviceLinks.map((link) => (
+              <li>
+                <a href={link.href} class="text-[13px] text-ink transition-opacity hover:opacity-60">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
 
-      <div class="flex items-center gap-3">
-        {
-          social.map((s) => (
-            <a
-              href={s.href}
-              aria-label={s.label}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-accent/30 hover:text-ink"
-            >
-              <Icon name={`lucide:${s.icon}`} class="h-4 w-4" />
-            </a>
-          ))
-        }
+      <div class="flex flex-col gap-3">
+        <span class="text-[13px] text-faint">{t.elsewhereTitle}</span>
+        <ul class="flex flex-col gap-2">
+          {
+            social.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 text-[13px] text-ink transition-opacity hover:opacity-60"
+                >
+                  <Icon name={`lucide:${s.icon}`} class="h-3.5 w-3.5 text-faint" />
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
 
-    <div class="h-px w-full bg-line"></div>
-
-    <div class="flex flex-col justify-between gap-2 text-sm text-faint sm:flex-row sm:items-center">
-      <span>© {year} {SITE.name} — {t.rights}</span>
+    <div class="flex flex-col justify-between gap-2 text-[12px] text-faint sm:flex-row sm:items-center">
+      <span>© {year} {SITE.name}. {t.rights}</span>
       <a href={`mailto:${SITE.email}`} class="transition-colors hover:text-ink">{SITE.email}</a>
     </div>
   </div>

@@ -1,143 +1,259 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens — mirrored from the Pencil source (dishape_web.pen)
+   Design tokens. The page is a grey canvas holding white artboards; ink is
+   near-black, and green belongs to the brand mark and links only.
+   Token names are kept from the previous system so every page re-skins from
+   here: base = canvas, card = artboard.
    --------------------------------------------------------------------------- */
 @theme {
-  /* Surfaces */
-  --color-base: #0a0a0f;
-  --color-surface: #111118;
-  --color-elevated: #1a1a24;
-  --color-card: #14141e;
-  --color-card-hover: #1c1c28;
-  --color-line: #1f1f2e;
+  --color-base: #ececec;
+  --color-surface: #ececec;
+  --color-card: #ffffff;
+  --color-card-hover: #fafafa;
+  --color-elevated: #f2f2f2;
+  --color-line: #e3e3e3;
 
-  /* Brand */
-  --color-accent: #3fb950;
-  --color-accent-light: #56d364;
+  --color-accent: #c2410c;
+  --color-accent-light: #c2410c;
+  /* Brand cube faces, flat. Light: vivid, so ink reads on top. */
+  --color-cube-top: #ff8a4c;
+  --color-cube-left: #ff5b1f;
+  --color-cube-right: #c93d0a;
 
-  /* Text */
-  --color-ink: #f1f1f4;
-  --color-muted: #a1a1b5;
-  --color-faint: #6b6b80;
+  --color-ink: #111111;
+  --color-muted: #555555;
+  --color-faint: #6b6b6b;
+  --color-danger: #b42318;
+  --color-warn: #a15c07;
 
-  /* Type */
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 
-  /* Radii */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---------------------------------------------------------------------------
-   Base
-   --------------------------------------------------------------------------- */
 @layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-base: #0c0c0c;
+      --color-surface: #0c0c0c;
+      --color-card: #161616;
+      --color-card-hover: #1b1b1b;
+      --color-elevated: #202020;
+      --color-line: #262626;
+
+      --color-accent: #ff8a4c;
+      --color-accent-light: #ff8a4c;
+      /* Dark: deeper, so white type reads on top. */
+      --color-cube-top: #ff6a2b;
+      --color-cube-left: #d9480f;
+      --color-cube-right: #a3360b;
+
+      --color-ink: #ededed;
+      --color-muted: #a6a6a6;
+      --color-faint: #8c8c8c;
+      --color-danger: #f87171;
+      --color-warn: #fbbf24;
+    }
+  }
+
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    color-scheme: light dark;
   }
 
   body {
     background-color: var(--color-base);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
-  ::selection {
-    background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
-    color: var(--color-ink);
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
-  /* Hero intro — CSS-driven so the first paint never waits for the lazily
-     loaded GSAP bundle. Scoped to #top; below-the-fold reveals stay on GSAP. */
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-card);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::placeholder {
+    color: var(--color-faint);
+    opacity: 1;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-accent);
+  }
+
+  /* Hero intro is CSS-driven so first paint never waits for GSAP. */
   @media (prefers-reduced-motion: no-preference) {
     #top .reveal {
-      opacity: 0;
-      animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: reveal-up 0.9s var(--ease-out-expo) both;
     }
     #top .reveal:nth-child(2) {
-      animation-delay: 0.08s;
+      animation-delay: 0.06s;
     }
     #top .reveal:nth-child(3) {
-      animation-delay: 0.16s;
+      animation-delay: 0.12s;
     }
     #top .reveal:nth-child(4) {
-      animation-delay: 0.24s;
+      animation-delay: 0.18s;
     }
   }
 
   @keyframes reveal-up {
     from {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translateY(14px);
+      filter: blur(6px);
     }
     to {
       opacity: 1;
       transform: none;
+      filter: none;
     }
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Utilities
-   --------------------------------------------------------------------------- */
 @layer components {
-  /* Faint engineering / blueprint grid. Tunable via --grid-size & --grid-color. */
-  .blueprint-grid {
-    --grid-size: 120px;
-    --grid-color: rgb(255 255 255 / 0.04);
-    background-image:
-      linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-    background-size: var(--grid-size) var(--grid-size);
-  }
-
-  /* Mono section eyebrow: "03 / IA & AUTOMATIZACIÓN" */
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.12em;
-    color: var(--color-accent);
-  }
-
+  /* Content width shared by nav, artboards and footer. */
   .shell {
     width: 100%;
-    max-width: 1280px;
+    max-width: 1240px;
     margin-inline: auto;
-    padding-inline: 1.5rem;
+    padding-inline: 1rem;
   }
   @media (min-width: 768px) {
     .shell {
-      padding-inline: 5rem;
+      padding-inline: 2rem;
     }
+  }
+
+  /* An artboard: a white sheet on the canvas, no border, no shadow. */
+  .board {
+    background: var(--color-card);
+    border-radius: 4px;
+  }
+
+  /* The artboard's name, set on the canvas just above it. */
+  .board-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--color-faint);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-card);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0.95rem 1.4rem;
+    transition:
+      transform 0.25s var(--ease-out-expo),
+      opacity 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-sm {
+    font-size: 13px;
+    padding: 0.6rem 0.95rem;
+  }
+
+  /* Quiet text link with an underline that draws in on hover. */
+  .link {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 0.2s;
+  }
+  .link:hover {
+    text-decoration-color: var(--color-ink);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 6px;
+    background: var(--color-elevated);
+    border: 1px solid transparent;
+    padding: 0.8rem 0.9rem;
+    font-size: 15px;
+    color: var(--color-ink);
+    transition:
+      border-color 0.2s,
+      background 0.2s;
+  }
+  .field:hover {
+    border-color: var(--color-line);
+  }
+  .field:focus {
+    outline: none;
+    background: var(--color-card);
+    border-color: var(--color-ink);
   }
 
   /* Long-form article prose (rendered Markdown). */
   .article {
     color: var(--color-muted);
     font-size: 1.0625rem;
-    line-height: 1.8;
+    line-height: 1.75;
   }
   .article > * + * {
     margin-top: 1.25rem;
   }
   .article h2 {
     color: var(--color-ink);
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 500;
     line-height: 1.25;
-    letter-spacing: -0.01em;
-    margin-top: 2.75rem;
+    letter-spacing: -0.02em;
+    margin-top: 3rem;
   }
   .article h3 {
     color: var(--color-ink);
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 500;
     margin-top: 2rem;
   }
   .article h2 + p,
@@ -153,12 +269,13 @@
     font-weight: 600;
   }
   .article a {
-    color: var(--color-accent-light);
+    color: var(--color-ink);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 3px;
   }
   .article a:hover {
-    color: var(--color-ink);
+    color: var(--color-accent);
   }
   .article ul,
   .article ol {
@@ -174,25 +291,23 @@
     list-style: decimal;
   }
   .article li::marker {
-    color: var(--color-accent);
+    color: var(--color-faint);
   }
   .article blockquote {
-    border-left: 3px solid var(--color-accent);
+    border-left: 1px solid var(--color-ink);
     padding-left: 1rem;
     color: var(--color-ink);
-    font-style: italic;
   }
   .article code {
     font-family: var(--font-mono);
-    font-size: 0.9em;
+    font-size: 0.88em;
     background: var(--color-elevated);
     padding: 0.15em 0.4em;
-    border-radius: 6px;
-    color: var(--color-accent-light);
+    border-radius: 4px;
+    color: var(--color-ink);
   }
 }
 
-/* Respect reduced-motion: neutralise any pre-set animation transforms. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

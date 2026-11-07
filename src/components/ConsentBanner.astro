@@ -9,20 +9,20 @@ const enabled = !!import.meta.env.PUBLIC_GTM_ID;
     <div
       data-consent-banner
       hidden
-      class="fixed inset-x-0 bottom-0 z-[60] border-t border-line bg-surface/95 backdrop-blur-md"
+      class="fixed inset-x-3 bottom-3 z-[60] rounded-md bg-card shadow-[0_8px_30px_rgb(0_0_0/0.12)] sm:inset-x-auto sm:left-4 sm:max-w-md"
     >
-      <div class="shell flex flex-col items-center gap-4 py-4 sm:flex-row sm:justify-between">
-        <p class="max-w-2xl text-sm leading-relaxed text-muted">{t.message}</p>
+      <div class="flex flex-col gap-4 p-5">
+        <p class="text-[13px] leading-relaxed text-muted">{t.message}</p>
         <div class="flex shrink-0 gap-3">
           <button
             data-consent="reject"
-            class="rounded-lg border border-line px-4 py-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+            class="btn btn-sm !bg-elevated !text-ink"
           >
             {t.reject}
           </button>
           <button
             data-consent="accept"
-            class="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+            class="btn btn-sm"
           >
             {t.accept}
           </button>

@@ -17,22 +17,19 @@ export const en = {
     book: "Book 10 min",
   },
   hero: {
-    badge: "AVAILABLE FOR NEW PROJECTS",
-    title: "The same person who designs your website builds it, ships it and maintains it.",
-    subtitle:
-      "Design, development, infrastructure and analytics in one place. No splitting the project across vendors, no paying each middleman's markup.",
-    ctaPrimary: "Let's talk about your project",
-    ctaSecondary: "See services",
-    panelFile: "flow.ts",
-    panelComment: "// the pieces I handle on every project",
-    flow: [
-      ["design", "UI/UX interfaces"],
-      ["development", "frontend + backend"],
-      ["data", "SQL / NoSQL"],
-      ["infra", "deploy · hosting · email"],
-      ["analytics", "GA4 / GTM"],
-      ["conversion", "SEO · CRO · performance"],
+    badge: "Available for new projects",
+    // One entry per line; the hero staggers them.
+    lines: [
+      "Fast websites,",
+      "well designed",
+      "and easy to find,",
+      "for professionals",
+      "and businesses.",
     ],
+    subtitle:
+      "Design, development, hosting and analytics handled by the same person, who also maintains the site after launch.",
+    ctaPrimary: "Book 10 min",
+    ctaSecondary: "Message on WhatsApp",
   },
   trust: {
     // Industry benchmarks with sources — used as a diagnostic lens, not as dishape's own results.
@@ -49,7 +46,7 @@ export const en = {
     sources: "Sources: Google · Deloitte · BrightEdge",
   },
   value: {
-    eyebrow: "01 / ALL IN ONE",
+    eyebrow: "How it works",
     title: "One point of contact for the whole project.",
     intro:
       "Coordinating a designer, a developer, a sysadmin and an agency separately costs time, and each one's markup adds up on the invoice. Here, one person handles every piece and is accountable for how they fit together.",
@@ -61,7 +58,7 @@ export const en = {
     ],
   },
   services: {
-    eyebrow: "02 / SERVICES",
+    eyebrow: "Services",
     title: "Services",
     intro: "Everything a project needs to run well and turn visitors into customers.",
     more: "Dedicated pages:",
@@ -75,7 +72,7 @@ export const en = {
     ],
   },
   ai: {
-    eyebrow: "03 / AI & AUTOMATION",
+    eyebrow: "AI and automation",
     title: "AI applied to concrete problems, not to hype",
     intro:
       "Artificial intelligence put where it cuts manual work or improves service: around-the-clock answers, processes that run on their own and decisions backed by data. Only where there's a real problem to solve.",
@@ -87,7 +84,7 @@ export const en = {
     ],
   },
   process: {
-    eyebrow: "04 / PROCESS",
+    eyebrow: "Process",
     title: "How I work",
     intro: "A clear, predictable process, with a fixed price agreed before starting.",
     steps: [
@@ -98,7 +95,7 @@ export const en = {
     ],
   },
   stack: {
-    eyebrow: "05 / STACK",
+    eyebrow: "Stack",
     title: "What I work with",
     intro:
       "Every layer chosen for a reason, not for hype. This is what I run in production.",
@@ -111,7 +108,7 @@ export const en = {
     ],
   },
   results: {
-    eyebrow: "06 / RESULTS",
+    eyebrow: "Benefits",
     title: "Benefits for your business",
     intro:
       "The part the business actually feels: the site loads, it shows up on Google, and the sale closes without friction.",
@@ -126,7 +123,7 @@ export const en = {
     ],
   },
   contact: {
-    eyebrow: "07 / CONTACT",
+    eyebrow: "Contact",
     title: "Ready to start your project?",
     intro:
       "With a short description of the project, I'll send back a clear proposal within 24 hours.",
@@ -166,6 +163,7 @@ export const en = {
     rights: "All rights reserved.",
     sectionsTitle: "Sections",
     servicesTitle: "Services",
+    elsewhereTitle: "Elsewhere",
   },
   servicePages: {
     web: {
@@ -174,7 +172,7 @@ export const en = {
       metaTitle: "Custom web development for businesses | dishape",
       metaDescription:
         "Custom websites and web apps, designed, built and maintained by one person. Your own code, fast and built to turn visitors into customers.",
-      eyebrow: "WEB DEVELOPMENT",
+      eyebrow: "Web development",
       h1: "Custom web development, from the first line of code to deploy.",
       subtitle:
         "Websites and apps built for your business, not adapted from a template. The same person designs them, builds them, ships them and maintains them.",
@@ -182,7 +180,7 @@ export const en = {
       ctaSecondary: "See everything I do",
       back: "Back to home",
       includes: {
-        eyebrow: "WHAT'S INCLUDED",
+        eyebrow: "What's included",
         title: "Everything the project needs, in one place",
         intro:
           "From the design to the server it runs on. One person is accountable for how every piece fits together.",
@@ -196,7 +194,7 @@ export const en = {
         ],
       },
       why: {
-        eyebrow: "WHY IT MATTERS",
+        eyebrow: "Why it matters",
         title: "Speed isn't a technical detail, it's conversion",
         body:
           "53% of visitors abandon a site that takes over 3 seconds to load, and every 0.1s of speed gained can add up to 8% more conversions. That's why performance is the first thing I solve, before any other layer.",
@@ -213,7 +211,7 @@ export const en = {
       metaTitle: "Custom online store development | dishape",
       metaDescription:
         "Your own online store, fast and ready to sell. Stripe and MercadoPago payments, integrations and analytics, built and maintained by one person.",
-      eyebrow: "ONLINE STORE",
+      eyebrow: "Online store",
       h1: "Your own online store, ready to sell without friction.",
       subtitle:
         "Your own e-commerce, not a rental on a platform that charges per sale. Fast, wired to your payment methods and built so the purchase actually closes.",
@@ -221,7 +219,7 @@ export const en = {
       ctaSecondary: "See everything I do",
       back: "Back to home",
       includes: {
-        eyebrow: "WHAT'S INCLUDED",
+        eyebrow: "What's included",
         title: "From the storefront to checkout, all connected",
         intro:
           "A store isn't just a catalog: it's payments, stock, shipping and data working together without anything getting stuck.",
@@ -235,7 +233,7 @@ export const en = {
         ],
       },
       why: {
-        eyebrow: "WHY IT MATTERS",
+        eyebrow: "Why it matters",
         title: "Your own store doesn't charge you a fee on every sale",
         body:
           "Rental platforms take a cut of every transaction and tie you to their rules. A custom store is yours: the margin stays in your business and so do the decisions.",
@@ -252,7 +250,7 @@ export const en = {
       metaTitle: "AI chatbots for businesses | dishape",
       metaDescription:
         "AI chatbots and assistants trained on your business's information. Around-the-clock service, wired to your tools, applied to concrete problems.",
-      eyebrow: "AI CHATBOTS",
+      eyebrow: "AI chatbots",
       h1: "AI applied to your business, not to the hype.",
       subtitle:
         "Chatbots and assistants trained on your own information, answering around the clock in your tone and handing off to a person when needed.",
@@ -260,7 +258,7 @@ export const en = {
       ctaSecondary: "See everything I do",
       back: "Back to home",
       includes: {
-        eyebrow: "WHAT'S INCLUDED",
+        eyebrow: "What's included",
         title: "Service that never sleeps, trained on your business",
         intro:
           "Not a canned bot: an assistant that knows your information, speaks in your tone and knows when to hand off to a person.",
@@ -274,7 +272,7 @@ export const en = {
         ],
       },
       why: {
-        eyebrow: "WHY IT MATTERS",
+        eyebrow: "Why it matters",
         title: "AI helps when it solves a real problem, not when it's trendy",
         body:
           "Put where it belongs, AI cuts manual work and improves service: instant answers, processes that run on their own and decisions backed by data. Put as decoration, it just adds noise.",
@@ -291,7 +289,7 @@ export const en = {
       metaTitle: "Business process automation | dishape",
       metaDescription:
         "Automation of repetitive tasks and workflows: classify, reply, load and move data with no manual work. Wired to the tools you already use.",
-      eyebrow: "AUTOMATION",
+      eyebrow: "Automation",
       h1: "Leave the repetitive tasks to the software.",
       subtitle:
         "Workflows that take on the manual, repetitive work: classifying, replying, loading and moving data between your systems, with no one doing it by hand.",
@@ -299,7 +297,7 @@ export const en = {
       ctaSecondary: "See everything I do",
       back: "Back to home",
       includes: {
-        eyebrow: "WHAT'S INCLUDED",
+        eyebrow: "What's included",
         title: "Less manual work, fewer errors",
         intro:
           "Anything someone does by hand repetitively today is a candidate for automation: time that goes back to the business.",
@@ -313,7 +311,7 @@ export const en = {
         ],
       },
       why: {
-        eyebrow: "WHY IT MATTERS",
+        eyebrow: "Why it matters",
         title: "Time spent on repetitive tasks is time that doesn't come back",
         body:
           "Every manual process costs hours and opens the door to errors. Automating it frees that time for what actually moves the business, and lowers the cost of each operation.",
@@ -329,7 +327,7 @@ export const en = {
     metaTitle: "Blog | dishape",
     metaDescription:
       "Articles on web development, online stores, performance and AI applied to business. Clear answers to what's worth knowing before starting a project.",
-    eyebrow: "BLOG",
+    eyebrow: "Blog",
     title: "Notes on web, business and conversion",
     intro:
       "What's worth knowing before starting a project: pricing, technical decisions and why some things move sales and others don't.",
@@ -363,7 +361,7 @@ export const en = {
       appName: "dishape Website Audit",
     },
     hero: {
-      eyebrow: "FREE TOOL",
+      eyebrow: "Free tool",
       title: "Find out what's slowing your site down.",
       subtitle:
         "A technical diagnosis of your site in under a minute: what Google sees, how fast it loads and what it looks like when someone shares the link. No signup, no cost.",
@@ -379,7 +377,7 @@ export const en = {
       // the registry holds SEO and sharing only. Performance is measured by
       // PageSpeed, not counted, so the eyebrow names it apart instead of
       // letting the number appear to cover the third card below it.
-      eyebrow: "{count} CHECKS + PERFORMANCE",
+      eyebrow: "{count} checks + performance",
       title: "What the audit looks at.",
       // Deliberately not report.categoryIntro: those say "this page", meaning
       // the audited page. On the landing nothing has been audited yet, so the

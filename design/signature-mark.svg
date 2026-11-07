@@ -1,19 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="88" height="88" viewBox="0 0 88 88" fill="none">
-  <defs>
-    <linearGradient id="top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6BDD78"/><stop offset="1" stop-color="#4CC661"/></linearGradient>
-    <linearGradient id="left" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46C95B"/><stop offset="1" stop-color="#2F9E46"/></linearGradient>
-    <linearGradient id="right" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E9440"/><stop offset="1" stop-color="#1C6B2E"/></linearGradient>
-    <mask id="cut">
-      <rect width="88" height="88" fill="#fff"/>
-      <g fill="#000">
-        <path d="M34 37 L40 40 L40 78 L34 75 Z"/>
-        <path d="M16 42 L34 51 L34 57 L16 48 Z"/>
-        <path d="M16 48 L22 51 L22 63 L16 60 Z"/>
-        <path d="M16 60 L34 69 L34 75 L16 66 Z"/>
-      </g>
-    </mask>
-  </defs>
-  <path d="M44 4 L80 22 L44 40 L8 22 Z" fill="url(#top)"/>
-  <path d="M8 22 L44 40 L44 84 L8 66 Z" fill="url(#left)" mask="url(#cut)"/>
-  <path d="M44 40 L80 22 L80 66 L44 84 Z" fill="url(#right)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- dishape: a lowercase "d" from a disc and a rounded bar; the counter is a true hole. -->
+  <mask id="counter"><rect width="100" height="100" fill="#fff"/><circle cx="40" cy="62" r="13" fill="#000"/></mask>
+  <g mask="url(#counter)">
+    <circle cx="40" cy="62" r="32" fill="#ff5b1f"/>
+    <rect x="60" y="4" width="20" height="90" rx="10" fill="#c93d0a"/>
+  </g>
 </svg>

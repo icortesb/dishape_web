@@ -4,7 +4,10 @@ import Contact from "./Contact.astro";
 import Footer from "./Footer.astro";
 import WhatsAppFab from "./WhatsAppFab.astro";
 import SectionHeader from "./SectionHeader.astro";
-import Card from "./Card.astro";
+import Board from "./Board.astro";
+import LogoMark from "./LogoMark.astro";
+import ItemList from "./ItemList.astro";
+import Statement from "./Statement.astro";
 import { Icon } from "astro-icon/components";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLang } from "../i18n";
@@ -20,94 +23,46 @@ const home = getRelativeLocaleUrl(lang, "");
 
 <Navbar />
 <main>
-  {/* hero */}
-  <section id="top" class="relative overflow-hidden border-b border-line bg-base">
-    <div
-      class="blueprint-grid pointer-events-none absolute inset-x-0 -top-[40%] h-[180%]"
-      data-parallax="0.3"
-    >
-    </div>
-    <div
-      class="pointer-events-none absolute -top-24 right-[8%] h-[500px] w-[500px] rounded-full opacity-60"
-      style="background: radial-gradient(circle, rgba(63,185,80,0.10), transparent 70%)"
-      data-parallax="-0.25"
-    >
-    </div>
-
-    <div class="shell relative flex flex-col items-start gap-7 py-24 lg:py-28">
-      <a
-        href={home}
-        class="flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
-      >
-        <Icon name="lucide:arrow-left" class="h-4 w-4" />
-        {data.back}
-      </a>
-      <span class="eyebrow reveal">{data.eyebrow}</span>
-      <h1
-        class="reveal max-w-4xl text-4xl font-bold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.2rem]"
-      >
-        {data.h1}
-      </h1>
-      <p class="reveal max-w-2xl text-lg leading-relaxed text-muted">
-        {data.subtitle}
-      </p>
-      <div class="reveal flex flex-wrap gap-4">
-        <a
-          href="#contacto"
-          data-cta="service_hero_primary"
-          class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
-        >
-          {data.ctaPrimary}
-        </a>
-        <a
-          href={home}
-          data-cta="service_hero_secondary"
-          class="rounded-lg border border-line px-8 py-4 font-medium text-muted transition-colors hover:border-accent/40 hover:text-ink"
-        >
-          {data.ctaSecondary}
-        </a>
+  <section id="top" class="shell pt-6">
+    <a href={home} class="board-label inline-flex items-center gap-1 transition-colors hover:text-ink">
+      <Icon name="lucide:arrow-left" class="h-3 w-3" />
+      {data.back}
+    </a>
+    <div class="board relative overflow-hidden">
+      <LogoMark
+        class="pointer-events-none absolute -right-4 -bottom-10 h-40 w-40 sm:h-64 sm:w-64 lg:-right-2 lg:-bottom-16 lg:h-80 lg:w-80"
+        decorative
+      />
+      <div class="relative flex flex-col items-start gap-8 p-6 pb-40 sm:p-10 sm:pb-60 lg:p-14 lg:pr-80">
+        <h1 class="reveal max-w-3xl text-[clamp(2rem,4.6vw,3.6rem)] leading-[1.05] font-medium tracking-[-0.04em] text-ink">
+          {data.h1}
+        </h1>
+        <p class="reveal max-w-xl text-[15px] leading-relaxed text-muted">{data.subtitle}</p>
+        <div class="reveal flex flex-wrap items-center gap-x-6 gap-y-4">
+          <a href="#contacto" data-cta="service_hero_primary" class="btn">{data.ctaPrimary}</a>
+          <a href={home} data-cta="service_hero_secondary" class="link text-[15px]">{data.ctaSecondary}</a>
+        </div>
       </div>
     </div>
   </section>
 
-  {/* what's included */}
-  <section class="border-b border-line bg-surface">
-    <div class="shell flex flex-col gap-14 py-24">
-      <SectionHeader eyebrow={data.includes.eyebrow} title={data.includes.title}>
-        <p class="text-lg leading-relaxed text-muted">{data.includes.intro}</p>
+  <Board class="mt-16">
+    <div class="flex flex-col gap-12">
+      <SectionHeader title={data.includes.title}>
+        <p class="text-[15px] leading-relaxed text-muted">{data.includes.intro}</p>
       </SectionHeader>
-
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          data.includes.items.map(([icon, title, body]) => (
-            <Card icon={icon} title={title}>
-              {body}
-            </Card>
-          ))
-        }
-      </div>
+      <ItemList items={data.includes.items} cols={3} />
     </div>
-  </section>
+  </Board>
 
-  {/* why it matters */}
-  <section class="border-b border-line bg-base">
-    <div class="shell grid gap-12 py-24 lg:grid-cols-2 lg:items-start">
-      <SectionHeader eyebrow={data.why.eyebrow} title={data.why.title}>
-        <p class="text-lg leading-relaxed text-muted">{data.why.body}</p>
+  <Board class="mt-16">
+    <div class="flex flex-col gap-12">
+      <SectionHeader title={data.why.title} shape="disc">
+        <p class="text-[15px] leading-relaxed text-muted">{data.why.body}</p>
       </SectionHeader>
-
-      <ul class="flex flex-col gap-5">
-        {
-          data.why.points.map(([title, body]) => (
-            <li class="reveal flex flex-col gap-1.5 rounded-2xl border border-line bg-card p-6">
-              <span class="font-semibold text-ink">{title}</span>
-              <span class="text-sm leading-relaxed text-muted">{body}</span>
-            </li>
-          ))
-        }
-      </ul>
+      <Statement items={data.why.points} at={0} size="sm" />
     </div>
-  </section>
+  </Board>
 
   <Contact />
 </main>

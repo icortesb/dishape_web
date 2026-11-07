@@ -1,4 +1,5 @@
 ---
+import Board from "./Board.astro";
 import SectionHeader from "./SectionHeader.astro";
 import { getLang, getDict } from "../i18n";
 
@@ -6,32 +7,22 @@ const t = getDict(getLang(Astro)).stack;
 const groups = t.groups as readonly (readonly [string, readonly string[]])[];
 ---
 
-<section id="stack" class="scroll-mt-20 border-b border-line bg-base">
-  <div class="shell flex flex-col gap-14 py-24">
-    <SectionHeader eyebrow={t.eyebrow} title={t.title}>
-      <p class="text-lg leading-relaxed text-muted">{t.intro}</p>
+<Board id="stack" class="mt-16" inner="relative overflow-hidden p-6 sm:p-10 lg:p-14">
+  <div class="relative grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
+    <SectionHeader title={t.title} shape="disc">
+      <p class="text-[15px] leading-relaxed text-muted">{t.intro}</p>
     </SectionHeader>
-
-    <div class="grid gap-6 md:grid-cols-2">
+    <dl class="flex flex-col">
       {
-        groups.map(([name, items], i) => (
-          <div
-            class:list={[
-              "reveal rounded-2xl border border-line bg-card p-8",
-              i === groups.length - 1 && "md:col-span-2",
-            ]}
-          >
-            <h3 class="eyebrow mb-5">{name}</h3>
-            <ul class="flex flex-wrap gap-2.5">
-              {items.map((t) => (
-                <li class="rounded-full border border-line bg-elevated px-4 py-2 text-[13px] font-medium text-ink">
-                  {t}
-                </li>
-              ))}
-            </ul>
+        groups.map(([name, items]) => (
+          <div class="reveal grid gap-1 border-t border-line py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
+            <dt class="text-[13px] text-faint">{name}</dt>
+            <dd class="text-[17px] leading-snug tracking-[-0.015em] text-ink">
+              {items.join(", ")}
+            </dd>
           </div>
         ))
       }
-    </div>
+    </dl>
   </div>
-</section>
+</Board>

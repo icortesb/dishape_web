@@ -1,85 +1,146 @@
 ---
 import { getLang, getDict } from "../i18n";
-const t = getDict(getLang(Astro)).hero;
+import { SITE, waLink } from "../site";
+
+const lang = getLang(Astro);
+const t = getDict(lang).hero;
+// Staggered indents, in em of the display size: the sentence steps in and out.
+const indents = [0, 1.1, 0, 1.1, 2.2];
 ---
 
-<section id="top" class="relative overflow-hidden border-b border-line bg-base">
-  {/* blueprint grid + glow */}
-  <div
-    class="blueprint-grid pointer-events-none absolute inset-x-0 -top-[40%] h-[180%]"
-    data-parallax="0.3"
-  >
+<section id="top" class="shell pt-6">
+  {/* Tick ruler: the lit window tracks how far down the page the visitor is. */}
+  <div aria-hidden="true" class="mb-3 flex justify-center">
+    <div class="relative flex h-4 w-56 items-center justify-between" data-page-ruler>
+      {Array.from({ length: 56 }, () => <span class="h-2.5 w-px bg-faint/50" />)}
+      <span
+        class="absolute top-0 left-0 h-4 w-6 rounded-[2px] border border-ink/60 transition-transform duration-200 ease-out"
+        data-ruler-window
+      >
+      </span>
+    </div>
   </div>
-  <div
-    class="pointer-events-none absolute -top-24 right-[8%] h-[500px] w-[500px] rounded-full opacity-60"
-    style="background: radial-gradient(circle, rgba(63,185,80,0.10), transparent 70%)"
-    data-parallax="-0.25"
-  >
-  </div>
+  <div class="board relative overflow-hidden">
+    <div class="relative z-10 flex flex-col justify-end gap-12 p-6 pt-6 sm:min-h-[min(78vh,720px)] sm:p-10 lg:p-14">
 
-  <div
-    class="shell relative grid items-center gap-16 py-24 lg:grid-cols-[1.1fr_0.9fr] lg:py-28"
-  >
-    {/* copy */}
-    <div class="flex flex-col items-start gap-7">
-      {/* Visitors click the availability badge expecting it to lead somewhere
-          (Clarity: one session clicked it three times), so it does. */}
-      <a
-        href="#contacto"
-        data-cta="hero_badge"
-        class="eyebrow reveal flex items-center gap-2 transition-opacity hover:opacity-80"
-      >
-        <span class="h-2 w-2 rounded-full bg-accent"></span>
-        {t.badge}
-      </a>
-      <h1
-        class="reveal text-4xl font-bold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]"
-      >
-        {t.title}
-      </h1>
-      <p class="reveal max-w-xl text-lg leading-relaxed text-muted">
-        {t.subtitle}
-      </p>
-      <div class="reveal flex flex-wrap gap-4">
-        <a
-          href="#contacto"
-          data-cta="hero_primary"
-          class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
-        >
-          {t.ctaPrimary}
-        </a>
-        <a
-          href="#servicios"
-          data-cta="hero_secondary"
-          class="rounded-lg border border-line px-8 py-4 font-medium text-muted transition-colors hover:border-accent/40 hover:text-ink"
-        >
-          {t.ctaSecondary}
-        </a>
+      <div class="flex flex-col gap-10 pt-[46vw] sm:pt-0">
+        <h1 class="reveal text-[clamp(2.1rem,5.4vw,4.4rem)] leading-[1.04] font-medium tracking-[-0.04em] text-ink">
+          {
+            t.lines.map((line, i) => (
+              <span class="hero-line block" style={`--i:${indents[i] ?? 0}`}>
+                {line}
+              </span>
+            ))
+          }
+        </h1>
+
+        <div class="reveal flex max-w-md flex-col gap-7">
+          <p class="text-[15px] leading-relaxed text-muted">{t.subtitle}</p>
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+            <a
+              href={SITE.calendly}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-calendly
+              data-cta="hero_primary"
+              class="btn"
+            >
+              {t.ctaPrimary}
+            </a>
+            <a
+              href={waLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-link
+              data-cta="hero_secondary"
+              class="link text-[15px]"
+            >
+              {t.ctaSecondary}
+            </a>
+          </div>
+          {/* Visitors click the availability note expecting it to lead
+              somewhere (Clarity: one session clicked it three times), so it does. */}
+          <a
+            href="#contacto"
+            data-cta="hero_badge"
+            class="inline-flex w-fit items-center gap-2 text-[13px] text-muted transition-colors hover:text-ink"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+            {t.badge}
+          </a>
+        </div>
       </div>
     </div>
 
-    {/* code / flow panel */}
-    <div
-      class="reveal w-full overflow-hidden rounded-2xl border border-line bg-card shadow-2xl shadow-black/40"
+    {/* The brand cube, flat and oversized, cropped by the artboard's edge. */}
+    <svg
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      class="hero-mark pointer-events-none absolute top-5 -right-[6%] w-[46%] sm:top-auto sm:-right-[4%] sm:-bottom-[10%] sm:w-[44%] lg:-right-[1%] lg:-bottom-[10%] lg:w-[43%] max-w-[680px]"
     >
-      <div class="flex items-center gap-2 border-b border-line bg-elevated px-4 py-3.5">
-        <span class="h-2.5 w-2.5 rounded-full" style="background:#ff5f56"></span>
-        <span class="h-2.5 w-2.5 rounded-full" style="background:#ffbd2e"></span>
-        <span class="h-2.5 w-2.5 rounded-full" style="background:#27c93f"></span>
-        <span class="ml-2 font-mono text-xs text-faint">{t.panelFile}</span>
-      </div>
-      <div class="p-6 font-mono text-[13px] leading-loose">
-        <p class="text-faint">{t.panelComment}</p>
-        {
-          t.flow.map(([k, v]) => (
-            <p class="flex text-muted">
-              <span class="inline-block w-28 shrink-0 text-accent-light">{k}</span>
-              <span class="mr-2 text-faint">&rarr;</span>
-              {v}
-            </p>
-          ))
-        }
-      </div>
-    </div>
+      <mask id="hero-counter">
+        <rect width="100" height="100" fill="#fff"></rect>
+        <circle cx="40" cy="62" r="13" fill="#000"></circle>
+      </mask>
+      <g mask="url(#hero-counter)">
+        <circle class="m-disc" cx="40" cy="62" r="32" style="fill: var(--color-cube-left)"></circle>
+        <rect class="m-bar" x="60" y="4" width="20" height="90" rx="10" style="fill: var(--color-cube-right)"></rect>
+      </g>
+    </svg>
   </div>
 </section>
+
+<style>
+  .hero-line {
+    padding-left: calc(var(--i) * 0.45em);
+  }
+  @media (min-width: 640px) {
+    .hero-line {
+      padding-left: calc(var(--i) * 1em);
+    }
+  }
+
+  
+  /* The one authored entrance: the disc grows in, then the bar rises. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-mark .m-disc {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: disc-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+    .hero-mark .m-bar {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: bar-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+    }
+  }
+  @keyframes disc-in {
+    from {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+  }
+  @keyframes bar-in {
+    from {
+      transform: scaleY(0.2);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-page-ruler]").forEach((ruler) => {
+    const win = ruler.querySelector<HTMLElement>("[data-ruler-window]");
+    if (!win) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const p = max > 0 ? Math.min(1, scrollY / max) : 0;
+      win.style.transform = `translateX(${p * (ruler.clientWidth - win.offsetWidth)}px)`;
+    };
+    addEventListener("scroll", () => (raf ||= requestAnimationFrame(update)), { passive: true });
+    addEventListener("resize", update, { passive: true });
+    update();
+  });
+</script>

@@ -28,26 +28,20 @@ const other: Lang = lang === "es" ? "en" : "es";
 const otherUrl = getRelativeLocaleUrl(other, "");
 ---
 
-<header class="sticky top-0 z-50 border-b border-line bg-base/80 backdrop-blur-md">
-  <nav class="shell flex items-center justify-between py-4">
-    <a href={home} class="flex items-center gap-2.5" aria-label="dishape — inicio">
-      <LogoMark class="h-8 w-8" cut="#0a0a0f" />
-      <Wordmark class="text-xl" />
+<header class="sticky top-0 z-50 bg-base/85 backdrop-blur-md">
+  <nav class="shell flex h-16 items-center justify-between gap-6">
+    <a href={home} class="flex items-center gap-2" aria-label="dishape — inicio">
+      <LogoMark class="h-6 w-6" />
+      <Wordmark class="text-[17px]" />
     </a>
 
-    {/* lg, not md: at 768 the seven labels collide with the wordmark on one
-      side and the language toggle on the other, and the booking CTA is pushed
-      off the edge — measured, and already true of the six that were here
-      before. Below lg the nav keeps the logo, the toggle and the CTA; the
-      footer carries the full link set. */}
-    <ul class="hidden items-center gap-8 lg:flex">
+    {/* lg, not md: below lg the seven labels collide with the wordmark and the
+      booking button; the footer carries the full link set. */}
+    <ul class="hidden items-center gap-7 lg:flex">
       {
         links.map((link) => (
           <li>
-            <a
-              href={link.href}
-              class="text-sm font-medium text-muted transition-colors hover:text-ink"
-            >
+            <a href={link.href} class="text-[13px] text-muted transition-colors hover:text-ink">
               {link.label}
             </a>
           </li>
@@ -55,12 +49,12 @@ const otherUrl = getRelativeLocaleUrl(other, "");
       }
     </ul>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4">
       <a
         href={otherUrl}
         hreflang={other}
         data-set-lang={other}
-        class="rounded-md border border-line px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"
+        class="text-[13px] text-muted transition-colors hover:text-ink"
         aria-label={`Switch to ${languages[other]}`}
       >
         {languages[other]}
@@ -71,7 +65,7 @@ const otherUrl = getRelativeLocaleUrl(other, "");
         rel="noopener noreferrer"
         data-calendly
         data-cta="navbar_book"
-        class="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+        class="btn btn-sm"
       >
         {t.book}
       </a>

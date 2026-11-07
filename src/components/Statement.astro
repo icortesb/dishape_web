@@ -1,0 +1,42 @@
+---
+/**
+ * Items read as one staggered statement: each title is a large line stepping
+ * in and out, its explanation set small beside it.
+ */
+interface Props {
+  items: readonly (readonly string[])[];
+  /** Index of the title column in each tuple (value items carry an icon first). */
+  at?: number;
+  /** "sm" sits under a section heading; default leads the section. */
+  size?: "lg" | "sm";
+}
+const { items, at = 1, size = "lg" } = Astro.props;
+const indents = [0, 1, 2, 0.5, 1.5];
+---
+
+<ol class="flex flex-col">
+  {
+    items.map((item, i) => (
+      <li class="reveal grid gap-2 py-3 md:grid-cols-[1fr_17rem] md:items-baseline md:gap-10">
+        <h3
+          class:list={["statement-line font-medium text-ink", size === "lg" ? "text-[clamp(1.6rem,3.6vw,3rem)] leading-[1.05] tracking-[-0.04em]" : "text-[clamp(1.2rem,2vw,1.6rem)] leading-[1.15] tracking-[-0.03em]"]}
+          style={`--i:${indents[i % indents.length]}`}
+        >
+          {item[at]}
+        </h3>
+        <p class="text-[14px] leading-relaxed text-muted md:pb-1">{item[at + 1]}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .statement-line {
+    padding-left: calc(var(--i) * 0.6em);
+  }
+  @media (min-width: 768px) {
+    .statement-line {
+      padding-left: calc(var(--i) * 1.4em);
+    }
+  }
+</style>

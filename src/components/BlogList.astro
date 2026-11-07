@@ -17,52 +17,43 @@ const dateLocale = lang === "es" ? "es-AR" : "en-US";
 
 <Navbar />
 <main>
-  <section id="top" class="relative overflow-hidden border-b border-line bg-base">
-    <div
-      class="blueprint-grid pointer-events-none absolute inset-x-0 -top-[40%] h-[180%]"
-      data-parallax="0.3"
-    >
-    </div>
-    <div class="shell relative flex flex-col items-start gap-5 py-20 lg:py-24">
-      <span class="eyebrow reveal">{t.eyebrow}</span>
-      <h1
-        class="reveal max-w-3xl text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl"
-      >
+  <section id="top" class="shell pt-6">
+    <div class="board p-6 sm:p-10 lg:p-14">
+      <h1 class="reveal max-w-3xl text-[clamp(2rem,4.6vw,3.6rem)] leading-[1.05] font-medium tracking-[-0.04em] text-ink">
         {t.title}
       </h1>
-      <p class="reveal max-w-2xl text-lg leading-relaxed text-muted">{t.intro}</p>
-    </div>
-  </section>
+      <p class="reveal mt-6 max-w-xl text-[15px] leading-relaxed text-muted">{t.intro}</p>
 
-  <section class="bg-surface">
-    <div class="shell grid gap-6 py-20 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        posts.map((post) => (
-          <a
-            href={getRelativeLocaleUrl(lang, `blog/${post.data.slug}`)}
-            class="reveal group flex h-full flex-col gap-4 rounded-2xl border border-line bg-card p-7 transition-colors duration-300 hover:border-accent/30 hover:bg-card-hover"
-          >
-            <div class="flex items-center gap-3">
-              <span class="eyebrow">{post.data.category}</span>
-              <span class="text-xs text-faint">
-                {post.data.readingTime} {t.readingSuffix}
-              </span>
-            </div>
-            <h2 class="text-xl font-semibold leading-snug text-ink transition-colors group-hover:text-accent-light">
-              {post.data.title}
-            </h2>
-            <p class="text-sm leading-relaxed text-muted">{post.data.description}</p>
-            <span class="mt-auto text-xs text-faint">
-              {(post.data.updatedDate ?? post.data.pubDate).toLocaleDateString(dateLocale, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-              })}
-            </span>
-          </a>
-        ))
-      }
+      <ul class="mt-14 flex flex-col">
+        {
+          posts.map((post) => (
+            <li class="reveal border-t border-line">
+              <a
+                href={getRelativeLocaleUrl(lang, `blog/${post.data.slug}`)}
+                class="group grid gap-2 py-7 md:grid-cols-[10rem_1fr_auto] md:gap-8"
+              >
+                <span class="text-[13px] text-faint">
+                  {(post.data.updatedDate ?? post.data.pubDate).toLocaleDateString(dateLocale, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    timeZone: "UTC",
+                  })}
+                </span>
+                <span class="flex flex-col gap-2">
+                  <h2 class="text-[clamp(1.2rem,2vw,1.5rem)] leading-snug font-medium tracking-[-0.025em] text-ink decoration-1 underline-offset-4 group-hover:underline">
+                    {post.data.title}
+                  </h2>
+                  <p class="max-w-2xl text-[14px] leading-relaxed text-muted">{post.data.description}</p>
+                </span>
+                <span class="text-[13px] text-faint md:text-right">
+                  {post.data.category} · {post.data.readingTime} {t.readingSuffix}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 </main>

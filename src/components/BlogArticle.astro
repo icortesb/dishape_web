@@ -28,74 +28,61 @@ const dateLabel = post.data.updatedDate ? t.updatedOn : t.postedOn;
 
 <Navbar />
 <main>
-  <article id="top" class="border-b border-line bg-base">
-    <div class="shell py-20 lg:py-24">
-      <div class="mx-auto flex max-w-3xl flex-col gap-6">
-        <a
-          href={blogHome}
-          class="flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
-        >
-          <Icon name="lucide:arrow-left" class="h-4 w-4" />
-          {t.back}
-        </a>
-
-        <div class="flex items-center gap-3">
-          <span class="eyebrow">{post.data.category}</span>
-          <span class="text-xs text-faint">
-            {post.data.readingTime} {t.readingSuffix}
+  <article id="top" class="shell pt-6">
+    <a href={blogHome} class="board-label inline-flex items-center gap-1 transition-colors hover:text-ink">
+      <Icon name="lucide:arrow-left" class="h-3 w-3" />
+      {t.back}
+    </a>
+    <div class="board px-6 py-10 sm:px-10 sm:py-14 lg:py-20">
+      <div class="mx-auto flex max-w-[42rem] flex-col gap-6">
+        <p class="flex flex-wrap items-center gap-x-3 text-[13px] text-faint">
+          <span class="text-ink">{post.data.category}</span>
+          <span>{post.data.readingTime} {t.readingSuffix}</span>
+          <span>
+            {dateLabel}{" "}
+            <time datetime={shownDate.toISOString()}>
+              {shownDate.toLocaleDateString(dateLocale, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                // Frontmatter dates parse as midnight UTC: format them there too,
+                // or a UTC-3 build renders every post a day early.
+                timeZone: "UTC",
+              })}
+            </time>
           </span>
-        </div>
+        </p>
 
-        <h1
-          class="text-4xl font-bold leading-[1.12] tracking-tight text-ink sm:text-[2.75rem]"
-        >
+        <h1 class="text-[clamp(1.9rem,4vw,3rem)] leading-[1.08] font-medium tracking-[-0.035em] text-ink">
           {post.data.title}
         </h1>
-        <p class="text-lg leading-relaxed text-muted">{post.data.description}</p>
-        <span class="text-sm text-faint">
-          {dateLabel}{" "}
-          <time datetime={shownDate.toISOString()}>
-            {shownDate.toLocaleDateString(dateLocale, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              // Frontmatter dates parse as midnight UTC: format them there too,
-              // or a UTC-3 build renders every post a day early.
-              timeZone: "UTC",
-            })}
-          </time>
-        </span>
+        <p class="text-[17px] leading-relaxed text-muted">{post.data.description}</p>
 
-        <div class="article mt-4">
+        <div class="article mt-6 border-t border-line pt-10">
           <slot />
         </div>
 
         <a
           href={relatedUrl}
           data-cta="blog_related_service"
-          class="mt-8 flex items-center justify-between gap-4 rounded-2xl border border-line bg-card p-6 transition-colors hover:border-accent/30"
+          class="group mt-10 flex items-center justify-between gap-4 border-y border-line py-5"
         >
           <span class="flex flex-col gap-1">
-            <span class="text-xs text-faint">{t.relatedTitle}</span>
-            <span class="font-semibold text-ink">{related.navLabel}</span>
+            <span class="text-[12px] text-faint">{t.relatedTitle}</span>
+            <span class="text-[17px] font-medium tracking-[-0.015em] text-ink">{related.navLabel}</span>
           </span>
-          <Icon name="lucide:arrow-right" class="h-5 w-5 shrink-0 text-accent-light" />
+          <Icon name="lucide:arrow-right" class="h-4 w-4 shrink-0 text-faint transition-transform group-hover:translate-x-1 group-hover:text-ink" />
         </a>
       </div>
     </div>
   </article>
 
-  <section class="bg-surface">
-    <div class="shell flex flex-col items-start gap-5 py-16">
-      <h2 class="text-2xl font-bold tracking-tight text-ink sm:text-3xl">{t.ctaTitle}</h2>
-      <p class="max-w-xl leading-relaxed text-muted">{t.ctaBody}</p>
-      <a
-        href={contact}
-        data-cta="blog_cta"
-        class="rounded-lg bg-accent px-8 py-4 font-semibold text-white shadow-lg shadow-accent/20 transition-transform hover:-translate-y-0.5"
-      >
-        {t.ctaButton}
-      </a>
+  <section class="shell mt-16">
+    <div class="board relative flex flex-col items-start gap-5 overflow-hidden p-6 sm:p-10 lg:p-14">
+      <div aria-hidden="true" class="pointer-events-none absolute -top-28 -right-28 h-64 w-64 rounded-full bg-cube-top"></div>
+      <h2 class="relative max-w-xl text-[clamp(1.6rem,3vw,2.25rem)] leading-[1.1] font-medium tracking-[-0.035em] text-ink">{t.ctaTitle}</h2>
+      <p class="relative max-w-xl text-[15px] leading-relaxed text-muted">{t.ctaBody}</p>
+      <a href={contact} data-cta="blog_cta" class="btn relative">{t.ctaButton}</a>
     </div>
   </section>
 </main>

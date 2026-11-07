@@ -1,0 +1,20 @@
+---
+/**
+ * An artboard on the canvas: its name sits on the canvas just above it, the
+ * content on a plain white (dark: graphite) sheet.
+ */
+interface Props {
+  id?: string;
+  label?: string;
+  class?: string;
+  inner?: string;
+}
+const { id, label, class: className = "", inner = "p-6 sm:p-10 lg:p-14" } = Astro.props;
+---
+
+<section id={id} class:list={["shell scroll-mt-20", className]}>
+  {label && <span class="board-label">{label}</span>}
+  <div class:list={["board", inner]}>
+    <slot />
+  </div>
+</section>

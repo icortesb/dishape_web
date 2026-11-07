@@ -16,31 +16,31 @@ const tone = (n: number | null) =>
   n === null
     ? "text-faint"
     : n >= 90
-      ? "text-accent-light"
+      ? "text-ink"
       : n >= 50
-        ? "text-amber-400"
-        : "text-red-400";
+        ? "text-warn"
+        : "text-danger";
 
 const passedCount = (s: CategoryScore) =>
   t.passedCount.replace("{passed}", String(s.passed)).replace("{total}", String(s.total));
 ---
 
 <div class="grid gap-4 sm:grid-cols-3" data-score-cards>
-  <div class="rounded-xl border border-line bg-card p-5">
-    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.seo}</p>
-    <p class={`mt-2 text-4xl font-semibold ${tone(seo.percent)}`}>{seo.percent}</p>
+  <div class="board p-5">
+    <p class="text-[12px] text-faint">{t.categories.seo}</p>
+    <p class={`mt-2 text-4xl font-medium ${tone(seo.percent)}`}>{seo.percent}</p>
     <p class="mt-1 text-sm text-muted">{passedCount(seo)}</p>
   </div>
 
-  <div class="rounded-xl border border-line bg-card p-5">
-    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.social}</p>
-    <p class={`mt-2 text-4xl font-semibold ${tone(social.percent)}`}>{social.percent}</p>
+  <div class="board p-5">
+    <p class="text-[12px] text-faint">{t.categories.social}</p>
+    <p class={`mt-2 text-4xl font-medium ${tone(social.percent)}`}>{social.percent}</p>
     <p class="mt-1 text-sm text-muted">{passedCount(social)}</p>
   </div>
 
-  <div class="rounded-xl border border-line bg-card p-5">
-    <p class="text-xs uppercase tracking-wide text-faint">{t.categories.perf}</p>
-    <p class={`mt-2 text-4xl font-semibold ${tone(perfScore)}`} data-perf-score>
+  <div class="board p-5">
+    <p class="text-[12px] text-faint">{t.categories.perf}</p>
+    <p class={`mt-2 text-4xl font-medium ${tone(perfScore)}`} data-perf-score>
       {perfPending ? "—" : (perfScore ?? "—")}
     </p>
     <p

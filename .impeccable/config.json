@@ -1,0 +1,71 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "archivo",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-07T14:22:45.890Z",
+        "reason": "decision sketch for replacement world; DESIGN.md is being replaced"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "archivo",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-07T14:22:45.904Z",
+        "reason": "decision sketch for replacement world; DESIGN.md is being replaced"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "archivo",
+        "files": [
+          ".impeccable/mocks/decision/challenger-molde.html"
+        ],
+        "createdAt": "2026-11-07T14:22:45.918Z",
+        "reason": "decision sketch for replacement world; DESIGN.md is being replaced"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "archivo",
+        "files": [
+          ".impeccable/mocks/decision/challenger-step.html"
+        ],
+        "createdAt": "2026-11-07T14:26:43.554Z",
+        "reason": "decision sketch for replacement world; DESIGN.md is being replaced"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "jetbrains mono",
+        "files": [
+          ".impeccable/mocks/decision/challenger-ascii.html"
+        ],
+        "createdAt": "2026-11-07T14:28:32.218Z",
+        "reason": "decision sketch for declined challenger the user asked to see"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-ascii.html"
+        ],
+        "createdAt": "2026-11-07T14:28:36.450Z",
+        "reason": "phosphor halo is literal to the declined ASCII world; sketch only"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-ascii.html"
+        ],
+        "createdAt": "2026-11-07T14:28:43.934Z",
+        "reason": "tracking squares the ASCII render cells; art grid, not body copy; sketch only"
+      }
+    ]
+  }
+}
